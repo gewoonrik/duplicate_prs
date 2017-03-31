@@ -4,7 +4,7 @@ import csv
 import re
 import sys
 
-# only prints pr comments that reference another PR
+# download all comments and write each comment in a seperate file to the comments dir
 
 client = MongoClient('127.0.0.1', 27017)
 db = client.github

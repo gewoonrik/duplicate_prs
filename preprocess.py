@@ -3,6 +3,8 @@ import re
 from os import listdir
 from os.path import isfile, join
 
+# load all comments in the comments dir, preprocess and write to comments_preprocessed
+
 def preprocess(str):
     # remove links
     str = re.sub(r'\[(.*?)\]\(.+?\)', "", str)
