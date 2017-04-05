@@ -19,7 +19,7 @@ def progressBar(value, endvalue, bar_length=20):
         sys.stderr.flush()
 
 
-with open('pr_reference_comments.csv', 'rb') as file:
+with open('temp/pr_reference_comments.csv', 'rb') as file:
         issues = file.read()
 	lines = issues.split("\n")
 	count = len(lines)
@@ -27,7 +27,7 @@ with open('pr_reference_comments.csv', 'rb') as file:
         for line in lines:
                 owner, repo, issue_id, id = line.split(",")
                 issue_comment = db.issue_comments.find_one({"repo":repo, "owner":owner, "issue_id":int(issue_id),"id":int(id)})
-		f = open('comments/'+owner+'-'+repo+'-'+issue_id+'-'+id+'.txt', 'w')
+		f = open('comments2/'+owner+'@'+repo+'@'+issue_id+'@'+id+'.txt', 'w')
 		f.write(issue_comment["body"].encode('utf-8'))
 		f.close()
 		progressBar(i, count)
