@@ -67,7 +67,10 @@ f = open("pairs.csv", 'w')
 f.write("owner,repo,pr1_id,p2_id\n")
 
 for owner, repo, pr1_id, pr2_id in resulting_pairs:
-    f.write(owner+","+repo+","+str(pr1_id)+","+str(pr2_id)+"\n")
+    if pr1_id != pr2_id:
+        min_v = min(pr1_id, pr2_id)
+        max_v = max(pr1_id, pr2_id)
+        f.write(owner+","+repo+","+str(min_v)+","+str(max_v)+"\n")
 f.close()
 
 
