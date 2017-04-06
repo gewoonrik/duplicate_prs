@@ -5,7 +5,7 @@ from os import listdir
 from os.path import isfile, join
 
 
-dir = "comments2"
+dir = "comments"
 
 files = [f for f in listdir(dir) if isfile(join(dir, f))]
 nr_files = len(files)
