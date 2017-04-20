@@ -17,7 +17,7 @@ def tokenize_file(file):
     content = f.read()
     f.close()
     tokens = tokenize(filter_diff_lines(content))
-    out_file = file.replace("diffs_tokenized")
+    out_file = file.replace("diffs","diffs_tokenized")
     f = open(out_file, "w")
     pickle.dump(tokens,f)
     f.close()
