@@ -2,52 +2,7 @@ import pickle
 from multiprocessing import Pool
 
 from gensim.models import Doc2Vec
-
-
-def filter_diff_lines(str):
-    # remove everything that isn't an added or removed line.
-    lines = str.split("\n")
-    results = []
-    for line in lines:
-        length = len(line)
-        if length > 0:
-            if line[0] == "+" or line[0] == "-":
-                if length == 1 or ( line[1] != "+" and line[1] != "-"):
-                    if line[0] == "+":
-                        line = "LINE__ADDED__TOKEN" + line[1:]
-                    elif line[0] == "-":
-                        line = "LINE__REMOVED__TOKEN" + line[1:]
-                    results.append(line)
-            elif line[:10] == "diff --git":
-                results.append("NEW__FILE__TOKEN")
-    return "\n".join(results)
-
-def read(file):
-    f = open(file, "r")
-    content = f.read()
-    f.close()
-    return content
-
-def tokenize(text, lower=True):
-    ''' Tokenizes code. All consecutive alphanumeric characters are grouped into one token.
-    Thereby trying to heuristically match identifiers.
-    All other symbols are seen as one token.
-    Whitespace is stripped, except the newline token.
-    '''
-    if lower:
-        text = text.lower() #type: str
-    seq = []
-    curr = ""
-    for c in text:
-        if c.isalnum():
-            curr += c
-        else:
-            if curr != "":
-                seq.append(curr)
-                curr = ""
-            if not c.isspace() or c == '\n':
-                seq.append(c)
-    return [_f for _f in seq if _f]
+from tokenize import tokenize,filter_diff_lines
 
 def load_data(file):
     f = open(file, "r")
