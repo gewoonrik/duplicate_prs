@@ -1,13 +1,14 @@
-from gensim.models.doc2vec import TaggedDocument, Doc2Vec
+import pickle
+
+import numpy as np
+from gensim.models.doc2vec import TaggedDocument
 from keras.callbacks import CSVLogger
 from keras.callbacks import EarlyStopping
-from keras.models import Model
 from keras.layers import Input, merge, Dense, Dropout
-import numpy as np
-import random
-import pickle
+from keras.models import Model
+
+from diff_scripts.load_data import load_data, lines_to_files
 from tokenize import tokenize,filter_diff_lines
-from load_data import load_data, lines_to_files
 
 
 class Documents(object):

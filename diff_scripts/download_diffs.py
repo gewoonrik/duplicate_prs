@@ -23,7 +23,7 @@ def get_and_save_diff(line):
 
 p = Pool(16)
 
-f = open("pairs.csv", "r")
+f = open("temp/pairs.csv", "r")
 lines = f.read().split("\n")
 f.close()
 

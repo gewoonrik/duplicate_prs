@@ -3,25 +3,15 @@ from multiprocessing import Pool
 
 from gensim.models import Doc2Vec
 from tokenize import tokenize,filter_diff_lines
-
-def load_data(file):
-    f = open(file, "r")
-    lines = f.read().split("\n")
-    f.close()
-    lines = lines[1:len(lines)-1]
-    #remove head and empty line at bottom
-    return lines
-
-def lines_to_files(lines):
-    files = []
-    for line in lines:
-        owner, repo, pr1, pr2, is_dup = line.split(",")
-        pr1 = "diffs/"+owner+"@"+repo+"@"+pr1+".diff"
-        pr2 = "diffs/"+owner+"@"+repo+"@"+pr2+".diff"
-        files.append((pr1,pr2,is_dup))
-    return files
+from load_data import load_data, lines_to_files
 
 model =  Doc2Vec.load("doc2vec.model")
+
+def read(file):
+    f = open(file, "r")
+    content = f.read()
+    f.close()
+    return content
 
 def docs2vec(file):
     (pr1, pr2, is_dup) = file

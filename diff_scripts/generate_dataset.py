@@ -63,7 +63,7 @@ results = [search_match(file) for file in files]
 
 resulting_pairs = [item for item in results if item != False]
 
-f = open("pairs.csv", 'w')
+f = open("temp/pairs.csv", 'w')
 f.write("owner,repo,pr1_id,p2_id\n")
 
 for owner, repo, pr1_id, pr2_id in resulting_pairs:

@@ -12,13 +12,13 @@ def diff_exists(owner, repo, id):
     return val
 
 
-f = open("pairs.csv", "r")
+f = open("temp/pairs.csv", "r")
 lines = f.read().split("\n")
 f.close()
 # remove header and newline at the end
 lines = lines[1:len(lines) - 1]
 
-f = open("pairs.csv", "w")
+f = open("temp/pairs.csv", "w")
 f.write("owner,repo,pr1_id,p2_id\n")
 
 for line in lines:

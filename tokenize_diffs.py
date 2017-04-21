@@ -1,9 +1,9 @@
-from multiprocessing import Pool
 import os.path
-
-from tokenize import tokenize,filter_diff_lines
-from load_data import load_data, lines_to_files
 import pickle
+from multiprocessing import Pool
+
+from load_data import load_data, lines_to_files
+from tokenize import tokenize,filter_diff_lines
 
 training = load_data("training_with_negative_samples.csv")
 validation = load_data("validation_with_negative_samples.csv")

@@ -1,11 +1,12 @@
+mkdir diffs
 echo "generating dataset"
-python generate_dataset.py
-cat pairs.csv | sort -u > pairs2.csv
-rm pairs.csv
-mv pairs2.csv pairs.csv
+python diff_scripts/generate_dataset.py
+cat temp/pairs.csv | sort -u > temp/pairs2.csv
+rm temp/pairs.csv
+mv temp/pairs2.csv temp/pairs.csv
 echo "getting diffs"
-python download_diffs.py
+python diff_scripts/download_diffs.py
 echo "removing pairs without diffs"
-python check_diffs.py
-python split_dataset.py
-python generate_negative_samples.py
+python diff_scripts/check_diffs.py
+python diff_scripts/split_dataset.py
+python diff_scripts/generate_negative_samples.py
