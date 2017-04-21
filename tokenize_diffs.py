@@ -26,4 +26,4 @@ def tokenize_file(file):
         f.close()
 
 p = Pool(4)
-p.map(tokenize_file,total)
+p.map(tokenize_file,files)
