@@ -2,7 +2,7 @@ import logging
 
 from gensim.models.doc2vec import TaggedDocument, Doc2Vec
 
-from diff_scripts.load_data import load_data, lines_to_files
+from load_data import load_data, lines_to_files
 from tokenize import tokenize,filter_diff_lines
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
@@ -19,9 +19,9 @@ class Documents(object):
             yield TaggedDocument(words = tokenize(filter_diff_lines(content)), tags = [file])
 
 
-training = load_data("training_with_negative_samples.csv")
-validation = load_data("validation_with_negative_samples.csv")
-test = load_data("test_with_negative_samples.csv")
+training = load_data("training_with_negative_samples_filtered.csv")
+validation = load_data("validation_with_negative_samples_filtered.csv")
+test = load_data("test_with_negative_samples_filtered.csv")
 
 total = training+test+validation
 
