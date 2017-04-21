@@ -6,7 +6,7 @@ def is_valid_diff(file):
     f = open(file, "r")
     content = f.read()
     nr_lines = content.count("\n")
-
+    f.close()
     return nr_lines > 0 and nr_lines <= 500
 
 def filter_diffs_in_file(file):
@@ -19,7 +19,7 @@ def filter_diffs_in_file(file):
     return correct_lines
 
 def write_lines(file, lines):
-    f = open(file, "r")
+    f = open(file, "w")
     f.write("\n".join(lines))
     f.close()
 
