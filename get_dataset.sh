@@ -8,3 +8,4 @@ python download_diffs.py
 echo "removing pairs without diffs"
 python check_diffs.py
 python split_dataset.py
+python generate_negative_samples.py
