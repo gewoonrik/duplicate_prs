@@ -10,13 +10,14 @@ import random
 
 def get_filename(owner,repo,id):
     return "diffs/"+owner+"@"+repo+"@"+str(id)+".diff"
+
 def download_diff(owner, repo, id):
     file = get_filename(owner,repo,id)
 
     if not os.path.isfile(file):
         url = "https://www.github.com/"+owner+"/"+repo+"/pull/"+str(id)+".diff"
         urllib.urlretrieve(url, file)
-        return file
+    return file
 
 def get_random_pr(owner, repo):
     client = MongoClient('127.0.0.1', 27017)
