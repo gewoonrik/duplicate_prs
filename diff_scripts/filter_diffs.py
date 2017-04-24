@@ -23,11 +23,12 @@ def write_lines(file, lines):
     f.write("\n".join(lines))
     f.close()
 
-train_filtered = filter_diffs_in_file("training_with_negative_samples.csv")
-write_lines("training_with_negative_samples_filtered.csv", train_filtered)
+if __name__ == "__main__":
+    train_filtered = filter_diffs_in_file("training_with_negative_samples.csv")
+    write_lines("training_with_negative_samples_filtered.csv", train_filtered)
 
-validation_filtered = filter_diffs_in_file("validation_with_negative_samples.csv")
-write_lines("validation_with_negative_samples_filtered.csv", validation_filtered)
+    validation_filtered = filter_diffs_in_file("validation_with_negative_samples.csv")
+    write_lines("validation_with_negative_samples_filtered.csv", validation_filtered)
 
-test_filtered = filter_diffs_in_file("test_with_negative_samples.csv")
-write_lines("test_with_negative_samples_filtered.csv", test_filtered)
+    test_filtered = filter_diffs_in_file("test_with_negative_samples.csv")
+    write_lines("test_with_negative_samples_filtered.csv", test_filtered)
