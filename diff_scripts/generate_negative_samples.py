@@ -8,9 +8,10 @@ from pymongo import MongoClient
 import random
 
 
-
+def get_filename(owner,repo,id):
+    return "diffs/"+owner+"@"+repo+"@"+str(id)+".diff"
 def download_diff(owner, repo, id):
-    file = "diffs/"+owner+"@"+repo+"@"+str(id)+".diff"
+    file = get_filename(owner,repo,id)
 
     if not os.path.isfile(file):
         url = "https://www.github.com/"+owner+"/"+repo+"/pull/"+str(id)+".diff"
@@ -46,11 +47,22 @@ def generate_negative_sample(line):
     return owner, repo, str(min_v), str(max_v)
 
 def generate_negative_samples(file):
-    lines = filter_diffs_in_file(file)
+    f = open(file, "r")
+    lines = f.read().split("\n")
+    f.close()
+
+    #remove header and last newline
+    lines = lines[1:len(lines)-1]
+    lines_filtered = []
+    for line in lines:
+        owner, repo, pr1, pr2 = line.split(",")
+        if is_valid_diff(get_filename(owner,repo,pr1)) and is_valid_diff(get_filename(owner,repo,pr2)):
+            lines_filtered.append(line)
 
     f = open(file.split(".")[0]+"_with_negative_samples2.csv", "w")
     f.write("owner,repo,pr1_id,p2_id,is_duplicate\n")
-    for line in lines:
+
+    for line in lines_filtered:
         f.write(line+","+"1\n")
 
     p = Pool(10)
