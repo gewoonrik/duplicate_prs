@@ -20,6 +20,7 @@ def lines_to_data(lines):
     l = []
     for line in lines:
         l.append(line_to_data(line))
+    return l
 
 def read(file):
     f = open(file, "r")
