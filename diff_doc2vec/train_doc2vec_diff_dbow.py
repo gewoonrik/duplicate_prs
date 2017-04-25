@@ -19,9 +19,9 @@ class Documents(object):
             yield TaggedDocument(words = tokenize(filter_diff_lines(content)), tags = [file])
 
 
-training = load_data("training_with_negative_samples_filtered.csv")
-validation = load_data("validation_with_negative_samples_filtered.csv")
-test = load_data("test_with_negative_samples_filtered.csv")
+training = load_data("training_with_negative_samples2.csv")
+validation = load_data("validation_with_negative_samples2.csv")
+test = load_data("test_with_negative_samples2.csv")
 
 total = training+test+validation
 
