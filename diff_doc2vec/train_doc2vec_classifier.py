@@ -6,10 +6,20 @@ from keras.callbacks import EarlyStopping
 from keras.layers import Input, merge, Dense, Dropout
 from keras.models import Model
 
-from load_data import load_data, lines_to_files
+from load_data import load_data
 
 
 
+def line_to_data(line):
+    owner, repo, pr1, pr2, is_dup = line.split(",")
+    pr1 = "diffs/"+owner+"@"+repo+"@"+pr1+".diff"
+    pr2 = "diffs/"+owner+"@"+repo+"@"+pr2+".diff"
+    return pr1, pr2, is_dup
+
+def lines_to_data(lines):
+    l = []
+    for line in lines:
+        l.append(line_to_data(line))
 
 def read(file):
     f = open(file, "r")
@@ -30,9 +40,9 @@ def load_docs2vec(files):
     return prs1, prs2, labels
 
 print("loading files")
-training = lines_to_files(load_data("training_with_negative_samples2.csv"))
-validation = lines_to_files(load_data("validation_with_negative_samples2.csv"))
-test = lines_to_files(load_data("test_with_negative_samples2.csv"))
+training = lines_to_data(load_data("training_with_negative_samples2.csv"))
+validation = lines_to_data(load_data("validation_with_negative_samples2.csv"))
+test = lines_to_data(load_data("test_with_negative_samples2.csv"))
 
 
 print("loading data")
