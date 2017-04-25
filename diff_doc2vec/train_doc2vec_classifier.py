@@ -12,8 +12,8 @@ from load_data import load_data
 
 def line_to_data(line):
     owner, repo, pr1, pr2, is_dup = line.split(",")
-    pr1 = "diffs/"+owner+"@"+repo+"@"+pr1+".diff"
-    pr2 = "diffs/"+owner+"@"+repo+"@"+pr2+".diff"
+    pr1 = "diffs_doc2vec_preprocessed/"+owner+"@"+repo+"@"+pr1+".diff"
+    pr2 = "diffs_doc2vec_preprocessed/"+owner+"@"+repo+"@"+pr2+".diff"
     return pr1, pr2, is_dup
 
 def lines_to_data(lines):
