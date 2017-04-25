@@ -3,9 +3,21 @@ from multiprocessing import Pool
 
 from gensim.models import Doc2Vec
 from tokenize import tokenize,filter_diff_lines
-from load_data import load_data, lines_to_files
+from load_data import load_data
 
-model =  Doc2Vec.load("doc2vec.model")
+model =  Doc2Vec.load("doc2vec_dbow10_epoch4.model")
+
+def line_to_data(line):
+    owner, repo, pr1, pr2, is_dup = line.split(",")
+    pr1 = "diffs/"+owner+"@"+repo+"@"+pr1+".diff"
+    pr2 = "diffs/"+owner+"@"+repo+"@"+pr2+".diff"
+    return pr1, pr2, is_dup
+
+def lines_to_data(lines):
+    l = []
+    for line in lines:
+        l.append(line_to_data(line))
+    return l
 
 def read(file):
     f = open(file, "r")
@@ -29,9 +41,9 @@ def docs2vec(file):
         pickle.dump(vec2, f)
 
 
-training = lines_to_files(load_data("training_with_negative_samples.csv"))
-validation = lines_to_files(load_data("validation_with_negative_samples.csv"))
-test = lines_to_files(load_data("test_with_negative_samples.csv"))
+training = lines_to_data(load_data("training_with_negative_samples2.csv"))
+validation = lines_to_data(load_data("validation_with_negative_samples2.csv"))
+test = lines_to_data(load_data("test_with_negative_samples2.csv"))
 
 total = training+validation+test
 
