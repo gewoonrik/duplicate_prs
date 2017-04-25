@@ -1,26 +1,13 @@
 import pickle
 
 import numpy as np
-from gensim.models.doc2vec import TaggedDocument
 from keras.callbacks import CSVLogger
 from keras.callbacks import EarlyStopping
 from keras.layers import Input, merge, Dense, Dropout
 from keras.models import Model
 
-from diff_scripts.load_data import load_data, lines_to_files
-from tokenize import tokenize,filter_diff_lines
+from load_data import load_data, lines_to_files
 
-
-class Documents(object):
-    def __init__(self, files):
-        self.files = files
-
-    def __iter__(self):
-        for file in self.files:
-            f = open(file, "r")
-            content = f.read()
-            f.close()
-            yield TaggedDocument(words = tokenize(filter_diff_lines(content)), tags = [file])
 
 
 
@@ -43,9 +30,9 @@ def load_docs2vec(files):
     return prs1, prs2, labels
 
 print("loading files")
-training = lines_to_files(load_data("training_with_negative_samples.csv"))
-validation = lines_to_files(load_data("validation_with_negative_samples.csv"))
-test = lines_to_files(load_data("test_with_negative_samples.csv"))
+training = lines_to_files(load_data("training_with_negative_samples2.csv"))
+validation = lines_to_files(load_data("validation_with_negative_samples2.csv"))
+test = lines_to_files(load_data("test_with_negative_samples2.csv"))
 
 
 print("loading data")
