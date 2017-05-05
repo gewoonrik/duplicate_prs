@@ -126,8 +126,8 @@ def ABCNN(
         conv_left = Permute((2, 1))(conv_left)
 
         conv_right = Convolution2D(
-            nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="valid",
-            border_mode="same",
+            nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="tanh",
+            border_mode="valid",
             dim_ordering="th"
         )(right_embed)
 
