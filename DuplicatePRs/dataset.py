@@ -2,7 +2,7 @@ import pickle
 import random
 import numpy as np
 from functools import partial
-import os
+from multiprocessing import Pool
 
 _current_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -73,8 +73,9 @@ def _get_data_by_line(get_file_func, read, line):
 
 def _get_data(lines, get_file_func, read):
     get_data_func = partial(_get_data_by_line, get_file_func, read)
+    pool = Pool(8)
 
-    data = map(get_data_func, lines)
+    data = pool.map(get_data_func, lines)
 
     #http://stackoverflow.com/questions/7558908/unpacking-a-list-tuple-of-pairs-into-two-lists-tuples
     pr1s, pr2s, labels = zip(*data)
