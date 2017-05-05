@@ -9,3 +9,6 @@ maxlen = 1500
 
 #convolution
 nr_filters = 150
+
+doc2vec_model_directory = os.path.abspath(__file__)+"/doc2vec_models/"
+fasttext_model_directory = os.path.abspath(__file__)+"/fasttext/"
