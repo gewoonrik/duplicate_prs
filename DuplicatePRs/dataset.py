@@ -4,6 +4,7 @@ import numpy as np
 from functools import partial
 from multiprocessing import Pool
 
+_current_path = os.path.dirname(os.path.abspath(__file__))
 
 
 def load_csv(file):
@@ -18,13 +19,13 @@ def load_csv(file):
 
 
 def get_diff_file(owner,repo,id):
-    return  "diff/"+owner+"@"+repo+"@"+id+".diff"
+    return  _current_path+"/diff/"+owner+"@"+repo+"@"+id+".diff"
 
 def get_tokenized_file(owner, repo, id):
-    return  "diffs_tokenized/"+owner+"@"+repo+"@"+id+".diff"
+    return  _current_path+"/diffs_tokenized/"+owner+"@"+repo+"@"+id+".diff"
 
 def get_doc2vec_file(owner, repo, id):
-    return  "diffs_doc2vec_preprocessed/"+owner+"@"+repo+"@"+id+".diff"
+    return  _current_path+"/diffs_doc2vec_preprocessed/"+owner+"@"+repo+"@"+id+".diff"
 
 
 def line_to_diff_files(line):
