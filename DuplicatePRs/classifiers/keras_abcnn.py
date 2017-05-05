@@ -112,14 +112,14 @@ def ABCNN(
         right_embed = merge([right_embed, attention_right], mode="concat", concat_axis=1)
 
         # Padding so we have wide convolution
-        left_embed_padded = ZeroPadding2D((filter_width - 1, 0))(left_embed)
-        right_embed_padded = ZeroPadding2D((filter_width - 1, 0))(right_embed)
+        #left_embed_padded = ZeroPadding2D((filter_width - 1, 0))(left_embed)
+        #right_embed_padded = ZeroPadding2D((filter_width - 1, 0))(right_embed)
 
         # 2D convolutions so we have the ability to treat channels. Effectively, we are still doing 1-D convolutions.
         conv_left = Convolution2D(
             nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="tanh", border_mode="same",
             dim_ordering="th"
-        )(left_embed_padded)
+        )(left_embed)
 
         # Reshape and Permute to get back to 1-D
         conv_left = (Reshape((conv_left._keras_shape[1], conv_left._keras_shape[2])))(conv_left)
@@ -127,9 +127,9 @@ def ABCNN(
 
         conv_right = Convolution2D(
             nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="tanh",
-            border_mode="valid",
+            border_mode="same",
             dim_ordering="th"
-        )(right_embed_padded)
+        )(right_embed)
 
         # Reshape and Permute to get back to 1-D
         conv_right = (Reshape((conv_right._keras_shape[1], conv_right._keras_shape[2])))(conv_right)
