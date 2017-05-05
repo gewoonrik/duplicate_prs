@@ -1,13 +1,20 @@
 import pickle
 import random
 import numpy as np
+from functools import partial
+from multiprocessing import Pool
+
+
 
 def load_csv(file):
     f = open(file, "r")
     lines = f.read().split("\n")
     f.close()
-    #remove head and empty line at bottom
-    return lines[1:len(lines)-1]
+    #remove header
+    lines = lines[1:len(lines)-1]
+    random.shuffle(lines)
+    return lines
+
 
 
 def get_diff_file(owner,repo,id):
@@ -54,21 +61,23 @@ def read_normal(file):
     f.close()
     return content
 
+def _get_data_by_line(get_file_func, read, line):
+    owner, repo, pr1, pr2, is_dup = line.split(",")
+    pr1_file = get_file_func(owner, repo, pr1)
+    pr2_file = get_file_func(owner, repo, pr2)
+
+    pr1_data = read(pr1_file)
+    pr2_data = read(pr2_file)
+    return pr1_data, pr2_data, is_dup
+
 def _get_data(lines, get_file_func, read):
-    pr1s = []
-    pr2s = []
-    labels = []
-    for line in lines:
-        owner, repo, pr1, pr2, is_dup = line.split(",")
-        pr1_file = get_file_func(owner, repo, pr1)
-        pr2_file = get_file_func(owner, repo, pr2)
+    get_data_func = partial(_get_data_by_line, get_file_func, read)
+    pool = Pool(16)
 
-        pr1_data = read(pr1_file)
-        pr2_data = read(pr2_file)
+    data = pool.map(get_data_func, lines)
 
-        pr1s.append(pr1_data)
-        pr2s.append(pr2_data)
-        labels.append(is_dup)
+    #http://stackoverflow.com/questions/7558908/unpacking-a-list-tuple-of-pairs-into-two-lists-tuples
+    pr1s, pr2s, labels = zip(*data)
 
     return np.asarray(pr1s), np.asarray(pr2s), np.asarray(labels)
 
