@@ -24,12 +24,6 @@ else:
     import fasttext
     embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
 
-
-tr_gen, tr_steps = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
-val_gen, val_steps = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
-te_gen, te_steps = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
-
-
 print('Build model...')
 
 model = ABCNN(
@@ -39,6 +33,13 @@ model = ABCNN(
     mode="euclidean"
     # mode="cos"
 )
+
+
+tr_gen, tr_steps = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
+val_gen, val_steps = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
+te_gen, te_steps = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
+
+
 
 optimizer = Adam(lr=args.learning_rate)
 
