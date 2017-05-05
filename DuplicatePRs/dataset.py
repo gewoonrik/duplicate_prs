@@ -3,6 +3,7 @@ import random
 import numpy as np
 from functools import partial
 from multiprocessing import Pool
+import os
 
 _current_path = os.path.dirname(os.path.abspath(__file__))
 
