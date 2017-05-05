@@ -72,7 +72,7 @@ class DataIterator:
 
         prs1_res = preprocess(prs1_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
         prs2_res = preprocess(prs2_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
-        yield ([prs1_res, prs2_res], labels_sliced)
+        return ([prs1_res, prs2_res], labels_sliced)
 
 
 
