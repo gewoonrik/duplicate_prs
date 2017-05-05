@@ -4,27 +4,6 @@ import numpy as np
 import math
 from DuplicatePRs.dataset import get_tokenized_data, load_csv
 
-class threadsafe_iter:
-    """Takes an iterator/generator and makes it thread-safe by
-    serializing call to the `next` method of given iterator/generator.
-    """
-    def __init__(self, it):
-        self.it = it
-        self.lock = threading.Lock()
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        with self.lock:
-            return self.it.next()
-
-def threadsafe_generator(f):
-    """A decorator that takes a generator function and makes it thread-safe.
-    """
-    def g(*a, **kw):
-        return threadsafe_iter(f(*a, **kw))
-    return g
 
 cached_vectors = {}
 
@@ -59,20 +38,47 @@ def preprocess(texts, embeddings_model, embeddings_size, maxlen):
         results[i] = preprocess_text(text, embeddings_model, maxlen, embeddings_size)
     return results
 
-@threadsafe_generator
-def generator(prs1, prs2, labels, embeddings_model, embeddings_size, maxlen, batch_size):
-    while True:
-        for i in xrange(0, len(prs1), batch_size):
-            prs1_sliced = prs1[i:i + batch_size]
-            prs2_sliced = prs2[i:i + batch_size]
-            labels_sliced = labels[i:i + batch_size]
 
-            prs1_res = preprocess(prs1_sliced, embeddings_model, embeddings_size, maxlen)
-            prs2_res = preprocess(prs2_sliced, embeddings_model, embeddings_size, maxlen)
-            yield ([prs1_res, prs2_res], labels_sliced)
+class DataIterator:
+    def __init__(self, prs1, prs2, labels, embeddings_model, embeddings_size, maxlen, batch_size):
+        self.prs1 = prs1
+        self.prs2 = prs2
+        self.labels = labels
+        self.embeddings_model = embeddings_model
+        self.embeddings_size = embeddings_size
+        self.maxlen = maxlen
+        self.batch_size = batch_size
+        self.lock = threading.Lock()
+        self.i = 0
+        self.steps = math.ceil(len(labels)/batch_size)
+
+    def __iter__(self):
+        return self
+
+    def reset(self):
+        self.i = 0
+
+    def next(self):
+        with self.lock:
+            i = self.i
+            self.i += 1
+            if self.i > self.steps:
+                self.reset()
+
+        cur = i * self.batch_size
+        prs1_sliced = self.prs1[cur:cur + self.batch_size]
+        prs2_sliced = self.prs2[cur:cur + self.batch_size]
+        labels_sliced = self.labels[cur:cur + self.batch_size]
+
+        prs1_res = preprocess(prs1_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
+        prs2_res = preprocess(prs2_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
+        yield ([prs1_res, prs2_res], labels_sliced)
+
+
+
 
 
 def get_preprocessed_generator(file, embeddings_model, embeddings_size, maxlen, batch_size):
     prs_1, prs_2, y = get_tokenized_data(load_csv(file))
-    return generator(prs_1, prs_2, y, embeddings_model, embeddings_size, maxlen, batch_size), math.ceil(len(y)/batch_size)
+    return DataIterator(prs_1, prs_2, y, embeddings_model, embeddings_size, maxlen, batch_size), math.ceil(len(y)/batch_size)
 
