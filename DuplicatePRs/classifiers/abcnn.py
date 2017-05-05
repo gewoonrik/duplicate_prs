@@ -35,8 +35,8 @@ print('Build model...')
 model = ABCNN(
     left_seq_len=config.maxlen, right_seq_len=config.maxlen, depth=1,
     embed_dimensions=config.embeddings_size, nb_filter=config.nr_filters, filter_widths=3,
-    collect_sentence_representations=True, abcnn_1=True, abcnn_2=True,
-    mode="euclidean",
+    collect_sentence_representations=False, abcnn_1=True, abcnn_2=False,
+    mode="euclidean"
     # mode="cos"
 )
 
