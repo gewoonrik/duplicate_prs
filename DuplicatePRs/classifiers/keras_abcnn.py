@@ -117,7 +117,7 @@ def ABCNN(
 
         # 2D convolutions so we have the ability to treat channels. Effectively, we are still doing 1-D convolutions.
         conv_left = Convolution2D(
-            nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="tanh", border_mode="same",
+            nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="tanh", border_mode="valid",
             dim_ordering="th"
         )(left_embed)
 
@@ -126,7 +126,7 @@ def ABCNN(
         conv_left = Permute((2, 1))(conv_left)
 
         conv_right = Convolution2D(
-            nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="tanh",
+            nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="valid",
             border_mode="same",
             dim_ordering="th"
         )(right_embed)
