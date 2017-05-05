@@ -1,22 +1,17 @@
 # removes all lines from pairs of which a diff could not be downloaded
 import os.path
-
-dir = "diffs"
+from DuplicatePRs.dataset import load_csv, get_diff_file
 
 
 def diff_exists(owner, repo, id):
-    file = dir + "/" + owner + "@" + repo + "@" + id + ".diff"
+    file = get_diff_file(owner,repo,id)
     val = os.path.isfile(file)
     if not val:
         print file
     return val
 
 
-f = open("temp/pairs.csv", "r")
-lines = f.read().split("\n")
-f.close()
-# remove header and newline at the end
-lines = lines[1:len(lines) - 1]
+lines = load_csv("temp/pairs.csv")
 
 f = open("temp/pairs.csv", "w")
 f.write("owner,repo,pr1_id,p2_id\n")

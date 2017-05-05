@@ -1,10 +1,7 @@
 import random
+from DuplicatePRs.dataset import load_csv
 
-f = open("temp/pairs.csv", "r")
-lines = f.read().split("\n")
-f.close()
-
-lines = lines[1:len(lines)-1]
+lines = load_csv("temp/pairs.csv")
 random.shuffle(lines)
 
 count = len(lines)

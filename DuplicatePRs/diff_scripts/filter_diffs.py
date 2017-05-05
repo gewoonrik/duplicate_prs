@@ -1,6 +1,6 @@
 #filter pairs that contain a diff that contain no diff (Sorry, this diff is unavailable. or zero lines)
 # or is too large
-from load_data import load_data, line_to_files
+from DuplicatePRs.dataset import load_csv, line_to_diff_files
 
 def is_valid_diff(file):
     f = open(file, "r")
@@ -10,10 +10,10 @@ def is_valid_diff(file):
     return nr_lines > 0 and nr_lines <= 500
 
 def filter_diffs_in_file(file):
-    lines  = load_data(file)
+    lines  = load_csv(file)
     correct_lines = []
     for line in lines:
-        pr1, pr2 = line_to_files(line)
+        pr1, pr2, _ = line_to_diff_files(line)
         if is_valid_diff(pr1) and is_valid_diff(pr2):
             correct_lines.append(line)
     return correct_lines

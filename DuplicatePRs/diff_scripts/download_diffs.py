@@ -1,16 +1,5 @@
-import os
 from multiprocessing import Pool
-import urllib
-
-dir = "diffs"
-
-
-def download_diff(owner, repo, id):
-    file = dir + "/" + owner + "@" + repo + "@" + id + ".diff"
-
-    if not os.path.isfile(file):
-        url = "https://www.github.com/" + owner + "/" + repo + "/pull/" + id + ".diff"
-        urllib.urlretrieve(url, file)
+from DuplicatePRs.diff_scripts.download import download_diff
 
 
 def get_and_save_diff(line):
