@@ -117,7 +117,7 @@ def ABCNN(
 
         # 2D convolutions so we have the ability to treat channels. Effectively, we are still doing 1-D convolutions.
         conv_left = Convolution2D(
-            nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="tanh", border_mode="valid",
+            nb_filter=nb_filter, nb_row=filter_width, nb_col=embed_dimensions, activation="tanh", border_mode="same",
             dim_ordering="th"
         )(left_embed_padded)
 
