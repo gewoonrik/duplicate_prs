@@ -33,7 +33,7 @@ def preprocess_text(text, embeddings_model, maxlen, embeddings_size):
 def preprocess(texts, embeddings_model, embeddings_size, maxlen):
     results = np.zeros((len(texts),maxlen, embeddings_size))
     for i, text in enumerate(texts):
-        results[i] = preprocess_text(embeddings_model, text, maxlen, embeddings_size)
+        results[i] = preprocess_text(text, embeddings_model, maxlen, embeddings_size)
     return results
 
 def generator(prs1, prs2, labels, embeddings_model, embeddings_size, maxlen, batch_size):
