@@ -21,11 +21,12 @@ args = parser.parse_args()
 
 if(args.embeddings_model == "word2vec"):
     from gensim.models import Word2Vec
-    embeddings_model =  Word2Vec.load("doc2vec_models/doc2vec_dbow_epoch9_notest.model")
+    embeddings_model =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_dbow_epoch9_notest.model")
     embeddings_model = embeddings_model.wv
 else:
     import fasttext
-    embeddings_model = fasttext.load_model("fasttext/model.bin")
+    embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
+
 
 tr_gen, tr_steps = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
 val_gen, val_steps = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
