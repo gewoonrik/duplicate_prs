@@ -50,7 +50,7 @@ args = parser.parse_args()
 
 if(args.embeddings_model == "word2vec"):
     from gensim.models import Word2Vec
-    embeddings_model =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_dbow_epoch9_notest.model")
+    embeddings_model =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
     embeddings_model = embeddings_model.wv
 else:
     import fasttext
@@ -88,7 +88,7 @@ model.fit_generator(tr_gen, steps_per_epoch=tr_steps,
                     epochs=epochs,
                     validation_data=val_gen,
                     validation_steps=val_steps,
-                    workers=1)
+                    workers=10)
 score, acc = model.evaluate_generator(te_gen, steps=te_steps)
 print('Test score:', score)
 print('Test accuracy:', acc)
