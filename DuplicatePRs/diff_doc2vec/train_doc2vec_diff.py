@@ -27,7 +27,7 @@ model.build_vocab(documents)
 for epoch in range(10):
     print("epoch "+str(epoch))
     model.train(documents)
-    model.save(config._current_path'/doc2vec_models/doc2vec_dbow_epoch'+str(epoch)+'.model')
+    model.save(config._current_path+'/doc2vec_models/doc2vec_dbow_epoch'+str(epoch)+'.model')
     model.alpha -= 0.002  # decrease the learning rate
     model.min_alpha = model.alpha  # fix the learning rate, no decay
 
