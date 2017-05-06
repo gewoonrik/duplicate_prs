@@ -56,6 +56,7 @@ else:
     import fasttext
     embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
 
+print("setting up datasource")
 
 tr_gen, tr_steps = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
 val_gen, val_steps = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
