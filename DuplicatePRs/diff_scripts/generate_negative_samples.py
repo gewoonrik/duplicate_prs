@@ -1,5 +1,3 @@
-import os
-import urllib
 from multiprocessing import Pool
 from filter_diffs import is_valid_diff
 from DuplicatePRs.dataset import get_diff_file, load_csv
@@ -60,8 +58,8 @@ def generate_negative_samples(file):
     f.close()
 
 
-
-generate_negative_samples("training.csv")
-generate_negative_samples("validation.csv")
-generate_negative_samples("test.csv")
+if __name__ == "__main__":
+    generate_negative_samples("training.csv")
+    generate_negative_samples("validation.csv")
+    generate_negative_samples("test.csv")
 
