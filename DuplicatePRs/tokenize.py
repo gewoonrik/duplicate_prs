@@ -14,7 +14,7 @@ def filter_diff_lines(str):
                     results.append(line)
             elif line[:10] == "diff --git":
                 results.append("NEWFILETOKEN")
-    return "\n".join(results)
+    return "".join(results)
 
 
 def tokenize(text, lower=True):
