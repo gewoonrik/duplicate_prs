@@ -3,7 +3,7 @@ from itertools import chain, imap
 from DuplicatePRs.dataset import load_csv, _current_path, get_diff_file
 
 training = load_csv(_current_path+"/training.csv")
-validation = load_csv(_current_path+"/validation")
+validation = load_csv(_current_path+"/validation.csv")
 test = load_csv(_current_path+"/test.csv")
 all = training + validation + test
 
