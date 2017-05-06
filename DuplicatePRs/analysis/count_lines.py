@@ -1,5 +1,7 @@
 from itertools import chain, imap
 # counts the number of lines of the PRs in the duplicate pairs
+from multiprocessing import Pool
+
 from DuplicatePRs.dataset import load_csv, _current_path, get_diff_file
 
 training = load_csv(_current_path+"/training.csv")
@@ -16,13 +18,15 @@ def get_files_by_line(line):
 
 files = flatmap(get_files_by_line, all)
 
-lines = []
-for file in files:
+def count_lines(file):
     f = open(file, "r")
     content = f.read()
     f.close()
     nrlines = content.count("\n")
-    lines.append(nrlines)
+    return nrlines
+p = Pool(8)
+
+lines = p.map(count_lines, files)
 
 f = open(_current_path+"/analysis/nrlines.txt", "w")
 
