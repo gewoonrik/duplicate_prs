@@ -20,13 +20,13 @@ def load_csv(file):
 
 
 def get_diff_file(owner,repo,id):
-    return  _current_path+"/diffs/"+owner+"@"+repo+"@"+id+".diff"
+    return  _current_path+"/diffs/"+owner+"@"+repo+"@"+str(id)+".diff"
 
 def get_tokenized_file(owner, repo, id):
-    return  _current_path+"/diffs_tokenized/"+owner+"@"+repo+"@"+id+".diff"
+    return  _current_path+"/diffs_tokenized/"+owner+"@"+repo+"@"+str(id)+".diff"
 
 def get_doc2vec_file(owner, repo, id):
-    return  _current_path+"/diffs_doc2vec_preprocessed/"+owner+"@"+repo+"@"+id+".diff"
+    return  _current_path+"/diffs_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".diff"
 
 
 def line_to_diff_files(line):
