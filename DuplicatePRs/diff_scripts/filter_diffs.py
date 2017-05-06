@@ -7,7 +7,7 @@ def is_valid_diff(file):
     content = f.read()
     nr_lines = content.count("\n")
     f.close()
-    return nr_lines > 0 and nr_lines <= 500
+    return nr_lines > 0 and nr_lines <= 28567
 
 def filter_diffs_in_file(file):
     lines  = load_csv(file)
