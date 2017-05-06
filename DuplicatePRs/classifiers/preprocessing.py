@@ -2,8 +2,7 @@ import threading
 
 import numpy as np
 import math
-from DuplicatePRs.dataset import get_tokenized_data, load_csv
-
+from DuplicatePRs.dataset import get_tokenized_data, load_csv, line_to_tokenized_files, read_pickled
 
 cached_vectors = {}
 
@@ -70,15 +69,28 @@ class DataIterator:
         prs2_sliced = self.prs2[cur:cur + self.batch_size]
         labels_sliced = self.labels[cur:cur + self.batch_size]
 
+        prs1_sliced = map(read_pickled, prs1_sliced)
+        prs2_sliced = map(read_pickled, prs2_sliced)
+
+
         prs1_res = preprocess(prs1_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
         prs2_res = preprocess(prs2_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
         return ([prs1_res, prs2_res], labels_sliced)
 
 
-
+def lines_to_tokenized_files(lines):
+    prs1 = []
+    prs2 = []
+    labels = []
+    for line in lines:
+        pr1, pr2, label = line_to_tokenized_files(line)
+        prs1.append(pr1)
+        prs2.append(pr2)
+        labels.append(label)
+    return prs1, prs2, labels
 
 
 def get_preprocessed_generator(file, embeddings_model, embeddings_size, maxlen, batch_size):
-    prs_1, prs_2, y = get_tokenized_data(load_csv(file))
+    prs_1, prs_2, y = lines_to_tokenized_files(load_csv(file))
     return DataIterator(prs_1, prs_2, y, embeddings_model, embeddings_size, maxlen, batch_size), math.ceil(len(y)/batch_size)
 

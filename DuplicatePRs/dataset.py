@@ -28,12 +28,18 @@ def get_tokenized_file(owner, repo, id):
 def get_doc2vec_file(owner, repo, id):
     return  _current_path+"/diffs_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".diff"
 
+def line_to_files(line, file_func):
+    owner, repo, pr1, pr2, is_dup = line.split(",")
+    pr1 = file_func(owner,repo,pr1)
+    pr2 = file_func(owner,repo,pr2)
+    return pr1, pr2, is_dup
 
 def line_to_diff_files(line):
-    owner, repo, pr1, pr2, is_dup = line.split(",")
-    pr1 = get_diff_file(owner,repo,pr1)
-    pr2 = get_diff_file(owner,repo,pr2)
-    return pr1, pr2
+    return line_to_files(line, get_diff_file)
+
+def line_to_tokenized_files(line):
+    return line_to_files(line, get_tokenized_file)
+
 
 def _get_files(lines, get_file_func):
     files = []
