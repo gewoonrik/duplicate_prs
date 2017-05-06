@@ -7,3 +7,4 @@ def download_diff(owner, repo, id):
     if not os.path.isfile(file):
         url = "https://www.github.com/" + owner + "/" + repo + "/pull/" + str(id) + ".diff"
         urllib.urlretrieve(url, file)
+    return file
