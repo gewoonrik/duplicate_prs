@@ -1,5 +1,7 @@
 import sys
 
+from DuplicatePRs import config
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 import os.path
@@ -8,9 +10,9 @@ from multiprocessing import Pool
 from dataset import load_csv, get_diff_files, read_normal
 from tokenize import tokenize,filter_diff_lines
 
-training = load_csv("training_with_negative_samples.csv")
-validation = load_csv("validation_with_negative_samples.csv")
-test = load_csv("test_with_negative_samples.csv")
+training = load_csv(config.training_dataset_file)
+validation = load_csv(config.validation_dataset_file)
+test = load_csv(config.test_dataset_file)
 
 total = training+test+validation
 
