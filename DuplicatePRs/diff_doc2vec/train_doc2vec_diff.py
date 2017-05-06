@@ -22,7 +22,8 @@ total = training+validation
 
 documents = Documents(get_tokenized_files(total))
 
-model = Doc2Vec(size=config.embeddings_size, dm=0,  window=5, seed=1337, min_count=5, workers=16,alpha=0.025, min_alpha=0.025)
+#iter = 1, because we keep training ourselves :)
+model = Doc2Vec(size=config.embeddings_size, dbow_words= 1, dm=0, iter=1,  window=5, seed=1337, min_count=5, workers=16,alpha=0.025, min_alpha=0.025)
 model.build_vocab(documents)
 for epoch in range(10):
     print("epoch "+str(epoch))
