@@ -1,6 +1,5 @@
 import threading
-from multiprocessing import Pool
-from functools import partial
+
 import numpy as np
 import math
 from DuplicatePRs.dataset import get_tokenized_data, load_csv, line_to_tokenized_files, read_pickled
@@ -8,7 +7,8 @@ from DuplicatePRs.dataset import get_tokenized_data, load_csv, line_to_tokenized
 cached_vectors = {}
 
 
-def preprocess_text(seq, embeddings_model, maxlen, embeddings_size):
+def preprocess_text(text, embeddings_model, maxlen, embeddings_size):
+    seq = text
     seq = seq[0:maxlen-1]
     res = np.zeros((maxlen, embeddings_size))
     seq_length = len(seq)
@@ -37,9 +37,6 @@ def preprocess(texts, embeddings_model, embeddings_size, maxlen):
         results[i] = preprocess_text(text, embeddings_model, maxlen, embeddings_size)
     return results
 
-def read_and_preprocess(embeddings_model, embeddings_size, maxlen, pr_file):
-    content = read_pickled(pr_file)
-    return preprocess_text(content, embeddings_model, maxlen, embeddings_size)
 
 class DataIterator:
     def __init__(self, prs1, prs2, labels, embeddings_model, embeddings_size, maxlen, batch_size):
@@ -53,8 +50,6 @@ class DataIterator:
         self.lock = threading.Lock()
         self.i = 0
         self.steps = math.ceil(len(labels)/batch_size)
-        self.p = Pool(8)
-        self.preprocess = partial(read_and_preprocess, embeddings_model, embeddings_size, maxlen)
 
     def __iter__(self):
         return self
@@ -74,10 +69,13 @@ class DataIterator:
         prs2_sliced = self.prs2[cur:cur + self.batch_size]
         labels_sliced = self.labels[cur:cur + self.batch_size]
 
-        prs1_sliced = self.p.map(self.preprocess, prs1_sliced)
-        prs2_sliced = self.p.map(self.preprocess, prs2_sliced)
+        prs1_sliced = map(read_pickled, prs1_sliced)
+        prs2_sliced = map(read_pickled, prs2_sliced)
 
-        return ([np.asarray(prs1_sliced), np.asarray(prs2_sliced)], labels_sliced)
+
+        prs1_res = preprocess(prs1_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
+        prs2_res = preprocess(prs2_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
+        return ([prs1_res, prs2_res], labels_sliced)
 
 
 def lines_to_tokenized_files(lines):
