@@ -1,4 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import pickle
+import codecs
+
 from multiprocessing import Pool
 
 from pymongo import MongoClient
@@ -19,9 +24,9 @@ def get_title(owner, repo, id):
     return db.pull_requests.find_one({"owner":owner, "repo":repo, "number": int(id)})["title"]
 
 def get_and_save_title(owner, repo, id):
-    title = get_title(owner,repo,id)
+    title = get_title(owner,repo,id).decode("utf-8")
     title_file = get_title_file(owner, repo, id)
-    f = open(title_file, "w")
+    f = codecs.open(title_file, "w", "utf-8")
     f.write(title)
     f.close()
     return title
