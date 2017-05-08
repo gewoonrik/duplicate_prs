@@ -13,9 +13,10 @@ total = tpr1s+tpr2s+valpr1s+valpr2s
 
 flat = [item for sublist in total for item in sublist]
 
+print("start counting")
 vocab = Counter(flat)
 
-
+print("start filtering")
 filtered_vocab = {}
 i = 0
 for token, count in vocab.iteritems():
