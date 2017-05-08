@@ -19,23 +19,17 @@ tr_titles_1, tr_titles_2, _ = get_doc2vec_data_titles(train)
 val_titles_1, val_titles_2, _ = get_doc2vec_data_titles(validation)
 te_titles_1, te_titles_2, _ = get_doc2vec_data_titles(test)
 
-pr =  Input(shape=(config.maxlen,config.embeddings_size), dtype='float32')
-title =  Input(shape=(config.maxlen,config.embeddings_size), dtype='float32')
-
-x = merge([pr,title], mode="concat")
-output = Dense(300, activation='relu')(x)
-shared_model = Model([pr,title], output)
-
 pr1 = Input(shape=(300,), dtype='float32', name='pr1_input')
 title1 = Input(shape=(300,), dtype='float32', name='title1_input')
 
 pr2 = Input(shape=(300,), dtype='float32', name='pr2_input')
 title2 = Input(shape=(300,), dtype='float32', name='title2_input')
 
-p1 = shared_model([pr1,title1])
+p1 = merge([pr1, title1])
+p1 = Dense(300, activation='relu')(p1)
 
-p2 = shared_model([pr2,title2])
-
+p2 = merge([pr2, title2])
+p2 = Dense(300, activation='relu')(p2)
 
 x = merged = merge([p1, pr2], mode='concat')
 x = Dense(600, activation='relu')(x)
