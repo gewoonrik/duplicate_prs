@@ -5,7 +5,7 @@ from gensim.models import Doc2Vec
 from DuplicatePRs.dataset import load_csv, get_tokenized_files, read_pickled
 from DuplicatePRs import config
 
-model = Doc2Vec.load("doc2vec_models/doc2vec_dbow_epoch.model")
+model = Doc2Vec.load(config._current_path+"/doc2vec_models/doc2vec_dbow_epoch.model")
 
 def docs2vec(file):
     content = read_pickled(file)
