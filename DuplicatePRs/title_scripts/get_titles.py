@@ -17,9 +17,10 @@ test = load_csv(config.test_dataset_file)
 
 all = training+validation+test
 
+client = MongoClient('127.0.0.1', 27017)
+
 
 def get_title(owner, repo, id):
-    client = MongoClient('127.0.0.1', 27017)
     db = client.github
     return db.pull_requests.find_one({"owner":owner, "repo":repo, "number": int(id)})["title"]
 
