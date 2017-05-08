@@ -1,25 +1,40 @@
+import argparse
 import pickle
 from multiprocessing import Pool
 
 from gensim.models import Doc2Vec
-from DuplicatePRs.dataset import load_csv, get_tokenized_files, read_pickled
+from DuplicatePRs.dataset import load_csv, get_tokenized_files, read_pickled, get_tokenized_title_files
 from DuplicatePRs import config
 
-model = Doc2Vec.load(config._current_path+"/doc2vec_models/doc2vec_dbow_epoch.model")
+parser = argparse.ArgumentParser()
+parser.add_argument('--titles', action="store_true")
+
+args = parser.parse_args()
+
+
+if args.titles:
+    get_files = get_tokenized_title_files
+    file = "doc2vec_word2vec_dbow_title_epoch"
+else:
+    get_files = get_tokenized_files
+    file = "doc2vec_word2vec_dbow_epoch"
+
+
+model = Doc2Vec.load(config._current_path+"/doc2vec_models/"+file+"9.model")
 
 def docs2vec(file):
     content = read_pickled(file)
     vec = model.infer_vector(content)
 
-    processed_pr = file.replace("diffs_tokenized","diffs_doc2vec_preprocessed")
+    processed_pr = file.replace("_tokenized","_doc2vec_preprocessed")
 
     with open(processed_pr, 'w') as f:
         pickle.dump(vec, f)
 
 
-tr_files = get_tokenized_files(load_csv(config.training_dataset_file))
-val_files = get_tokenized_files(load_csv(config.validation_dataset_file))
-te_files  = get_tokenized_files(load_csv(config.test_dataset_file))
+tr_files = get_files(load_csv(config.training_dataset_file))
+val_files = get_files(load_csv(config.validation_dataset_file))
+te_files  = get_files(load_csv(config.test_dataset_file))
 
 total = tr_files+val_files+te_files
 
