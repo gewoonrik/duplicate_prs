@@ -61,7 +61,7 @@ def get_tokenized_files(lines):
     return _get_files(lines, get_tokenized_file)
 
 def get_tokenized_title_files(lines):
-    return _get_files(lines, get_tokenized_title_file())
+    return _get_files(lines, get_tokenized_title_file)
 
 def get_diff_files(lines):
     return _get_files(lines, get_diff_file)
