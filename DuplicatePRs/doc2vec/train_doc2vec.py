@@ -6,7 +6,7 @@ from DuplicatePRs import config
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--title')
+parser.add_argument('--titles', action="store_true")
 
 args = parser.parse_args()
 
