@@ -41,7 +41,7 @@ model = Doc2Vec(size=config.embeddings_size, dbow_words= 1, dm=0, iter=1,  windo
 model.build_vocab(documents)
 for epoch in range(10):
     print("epoch "+str(epoch))
-    model.train(documents, total_examples=len(total), epochs=1)
+    model.train(documents, total_examples=len(total)*2, epochs=1)
     model.save(config._current_path+'/doc2vec_models/'+file+str(epoch)+'.model')
     model.alpha -= 0.002  # decrease the learning rate
     model.min_alpha = model.alpha  # fix the learning rate, no decay
