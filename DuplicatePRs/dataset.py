@@ -18,6 +18,12 @@ def load_csv(file):
     return lines
 
 
+def get_title_file(owner,repo,id):
+    return  _current_path+"/titles/"+owner+"@"+repo+"@"+str(id)+".title"
+
+def get_tokenized_title_file(owner,repo,id):
+    return  _current_path+"/titles_tokenized/"+owner+"@"+repo+"@"+str(id)+".title"
+
 
 def get_diff_file(owner,repo,id):
     return  _current_path+"/diffs/"+owner+"@"+repo+"@"+str(id)+".diff"
