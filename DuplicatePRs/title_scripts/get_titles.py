@@ -24,7 +24,7 @@ def get_title(owner, repo, id):
     return db.pull_requests.find_one({"owner":owner, "repo":repo, "number": int(id)})["title"]
 
 def get_and_save_title(owner, repo, id):
-    title = get_title(owner,repo,id).decode("utf-8")
+    title = get_title(owner,repo,id)
     title_file = get_title_file(owner, repo, id)
     f = codecs.open(title_file, "w", "utf-8")
     f.write(title)
