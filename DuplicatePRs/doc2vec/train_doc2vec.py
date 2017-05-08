@@ -26,7 +26,7 @@ validation = load_csv(config.validation_dataset_file)
 total = training+validation
 
 
-if(args.title):
+if(args.titles):
     documents = Documents(get_tokenized_title_files(total))
     print("learning based on titles")
     file = "doc2vec_word2vec_dbow_title_epoch"
