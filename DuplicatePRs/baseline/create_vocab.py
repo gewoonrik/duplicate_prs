@@ -23,6 +23,6 @@ for token, count in vocab.iteritems():
         filtered_vocab[token] = i
         i += 1
 
-f = open(config._current_path+"/baseline/vocab.py")
+f = open(config._current_path+"/baseline/vocab.py", "w")
 pickle.dump(filtered_vocab,f)
 f.close()
