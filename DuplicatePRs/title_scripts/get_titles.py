@@ -27,7 +27,7 @@ def get_and_save_title(owner, repo, id):
     return title
 
 def process_line(line):
-    owner, repo, pr1, pr2 = line.split(",")
+    owner, repo, pr1, pr2, is_dup = line.split(",")
     title_1 = get_and_save_title(owner,repo,pr1)
     title_2 = get_and_save_title(owner,repo,pr2)
 
