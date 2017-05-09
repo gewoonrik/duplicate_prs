@@ -47,7 +47,7 @@ def get_doc2vec_file_diff(owner, repo, id):
 def get_doc2vec_file_title(owner, repo, id):
     return  _current_path+"/titles_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".title"
 def get_doc2vec_file_description(owner, repo, id):
-    return  _current_path+"/descriptions_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".descriptions"
+    return  _current_path+"/descriptions_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".description"
 
 
 def line_to_files(line, file_func):
