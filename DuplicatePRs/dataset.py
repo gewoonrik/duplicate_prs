@@ -46,6 +46,8 @@ def get_doc2vec_file_diff(owner, repo, id):
 
 def get_doc2vec_file_title(owner, repo, id):
     return  _current_path+"/titles_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".title"
+def get_doc2vec_file_description(owner, repo, id):
+    return  _current_path+"/descriptions_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".descriptions"
 
 
 def line_to_files(line, file_func):
@@ -121,6 +123,9 @@ def get_doc2vec_data_diffs(lines):
 
 def get_doc2vec_data_titles(lines):
     return _get_data(lines, get_doc2vec_file_title, read_pickled)
+
+def get_doc2vec_data_descriptions(lines):
+    return _get_data(lines, get_doc2vec_file_description, read_pickled)
 
 def get_tokenized_data(lines):
     return _get_data(lines, get_tokenized_file, read_pickled)

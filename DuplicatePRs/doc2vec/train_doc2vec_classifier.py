@@ -2,7 +2,7 @@ from keras.callbacks import CSVLogger
 from keras.layers import Input, merge, Dense, Dropout
 from keras.models import Model
 from keras.callbacks import ModelCheckpoint
-from DuplicatePRs.dataset import load_csv, get_doc2vec_data_diffs, get_doc2vec_data_titles
+from DuplicatePRs.dataset import load_csv, get_doc2vec_data_diffs, get_doc2vec_data_descriptions
 from DuplicatePRs import config
 from keras.optimizers import Adam
 from DuplicatePRs import config
@@ -16,9 +16,9 @@ val_1, val_2, val_labels = get_doc2vec_data_diffs(validation)
 test_1, test_2, test_labels = get_doc2vec_data_diffs(test)
 
 
-tr_titles_1, tr_titles_2, _ = get_doc2vec_data_titles(train)
-val_titles_1, val_titles_2, _ = get_doc2vec_data_titles(validation)
-te_titles_1, te_titles_2, _ = get_doc2vec_data_titles(test)
+tr_titles_1, tr_titles_2, _ = get_doc2vec_data_descriptions(train)
+val_titles_1, val_titles_2, _ = get_doc2vec_data_descriptions(validation)
+te_titles_1, te_titles_2, _ = get_doc2vec_data_descriptions(test)
 
 pr1 = Input(shape=(300,), dtype='float32', name='pr1_input')
 title1 = Input(shape=(300,), dtype='float32', name='title1_input')
