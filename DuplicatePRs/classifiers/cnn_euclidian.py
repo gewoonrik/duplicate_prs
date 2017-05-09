@@ -1,5 +1,6 @@
 import argparse
 
+from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger
 from keras.models import Model
 from keras.layers import Lambda
 from keras.layers import Input
@@ -45,7 +46,7 @@ def contrastive_loss(y_true, y_pred):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--embeddings_model', default='word2vec')
-parser.add_argument('--learning_rate', type=float, default=0.003)
+parser.add_argument('--learning_rate', type=float, default=0.002)
 
 args = parser.parse_args()
 
@@ -88,12 +89,15 @@ model.compile(loss=contrastive_loss,
 
 print('Train...')
 
+checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/cnn_euclidian-{val_loss:5.5f}-{val_acc:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
+early_stopping = EarlyStopping(monitor="val_loss", patience=5)
+csv_logger = CSVLogger(config._current_path+"/classifier_models/cnn_euclidian.csv")
 
 model.fit_generator(tr_gen, steps_per_epoch=tr_steps,
                     epochs=epochs,
                     validation_data=val_gen,
                     validation_steps=val_steps,
-                    workers=10)
+                    workers=1, callbacks=[checkpoint, early_stopping, csv_logger])
 score, acc = model.evaluate_generator(te_gen, steps=te_steps)
 print('Test score:', score)
 print('Test accuracy:', acc)
