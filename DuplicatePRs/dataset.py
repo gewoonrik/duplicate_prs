@@ -97,35 +97,38 @@ def read_normal(file):
     f.close()
     return content
 
-def _get_data_by_line(get_file_func, read, line):
+def _get_data_by_line(get_file_func, read, maxlen, line):
     owner, repo, pr1, pr2, is_dup = line.split(",")
     pr1_file = get_file_func(owner, repo, pr1)
     pr2_file = get_file_func(owner, repo, pr2)
 
     pr1_data = read(pr1_file)
     pr2_data = read(pr2_file)
+    if maxlen != None:
+        pr1_data = pr1_data[:maxlen]
+        pr2_data = pr2_data[:maxlen]
     return pr1_data, pr2_data, is_dup
 
-def _get_data(lines, get_file_func, read):
-    get_data_func = partial(_get_data_by_line, get_file_func, read)
+def _get_data(lines, get_file_func, read, maxlen = None):
+    get_data_func = partial(_get_data_by_line, get_file_func, read, maxlen)
     pool = Pool(8)
 
     data = pool.map(get_data_func, lines)
+    pool.close()
 
     #http://stackoverflow.com/questions/7558908/unpacking-a-list-tuple-of-pairs-into-two-lists-tuples
     pr1s, pr2s, labels = zip(*data)
-
     return np.asarray(pr1s), np.asarray(pr2s), np.asarray(labels)
 
 
 def get_doc2vec_data_diffs(lines):
-    return _get_data(lines, get_doc2vec_file_diff, read_pickled)
+    return _get_data(lines, get_doc2vec_file_diff, read_pickled, None)
 
 def get_doc2vec_data_titles(lines):
-    return _get_data(lines, get_doc2vec_file_title, read_pickled)
+    return _get_data(lines, get_doc2vec_file_title, read_pickled, None)
 
 def get_doc2vec_data_descriptions(lines):
-    return _get_data(lines, get_doc2vec_file_description, read_pickled)
+    return _get_data(lines, get_doc2vec_file_description, read_pickled, None)
 
-def get_tokenized_data(lines):
-    return _get_data(lines, get_tokenized_file, read_pickled)
+def get_tokenized_data(lines, maxlen = None):
+    return _get_data(lines, get_tokenized_file, read_pickled, maxlen)

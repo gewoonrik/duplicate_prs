@@ -4,7 +4,6 @@ import numpy as np
 import math
 from DuplicatePRs.dataset import get_tokenized_data, load_csv, line_to_tokenized_files, read_pickled
 
-cached_vectors = {}
 
 
 def preprocess_text(text, embeddings_model, maxlen, embeddings_size):
@@ -17,12 +16,7 @@ def preprocess_text(text, embeddings_model, maxlen, embeddings_size):
     i = 0
     for elem in seq:
         try:
-            if elem in cached_vectors:
-                res[i+offset] = cached_vectors[elem]
-            else:
-                vec = embeddings_model[elem]
-                res[i+offset] = vec
-                cached_vectors[elem] = vec
+            res[i+offset] = embeddings_model[elem]
         except KeyError:
             #just keep zeros if we don't have a vector
             pass
@@ -69,10 +63,6 @@ class DataIterator:
         prs2_sliced = self.prs2[cur:cur + self.batch_size]
         labels_sliced = self.labels[cur:cur + self.batch_size]
 
-        prs1_sliced = map(read_pickled, prs1_sliced)
-        prs2_sliced = map(read_pickled, prs2_sliced)
-
-
         prs1_res = preprocess(prs1_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
         prs2_res = preprocess(prs2_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
         return ([prs1_res, prs2_res], labels_sliced)
@@ -91,6 +81,8 @@ def lines_to_tokenized_files(lines):
 
 
 def get_preprocessed_generator(file, embeddings_model, embeddings_size, maxlen, batch_size):
-    prs_1, prs_2, y = lines_to_tokenized_files(load_csv(file))
+    print("loading data into memory")
+    prs_1, prs_2, y = get_tokenized_data(load_csv(file), maxlen)
+    print("starting iterator")
     return DataIterator(prs_1, prs_2, y, embeddings_model, embeddings_size, maxlen, batch_size), math.ceil(len(y)/batch_size)
 
