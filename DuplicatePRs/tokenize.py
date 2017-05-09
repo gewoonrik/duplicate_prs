@@ -8,12 +8,12 @@ def filter_diff_lines(str):
             if line[0] == "+" or line[0] == "-":
                 if length == 1 or ( line[1] != "+" and line[1] != "-"):
                     if line[0] == "+":
-                        line = "LINEADDEDTOKEN" + line[1:]
+                        line = " LINEADDEDTOKEN " + line[1:]
                     elif line[0] == "-":
-                        line = "LINEREMOVEDTOKEN" + line[1:]
+                        line = " LINEREMOVEDTOKEN " + line[1:]
                     results.append(line)
             elif line[:10] == "diff --git":
-                results.append("NEWFILETOKEN")
+                results.append(" NEWFILETOKEN ")
     return " ".join(results)
 
 
