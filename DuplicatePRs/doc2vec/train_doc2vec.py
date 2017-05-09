@@ -1,12 +1,14 @@
 import argparse
 import logging
 from gensim.models.doc2vec import TaggedDocument, Doc2Vec
-from DuplicatePRs.dataset import load_csv, get_tokenized_files, read_pickled, get_tokenized_title_files
+from DuplicatePRs.dataset import load_csv, get_tokenized_files, read_pickled, get_tokenized_title_files, \
+    get_tokenized_description_files
 from DuplicatePRs import config
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--titles', action="store_true")
+parser.add_argument('--descriptions', action="store_true")
 
 args = parser.parse_args()
 cached_files = {}
@@ -34,6 +36,10 @@ if(args.titles):
     documents = Documents(get_tokenized_title_files(total))
     print("learning based on titles")
     file = "doc2vec_word2vec_dbow_title_epoch"
+elif args.descriptions:
+    documents = Documents(get_tokenized_description_files(total))
+    print("learning based on descriptions")
+    file = "doc2vec_word2vec_dbow_description_epoch"
 else:
     documents = Documents(get_tokenized_files(total))
     print("learning based on diffs")

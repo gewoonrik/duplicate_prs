@@ -30,7 +30,7 @@ def get_description_file(owner,repo,id):
 def get_tokenized_description_file(owner,repo,id):
     return  _current_path+"/descriptions_tokenized/"+owner+"@"+repo+"@"+str(id)+".description"
 
-def get_tokenized_description_file(owner,repo,id):
+def get_doc2vec_description_file(owner,repo,id):
     return  _current_path+"/descriptions_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".description"
 
 
@@ -76,6 +76,9 @@ def get_tokenized_files(lines):
 
 def get_tokenized_title_files(lines):
     return _get_files(lines, get_tokenized_title_file)
+
+def get_tokenized_description_files(lines):
+    return _get_files(lines, get_tokenized_description_file)
 
 def get_diff_files(lines):
     return _get_files(lines, get_diff_file)
