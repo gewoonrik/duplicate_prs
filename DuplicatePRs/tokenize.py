@@ -36,4 +36,6 @@ def tokenize(text, lower=True):
                 curr = ""
             if not c.isspace() or c == '\n':
                 seq.append(c)
+    if curr != "":
+        seq.append(curr)
     return [_f for _f in seq if _f]
