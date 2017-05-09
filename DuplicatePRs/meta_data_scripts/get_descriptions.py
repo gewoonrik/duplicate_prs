@@ -27,6 +27,8 @@ def get_description(owner, repo, id):
 def get_and_save_description(owner, repo, id):
     description = get_description(owner,repo,id)
     description_file = get_description_file(owner, repo, id)
+    if description == None:
+        description = ""
     f = codecs.open(description_file, "w", "utf-8")
     f.write(description)
     f.close()
