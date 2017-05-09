@@ -31,8 +31,12 @@ def get_diff_file(owner,repo,id):
 def get_tokenized_file(owner, repo, id):
     return  _current_path+"/diffs_tokenized/"+owner+"@"+repo+"@"+str(id)+".diff"
 
-def get_doc2vec_file(owner, repo, id):
+def get_doc2vec_file_diff(owner, repo, id):
     return  _current_path+"/diffs_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".diff"
+
+def get_doc2vec_file_title(owner, repo, id):
+    return  _current_path+"/titles_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".diff"
+
 
 def line_to_files(line, file_func):
     owner, repo, pr1, pr2, is_dup = line.split(",")
@@ -99,10 +103,11 @@ def _get_data(lines, get_file_func, read):
     return np.asarray(pr1s), np.asarray(pr2s), np.asarray(labels)
 
 
-def get_doc2vec_data(lines):
-    return _get_data(lines, get_doc2vec_file, read_pickled)
+def get_doc2vec_data_diffs(lines):
+    return _get_data(lines, get_doc2vec_file_diff, read_pickled)
 
-
+def get_doc2vec_data_titles(lines):
+    return _get_data(lines, get_doc2vec_file_title, read_pickled)
 
 def get_tokenized_data(lines):
     return _get_data(lines, get_tokenized_file, read_pickled)
