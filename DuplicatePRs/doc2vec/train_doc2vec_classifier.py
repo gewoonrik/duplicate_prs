@@ -29,7 +29,7 @@ x = merged = merge([pr1,title1, pr2, title2], mode='concat')
 x = Dense(600, activation='relu')(x)
 main_output = Dense(1, activation='sigmoid', name='output')(x)
 
-model = Model(input=[pr1, pr2], output=[main_output])
+model = Model(input=[pr1, title1, pr2, title2], output=[main_output])
 
 optimizer = Adam(lr = 0.00011)
 
@@ -41,9 +41,9 @@ checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/doc2vec_cl
 print("train")
 
 
-model.fit([tr_1, tr_2], tr_labels, batch_size=100, nb_epoch=100,
-          validation_data=([val_1, val_2], val_labels), callbacks=[checkpoint])
+model.fit([tr_1, tr_titles_1, tr_2, tr_titles_2], tr_labels, batch_size=100, nb_epoch=100,
+          validation_data=([val_1, val_titles_1, val_2, val_titles_2], val_labels), callbacks=[checkpoint])
 
-results = model.evaluate([test_1, test_2], test_labels, batch_size=100)
+results = model.evaluate([test_1, te_titles_1, test_2, te_titles_2], test_labels, batch_size=100)
 print('Test results: ', results)
 print('On metrics: ', model.metrics_names)
