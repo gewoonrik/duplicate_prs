@@ -52,10 +52,10 @@ args = parser.parse_args()
 
 if(args.embeddings_model == "word2vec"):
     from gensim.models import Word2Vec
-    embeddings_model =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
-    embeddings_model = embeddings_model.wv
+    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
+    embeddings_model = w2vec.wv
     # save memory
-    del embeddings_model
+    del w2vec
 else:
     import fasttext
     embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
