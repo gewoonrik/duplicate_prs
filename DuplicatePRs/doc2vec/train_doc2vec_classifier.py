@@ -23,7 +23,7 @@ te_titles_1, te_titles_2, _ = get_doc2vec_data_titles(test)
 pr1 = Input(shape=(300,), dtype='float32', name='pr1_input')
 title1 = Input(shape=(300,), dtype='float32', name='title1_input')
 pr2 = Input(shape=(300,), dtype='float32', name='pr2_input')
-title2 = Input(shape=(300,), dtype='float32', name='pr2_input')
+title2 = Input(shape=(300,), dtype='float32', name='title2_input')
 
 x = merged = merge([pr1,title1, pr2, title2], mode='concat')
 x = Dense(600, activation='relu')(x)
