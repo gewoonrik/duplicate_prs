@@ -42,7 +42,7 @@ def process_line(line):
 
 def tokenize_description(description):
     # keep the #, because that can sign for an issue or a PR
-    preprocessed = ''.join(e for e in description if e.isalnum() or e == '#').lower()
+    preprocessed = ''.join(e for e in description if e.isalnum() or e == '#' or e.isspace()).lower()
     seq = []
     curr = ""
     # group all alpha characters, remove spaces/newlines
@@ -56,6 +56,8 @@ def tokenize_description(description):
                 curr = ""
             if not c.isspace() or c == '\n':
                 seq.append(c)
+    if curr != "":
+        seq.append(curr)
     return [_f for _f in seq if _f]
 
 def tokenize_and_save_description(owner, repo, id, description):
