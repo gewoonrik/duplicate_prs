@@ -1,6 +1,6 @@
 # counts the number of tokens of the PRs
 
-from DuplicatePRs.dataset import load_csv, _current_path, get_tokenized_data
+from DuplicatePRs.dataset import load_csv, _current_path, get_tokenized_files, read_pickled
 from DuplicatePRs import config
 
 training = load_csv(config.training_dataset_file)
@@ -8,10 +8,16 @@ validation = load_csv(config.validation_dataset_file)
 test = load_csv(config.test_dataset_file)
 all = training + validation + test
 
-files = get_tokenized_data(all)
+
+def count_tokens(file):
+    content = read_pickled(file)
+    return len(content)
 
 
-nr_tokens = map(len, files)
+files = get_tokenized_files(all)
+
+
+nr_tokens = map(count_tokens, files)
 
 f = open(_current_path+"/analysis/nrtokens.txt", "w")
 txt = "\n".join(str(x) for x in nr_tokens)
