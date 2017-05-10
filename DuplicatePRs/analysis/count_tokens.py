@@ -1,4 +1,5 @@
 # counts the number of tokens of the PRs
+from multiprocessing import Pool
 
 from DuplicatePRs.dataset import load_csv, _current_path, get_tokenized_files, read_pickled
 from DuplicatePRs import config
@@ -16,8 +17,9 @@ def count_tokens(file):
 
 files = get_tokenized_files(all)
 
+p = Pool(4)
 
-nr_tokens = map(count_tokens, files)
+nr_tokens = p.map(count_tokens, files)
 
 f = open(_current_path+"/analysis/nrtokens.txt", "w")
 txt = "\n".join(str(x) for x in nr_tokens)
