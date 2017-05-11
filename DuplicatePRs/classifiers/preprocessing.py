@@ -63,8 +63,12 @@ class DataIterator:
         prs2_sliced = self.prs2[cur:cur + self.batch_size]
         labels_sliced = self.labels[cur:cur + self.batch_size]
 
-        prs1_res = preprocess(prs1_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
-        prs2_res = preprocess(prs2_sliced, self.embeddings_model, self.embeddings_size, self.maxlen)
+        if self.maxlen == None:
+            maxlen = max(map(len,prs1_sliced+prs2_sliced))
+        else:
+            maxlen = self.maxlen
+        prs1_res = preprocess(prs1_sliced, self.embeddings_model, self.embeddings_size, maxlen)
+        prs2_res = preprocess(prs2_sliced, self.embeddings_model, self.embeddings_size, maxlen)
         return ([prs1_res, prs2_res], labels_sliced)
 
 
