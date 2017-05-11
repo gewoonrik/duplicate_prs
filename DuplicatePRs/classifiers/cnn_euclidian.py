@@ -86,9 +86,9 @@ model.compile(loss=contrastive_loss,
 
 print('Train...')
 
-checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/cnn_euclidian-{val_loss:5.5f}-{val_acc:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
+checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/cnn_euclidian/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
 early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stopping_patience)
-csv_logger = CSVLogger(config._current_path+"/classifier_models/cnn_euclidian.csv")
+csv_logger = CSVLogger(config._current_path+"/classifier_models/cnn_euclidian/training.csv")
 
 model.fit_generator(tr_gen, steps_per_epoch=tr_steps,
                     epochs=epochs,

@@ -28,9 +28,9 @@ optimizer = Adam(lr = 0.0001)
 
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
-checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/doc2vec/doc2vec_classifier-{val_acc:5.5f}.hdf5", monitor="val_acc", save_best_only=True)
+checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/doc2vec/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
 early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stopping_patience)
-csv_logger = CSVLogger(config._current_path+"/classifier_models/doc2vec/doc2vec_classifier.csv")
+csv_logger = CSVLogger(config._current_path+"/classifier_models/doc2vec/training.csv")
 
 
 print("train")
