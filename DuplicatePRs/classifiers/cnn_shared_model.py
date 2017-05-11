@@ -8,14 +8,14 @@ from DuplicatePRs import config
 input =  Input(shape=(config.maxlen,config.embeddings_size), dtype='float32')
 conv_3 = Conv1D(config.nr_filters,
                 3,
-                padding='valid',
+                padding='same',
                 activation='relu',
                 strides=1)(input)
 out_3 = GlobalMaxPooling1D()(conv_3)
 
 conv_4 = Conv1D(config.nr_filters,
                 4,
-                padding='valid',
+                padding='same',
                 activation='relu',
                 strides=1)(input)
 out_4 = GlobalMaxPooling1D()(conv_4)
@@ -23,7 +23,7 @@ out_4 = GlobalMaxPooling1D()(conv_4)
 
 conv_5 = Conv1D(config.nr_filters,
                 5,
-                padding='valid',
+                padding='same',
                 activation='relu',
                 strides=1)(input)
 out_5 = GlobalMaxPooling1D()(conv_5)
