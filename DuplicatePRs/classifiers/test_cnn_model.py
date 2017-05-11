@@ -1,9 +1,11 @@
 import argparse
+from functools import partial
+
 from keras.models import load_model
 import keras.backend as K
 
 from DuplicatePRs import config
-from DuplicatePRs.classifiers.preprocessing import preprocess
+from DuplicatePRs.classifiers.preprocessing import preprocess, get_preprocessed_generator
 from DuplicatePRs.dataset import load_csv, get_tokenized_data
 
 
@@ -12,19 +14,21 @@ def contrastive_loss(y_true, y_pred):
     http://yann.lecun.com/exdb/publis/pdf/hadsell-chopra-lecun-06.pdf
     '''
     margin = 1
-    return K.mean(y_true * K.square(y_pred) +
-                  (1 - y_true) * K.square(K.maximum(margin - y_pred, 0)))
+    # duplicates should be low, non duplicates should be high
+    # so duplicates = 0, non duplicate = 1
+    y_true = -1 * y_true + 1
+    return K.mean((1 - y_true) * K.square(y_pred) +  y_true * K.square(K.maximum(margin - y_pred, 0)))
 
 
-def acc(y_true, y_pred):
-    ones = K.ones_like(y_pred)
-    return K.mean(K.equal(y_true, ones - K.clip(K.round(y_pred), 0, 1)), axis=-1)
+def acc(cutoff, y_true, y_pred):
+    k_cutoff = K.ones_like(y_pred) * cutoff
+    return K.mean(K.equal(y_true, K.less(y_pred, k_cutoff), axis=-1))
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--embeddings_model', default='word2vec')
-parser.add_argument('--learning_rate', type=float, default=0.003)
 parser.add_argument('--model', default='')
+parser.add_argument('--cutoff', default=0.5, type=float)
 
 
 args = parser.parse_args()
@@ -32,23 +36,23 @@ args = parser.parse_args()
 
 if(args.embeddings_model == "word2vec"):
     from gensim.models import Word2Vec
-    embeddings_model =  Word2Vec.load("doc2vec_models/doc2vec_dbow_epoch9_notest.model")
+    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
+    embeddings_model = w2vec.wv
+    # save memory
+    del w2vec
 else:
     import fasttext
     embeddings_model = fasttext.load_model("fasttext/model.bin")
 
 
-lines = load_csv("validation_with_negative_samples.csv")
-test_1, test_2, test_labels = get_tokenized_data(lines)
+lines = load_csv(config.test_dataset_file)
+test_gen, test_steps, test_labels = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, None, 5)
 
-test_1 = preprocess(embeddings_model, test_1, config.embeddings_size, config.maxlen)
-test_2 = preprocess(embeddings_model, test_2, config.embeddings_size, config.maxlen)
-
-
-model = load_model("classifier_models/cnn_fasttext_classifier-0.79271.hdf5",{"contrastive_loss":contrastive_loss, "acc":acc})
+acc_cutoff = partial(acc, args.cutoff)
+model = load_model(config._current_path+"/classifier_models/"+args.model,{"contrastive_loss":contrastive_loss, "acc":acc_cutoff})
 
 
-results = model.evaluate([test_1, test_2], test_labels, batch_size=100)
+results = model.evaluate_generator(test_gen, test_steps)
 
 print('Test score: ', results)
 
