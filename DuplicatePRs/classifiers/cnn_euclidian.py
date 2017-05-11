@@ -38,8 +38,8 @@ def contrastive_loss(y_true, y_pred):
     http://yann.lecun.com/exdb/publis/pdf/hadsell-chopra-lecun-06.pdf
     '''
     margin = 1
-    return K.mean(y_true * K.square(y_pred) +
-                  (1 - y_true) * K.square(K.maximum(margin - y_pred, 0)))
+    return K.mean((1 - y_true) * K.square(y_pred) + y_true * K.square(K.maximum(margin - y_pred, 0)))
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--embeddings_model', default='word2vec')
@@ -86,9 +86,9 @@ model.compile(loss=contrastive_loss,
 
 print('Train...')
 
-checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/cnn_euclidian/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
+checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/cnn_euclidian2/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
 early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stopping_patience)
-csv_logger = CSVLogger(config._current_path+"/classifier_models/cnn_euclidian/training.csv")
+csv_logger = CSVLogger(config._current_path+"/classifier_models/cnn_euclidian2/training.csv")
 
 model.fit_generator(tr_gen, steps_per_epoch=tr_steps,
                     epochs=epochs,
