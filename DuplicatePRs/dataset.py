@@ -104,9 +104,8 @@ def _get_data_by_line(get_file_func, read, maxlen, line):
 
     pr1_data = read(pr1_file)
     pr2_data = read(pr2_file)
-    if maxlen != None:
-        pr1_data = pr1_data[:maxlen]
-        pr2_data = pr2_data[:maxlen]
+    if maxlen != None and (len(pr1_data) > maxlen or len(pr2_data) > maxlen):
+        return None
     return pr1_data, pr2_data, is_dup
 
 def _get_data(lines, get_file_func, read, maxlen = None):
@@ -115,6 +114,8 @@ def _get_data(lines, get_file_func, read, maxlen = None):
 
     data = pool.map(get_data_func, lines)
     pool.close()
+
+    data = [x for x in data if x != None]
 
     #http://stackoverflow.com/questions/7558908/unpacking-a-list-tuple-of-pairs-into-two-lists-tuples
     pr1s, pr2s, labels = zip(*data)

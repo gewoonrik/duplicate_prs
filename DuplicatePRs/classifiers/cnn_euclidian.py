@@ -7,18 +7,15 @@ from keras.layers import Input
 from keras import backend as K
 from keras.optimizers import Adam
 
-from DuplicatePRs.dataset import get_tokenized_data, load_csv
 from preprocessing import get_preprocessed_generator
 from cnn_shared_model import conv_model
 from DuplicatePRs import config
 
 
-# Convolution
-filters = 150
 
 
 # Training
-batch_size = 100
+batch_size = 50
 epochs = 150
 
 def acc(y_true, y_pred):
@@ -66,7 +63,7 @@ print("setting up datasource")
 
 tr_gen, tr_steps = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
 val_gen, val_steps = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
-te_gen, te_steps = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
+#te_gen, te_steps = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
 
 
 print('Build model...')
@@ -98,8 +95,8 @@ model.fit_generator(tr_gen, steps_per_epoch=tr_steps,
                     validation_data=val_gen,
                     validation_steps=val_steps,
                     workers=1, callbacks=[checkpoint, early_stopping, csv_logger])
-score, acc = model.evaluate_generator(te_gen, steps=te_steps)
-print('Test score:', score)
-print('Test accuracy:', acc)
+#score, acc = model.evaluate_generator(te_gen, steps=te_steps)
+# print('Test score:', score)
+# print('Test accuracy:', acc)
 
 
