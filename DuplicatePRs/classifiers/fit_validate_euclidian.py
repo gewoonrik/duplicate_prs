@@ -44,14 +44,11 @@ if(args.embeddings_model == "word2vec"):
 else:
     import fasttext
     embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
-def get_label(line):
-    owner, repo, pr1, pr2, is_dup = line.split(",")
-    return is_dup
+
 
 lines = load_csv(config.validation_dataset_file)
 
-val_labels = map(get_label, lines)
-val_gen, val_steps = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, 50)
+val_gen, val_steps, val_labels = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, 50)
 
 
 
