@@ -43,7 +43,7 @@ def contrastive_loss(y_true, y_pred):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--embeddings_model', default='word2vec')
-parser.add_argument('--learning_rate', type=float, default=0.001)
+parser.add_argument('--learning_rate', type=float, default=0.0006)
 
 args = parser.parse_args()
 
