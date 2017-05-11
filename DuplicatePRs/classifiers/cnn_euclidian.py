@@ -41,7 +41,7 @@ def contrastive_loss(y_true, y_pred):
     # duplicates should be low, non duplicates should be high
     # so duplicates = 0, non duplicate = 1
     y_true = -1 * y_true + 1
-    return 0.5 * K.mean((1 - y_true) * K.square(y_pred) + 0.5 * y_true * K.square(K.maximum(margin - y_pred, 0)))
+    return K.mean((1 - y_true) * K.square(y_pred) +  y_true * K.square(K.maximum(margin - y_pred, 0)))
 
 
 parser = argparse.ArgumentParser()
