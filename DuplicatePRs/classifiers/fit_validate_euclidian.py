@@ -1,7 +1,7 @@
 import argparse
 
 from DuplicatePRs import config
-from DuplicatePRs.classifiers.preprocessing import preprocess
+from DuplicatePRs.classifiers.preprocessing import preprocess, get_preprocessed_generator
 from DuplicatePRs.dataset import load_csv, get_tokenized_data
 import fasttext
 from keras.models import load_model
@@ -44,19 +44,21 @@ if(args.embeddings_model == "word2vec"):
 else:
     import fasttext
     embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
+def get_label(line):
+    owner, repo, pr1, pr2, is_dup = line.split(",")
+    return is_dup
 
 lines = load_csv(config.validation_dataset_file)
-val_1, val_2, val_labels = get_tokenized_data(lines, config.maxlen)
 
-val_1 = preprocess(val_1, embeddings_model, config.embeddings_size, config.maxlen)
-val_2 = preprocess(val_2, embeddings_model, config.embeddings_size, config.maxlen)
+val_labels = map(get_label, lines)
+val_gen, val_steps = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, 50)
 
 
 
 model = load_model(config._current_path+"/classifier_models/"+args.model,{"contrastive_loss":contrastive_loss})
 
 
-results = model.predict([val_1, val_2], batch_size=50)
+results = model.predict_generator(val_gen, val_steps, batch_size=50)
 
 for i in range(1, 20, 1):
     i = i/10.0
