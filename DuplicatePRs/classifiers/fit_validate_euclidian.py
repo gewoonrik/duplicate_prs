@@ -58,7 +58,7 @@ val_gen, val_steps = get_preprocessed_generator(config.validation_dataset_file, 
 model = load_model(config._current_path+"/classifier_models/"+args.model,{"contrastive_loss":contrastive_loss})
 
 
-results = model.predict_generator(val_gen, val_steps, batch_size=50, verbose=1)
+results = model.predict_generator(val_gen, val_steps, verbose=1)
 
 for i in range(1, 20, 1):
     i = i/10.0
