@@ -28,22 +28,32 @@ def acc(y_true, y_pred, cutoff):
     return np.mean(np.equal(y_true, np.asarray(y_res)))
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--model', default='')
+parser.add_argument('--embeddings_model', default='word2vec')
 
-fasttext_model = fasttext.load_model("fasttext/model.bin")
+
+args = parser.parse_args()
+
+if(args.embeddings_model == "word2vec"):
+    from gensim.models import Word2Vec
+    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
+    embeddings_model = w2vec.wv
+    # save memory
+    del w2vec
+else:
+    import fasttext
+    embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
 
 lines = load_csv(config.validation_dataset_file)
 val_1, val_2, val_labels = get_tokenized_data(lines)
 
-val_1 = preprocess(val_1, fasttext_model, config.maxlen, config.maxlen)
-val_2 = preprocess(val_2, fasttext_model, config.maxlen, config.maxlen)
+val_1 = preprocess(val_1, embeddings_model, config.embeddings_size, config.maxlen)
+val_2 = preprocess(val_2, embeddings_model, config.embeddings_size, config.maxlen)
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--model', default='')
 
-args = parser.parse_args()
-
-model = load_model("classifier_models/cnn_fasttext_classifier-0.79271.hdf5",{"contrastive_loss":contrastive_loss})
+model = load_model(config._current_path+"/classifier_models/"+args.model,{"contrastive_loss":contrastive_loss})
 
 
 results = model.predict([val_1, val_2], batch_size=50)
