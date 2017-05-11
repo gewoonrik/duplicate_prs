@@ -71,8 +71,8 @@ te_gen, te_steps = get_preprocessed_generator(config.test_dataset_file, embeddin
 
 print('Build model...')
 
-pr_1 =  Input(shape=(config.maxlen, config.embeddings_size), dtype='float32')
-pr_2 =  Input(shape=(config.maxlen, config.embeddings_size), dtype='float32')
+pr_1 =  Input(shape=(None, config.embeddings_size), dtype='float32')
+pr_2 =  Input(shape=(None, config.embeddings_size), dtype='float32')
 
 out_1 = conv_model(pr_1)
 out_2 = conv_model(pr_2)
