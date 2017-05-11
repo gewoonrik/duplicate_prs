@@ -46,7 +46,7 @@ else:
     embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
 
 lines = load_csv(config.validation_dataset_file)
-val_1, val_2, val_labels = get_tokenized_data(lines)
+val_1, val_2, val_labels = get_tokenized_data(lines, config.maxlen)
 
 val_1 = preprocess(val_1, embeddings_model, config.embeddings_size, config.maxlen)
 val_2 = preprocess(val_2, embeddings_model, config.embeddings_size, config.maxlen)
