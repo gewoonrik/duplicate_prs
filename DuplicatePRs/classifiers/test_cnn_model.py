@@ -22,7 +22,7 @@ def contrastive_loss(y_true, y_pred):
 
 def acc(cutoff, y_true, y_pred):
     k_cutoff = K.ones_like(y_pred) * cutoff
-    return K.mean(K.equal(y_true, K.less(y_pred, k_cutoff), axis=-1))
+    return K.mean(K.equal(y_true, K.less(y_pred, k_cutoff)) , axis=-1)
 
 
 parser = argparse.ArgumentParser()
