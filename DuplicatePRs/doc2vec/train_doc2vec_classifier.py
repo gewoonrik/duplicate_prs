@@ -24,13 +24,13 @@ main_output = Dense(1, activation='sigmoid', name='output')(x)
 
 model = Model(input=[pr1, pr2], output=[main_output])
 
-optimizer = Adam(lr = 0.00011)
+optimizer = Adam(lr = 0.0001)
 
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
-checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/doc2vec_classifier-{val_acc:5.5f}.hdf5", monitor="val_acc", save_best_only=True)
-early_stopping = EarlyStopping(monitor="val_loss", patience=5)
-csv_logger = CSVLogger(config._current_path+"/classifier_models/doc2vec_classifier.csv")
+checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/doc2vec/doc2vec_classifier-{val_acc:5.5f}.hdf5", monitor="val_acc", save_best_only=True)
+early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stopping_patience)
+csv_logger = CSVLogger(config._current_path+"/classifier_models/doc2vec/doc2vec_classifier.csv")
 
 
 print("train")

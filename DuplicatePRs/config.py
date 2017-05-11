@@ -11,5 +11,7 @@ maxlen = 2000
 #convolution
 nr_filters = 100
 
+early_stopping_patience = 8
+
 doc2vec_model_directory = _current_path+"/doc2vec_models/"
 fasttext_model_directory = _current_path+"/fasttext/"
