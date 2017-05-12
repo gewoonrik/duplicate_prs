@@ -27,7 +27,7 @@ if(args.embeddings_model == "word2vec"):
     embeddings_model = embeddings_model.wv
 else:
     import fasttext
-    embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
+    embeddings_model = fasttext.load_model(config.fasttext_model_directory+"/model.bin")
 
 
 tr_gen, tr_steps, tr_y = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
