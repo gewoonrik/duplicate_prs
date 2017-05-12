@@ -59,7 +59,7 @@ if(args.embeddings_model == "word2vec"):
     del w2vec
 else:
     import fasttext
-    embeddings_model = fasttext.load_model(config.fasttext_model_directory+"fasttext/model.bin")
+    embeddings_model = fasttext.load_model(config.fasttext_model_directory+"/model.bin")
 
 print("setting up datasource")
 
