@@ -20,5 +20,5 @@ validation = get_tokenized_files(load_csv(config.validation_dataset_file))
 
 files = training + validation
 
-files_to_file(files, config._current_path+"fasttext/training_data.txt")
+files_to_file(files, config._current_path+"/fasttext/training_data.txt")
 
