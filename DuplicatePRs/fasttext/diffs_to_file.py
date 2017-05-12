@@ -1,7 +1,7 @@
 #concats al diffs to one big file, so fasttext can process it
-import pickle
 import codecs
 
+from DuplicatePRs import config
 from DuplicatePRs.dataset import load_csv, get_tokenized_files, read_pickled
 
 
@@ -15,10 +15,10 @@ def files_to_file(files, output_file):
         f.write(content)
     f.close()
 
-training = get_tokenized_files(load_csv("training_with_negative_samples.csv"))
-validation = get_tokenized_files(load_csv("validation_with_negative_samples.csv"))
+training = get_tokenized_files(load_csv(config.training_dataset_file))
+validation = get_tokenized_files(load_csv(config.validation_dataset_file))
 
 files = training + validation
 
-files_to_file(files, "fasttext/training_data.txt")
+files_to_file(files, config._current_path+"fasttext/training_data.txt")
 
