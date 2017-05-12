@@ -67,7 +67,7 @@ model.fit_generator(tr_gen, steps_per_epoch=tr_steps,
                     epochs=epochs,
                     validation_data=val_gen,
                     validation_steps=val_steps,
-                    workers=1)
+                    workers=1,  callbacks=[checkpoint, early_stopping, csv_logger])
 #score, acc = model.evaluate_generator(te_gen, steps=te_steps)
 #print('Test score:', score)
 #print('Test accuracy:', acc)
