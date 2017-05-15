@@ -6,8 +6,8 @@ from DuplicatePRs.dataset import load_csv, get_tokenized_data_generator
 
 def get_prs(gen):
     for pr1,pr2,_ in gen:
-        yield map(lambda x: x.encode('utf-8'), pr1)
-        yield map(lambda x: x.encode('utf-8'), pr2)
+        yield map(lambda x: x.decode('utf-8', 'ignore'), pr1)
+        yield map(lambda x: x.decode('utf-8', 'ignore'), pr2)
 
 tr_gen = get_tokenized_data_generator(load_csv(config.training_dataset_file))
 val_gen = get_tokenized_data_generator(load_csv(config.validation_dataset_file))
