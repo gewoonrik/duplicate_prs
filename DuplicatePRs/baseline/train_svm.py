@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from scipy.sparse import coo_matrix
 from sklearn.svm import LinearSVC
 
@@ -20,6 +22,8 @@ def dataset_to_bow(generator, length):
     matrix = coo_matrix((length, nr_words*2), dtype=int)
     labels = []
     for i, (pr1,pr2,label) in enumerate(generator):
+        print("creating matrix %s / %s" % (i, length), end='\r')
+
         pr1 = map(lambda x: x.decode('utf-8', 'ignore'), pr1)
         pr2 = map(lambda x: x.decode('utf-8', 'ignore'), pr2)
         pr1_bow = dict.doc2bow(pr1)
