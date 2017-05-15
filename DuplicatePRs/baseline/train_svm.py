@@ -20,6 +20,8 @@ def dataset_to_bow(generator, length):
     matrix = coo_matrix((length, nr_words*2), dtype=int)
     labels = []
     for i, (pr1,pr2,label) in enumerate(generator):
+        pr1 = map(lambda x: x.decode('utf-8', 'ignore'), pr1)
+        pr2 = map(lambda x: x.decode('utf-8', 'ignore'), pr2)
         pr1_bow = dict.doc2bow(pr1)
         pr2_bow = dict.doc2bow(pr2)
         for (id, count) in pr1_bow:
