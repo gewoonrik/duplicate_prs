@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from scipy.sparse import coo_matrix
+from scipy.sparse import lil_matrix
 from sklearn.svm import LinearSVC
 
 from DuplicatePRs import config
@@ -13,13 +13,12 @@ tr_gen = get_tokenized_data_generator(tr_lines)
 val_gen = get_tokenized_data_generator(val_lines)
 
 print("loading dict")
-dict = Dictionary()
-dict.load(config._current_path+"/baseline/dict")
+dict = Dictionary().load(config._current_path+"/baseline/dict")
 
 nr_words = len(dict.token2id)
 
 def dataset_to_bow(generator, length):
-    matrix = coo_matrix((length, nr_words*2), dtype=int)
+    matrix = lil_matrix((length, nr_words*2), dtype=int)
     labels = []
     for i, (pr1,pr2,label) in enumerate(generator):
         print("creating matrix %s / %s" % (i, length), end='\r')
