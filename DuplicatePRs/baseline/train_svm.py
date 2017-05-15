@@ -27,7 +27,7 @@ def dataset_to_bow(generator, length):
         for (id, count) in pr1_bow:
             matrix[i][id] = count
         for (id, count) in pr2_bow:
-            matrix[i+nr_words][id] = count
+            matrix[i][id+nr_words] = count
         labels.append(labels)
     return matrix, labels
 print("creating matrix")
