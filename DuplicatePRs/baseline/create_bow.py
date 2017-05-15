@@ -1,13 +1,22 @@
 from gensim.corpora import Dictionary
+from itertools import chain
 
 from DuplicatePRs import config
-from DuplicatePRs.dataset import get_tokenized_data, load_csv
+from DuplicatePRs.dataset import load_csv, get_tokenized_data_generator
 
-tpr1s, tpr2s, _ = get_tokenized_data(load_csv(config.training_dataset_file))
-valpr1s, valpr2s, _ = get_tokenized_data(load_csv(config.validation_dataset_file))
+def get_prs(gen):
+    for pr1,pr2,_ in gen:
+        yield pr1
+        yield pr2
+
+tr_gen = get_tokenized_data_generator(load_csv(config.training_dataset_file))
+val_gen = get_tokenized_data_generator(load_csv(config.validation_dataset_file))
+
+both_gen = chain(tr_gen,val_gen)
+
 
 print("creating dictionairy")
-dict = Dictionary(tpr1s + tpr2s + valpr1s + valpr2s)
+dict = Dictionary(get_prs(both_gen))
 print("filtering")
 dict.filter_extremes(keep_n = None)
 print("saving")

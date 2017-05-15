@@ -122,6 +122,11 @@ def _get_data(lines, get_file_func, read, maxlen = None):
     return np.asarray(pr1s), np.asarray(pr2s), np.asarray(labels)
 
 
+def _get_data_generator(lines, get_file_func, read, maxlen = None):
+    get_data_func = partial(_get_data_by_line, get_file_func, read, maxlen)
+    for line in lines:
+        yield get_data_func(line)
+
 def get_doc2vec_data_diffs(lines):
     return _get_data(lines, get_doc2vec_file_diff, read_pickled, None)
 
@@ -133,3 +138,6 @@ def get_doc2vec_data_descriptions(lines):
 
 def get_tokenized_data(lines, maxlen = None):
     return _get_data(lines, get_tokenized_file, read_pickled, maxlen)
+
+def get_tokenized_data_generator(lines, maxlen = None):
+    return _get_data_generator(lines, get_tokenized_file, read_pickled, maxlen)
