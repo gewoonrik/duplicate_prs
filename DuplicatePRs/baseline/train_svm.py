@@ -2,6 +2,7 @@ from __future__ import print_function
 
 from scipy.sparse import lil_matrix
 from sklearn.svm import LinearSVC
+from sklearn.externals import joblib
 
 from DuplicatePRs import config
 from DuplicatePRs.dataset import get_tokenized_data_generator, load_csv
@@ -39,6 +40,8 @@ training_matrix, tr_labels = dataset_to_bow(tr_gen, len(tr_lines))
 svm = LinearSVC()
 print("fitting ")
 svm.fit(training_matrix, tr_labels)
+
+joblib.dump(svm, config._current_path+"/baseline/svm")
 
 validation_matrix, val_labels = dataset_to_bow(val_gen, len(val_lines))
 print("testing")
