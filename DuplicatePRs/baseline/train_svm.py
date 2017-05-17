@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from scipy.sparse import lil_matrix
+import itertools
 from sklearn.svm import LinearSVC
 from sklearn.externals import joblib
 
@@ -21,7 +22,7 @@ nr_words = len(dict.token2id)
 def dataset_to_bow(generator, length):
     matrix = lil_matrix((length, nr_words*2), dtype=int)
     labels = []
-    for i, (pr1,pr2,label) in enumerate(generator):
+    for i, (pr1,pr2,label) in enumerate(itertools.islice(generator,5)):
         print("creating matrix %s / %s" % (i, length), end='\r')
 
         pr1 = map(lambda x: x.decode('utf-8', 'ignore'), pr1)
@@ -37,7 +38,7 @@ def dataset_to_bow(generator, length):
 print("creating matrix")
 training_matrix, tr_labels = dataset_to_bow(tr_gen, len(tr_lines))
 
-svm = LinearSVC()
+svm = LinearSVC(verbose=1)
 print("fitting ")
 svm.fit(training_matrix, tr_labels)
 
