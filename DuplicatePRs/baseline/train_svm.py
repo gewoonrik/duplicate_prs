@@ -30,9 +30,9 @@ def dataset_to_bow(generator, length):
         pr1_bow = dict.doc2bow(pr1)
         pr2_bow = dict.doc2bow(pr2)
         for (id, count) in pr1_bow:
-            matrix[i][id] = count
+            matrix[i,id] = count
         for (id, count) in pr2_bow:
-            matrix[i][id+nr_words] = count
+            matrix[i,id+nr_words] = count
         labels.append(label)
     return matrix, labels
 print("creating matrix")
