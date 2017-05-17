@@ -23,19 +23,19 @@ nr_words = len(dict.token2id)
 
 def line_to_bow(line):
     pr1,pr2,label = line
+    pr1 = map(lambda x: x.decode('utf-8', 'ignore'), pr1)
+    pr2 = map(lambda x: x.decode('utf-8', 'ignore'), pr2)
     return dict.doc2bow(pr1), dict.doc2bow(pr2), label
 def dataset_to_bow(generator, length):
     matrix = lil_matrix((length, nr_words*2), dtype=int)
     labels = []
-    p = Pool(10)
+    p = Pool(14)
+    print("mapping")
     bow = p.map(line_to_bow, generator)
-    for i, (pr1,pr2,label) in enumerate(bow):
+    print("done mapping")
+    for i, (pr1_bow,pr2_bow,label) in enumerate(bow):
         print("creating matrix %s / %s" % (i, length), end='\r')
 
-        pr1 = map(lambda x: x.decode('utf-8', 'ignore'), pr1)
-        pr2 = map(lambda x: x.decode('utf-8', 'ignore'), pr2)
-        pr1_bow = dict.doc2bow(pr1)
-        pr2_bow = dict.doc2bow(pr2)
         for (id, count) in pr1_bow:
             matrix[i,id] = count
         for (id, count) in pr2_bow:
