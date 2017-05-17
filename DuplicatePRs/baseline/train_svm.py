@@ -15,7 +15,7 @@ tr_gen = get_tokenized_data_generator(tr_lines)
 val_gen = get_tokenized_data_generator(val_lines)
 
 print("loading dict")
-dict = Dictionary().load(config._current_path+"/baseline/dict")
+dict = Dictionary().load(config._current_path+"/baseline/dict3")
 
 nr_words = len(dict.token2id)
 
