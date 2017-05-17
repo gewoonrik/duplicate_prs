@@ -8,13 +8,13 @@ from sklearn.svm import LinearSVC
 from sklearn.externals import joblib
 
 from DuplicatePRs import config
-from DuplicatePRs.dataset import get_tokenized_data_generator, load_csv
+from DuplicatePRs.dataset import load_csv, read_pickled, line_to_tokenized_files
 from gensim.corpora import Dictionary
 
 tr_lines = load_csv(config.training_dataset_file)
 val_lines = load_csv(config.validation_dataset_file)
-tr_gen = get_tokenized_data_generator(tr_lines)
-val_gen = get_tokenized_data_generator(val_lines)
+tr_gen = line_to_tokenized_files(tr_lines)
+val_gen = line_to_tokenized_files(val_lines)
 
 print("loading dict")
 dict = Dictionary().load(config._current_path+"/baseline/dict3")
@@ -23,9 +23,13 @@ nr_words = len(dict.token2id)
 
 def line_to_bow(line):
     pr1,pr2,label = line
+    pr1 = read_pickled(pr1)
+    pr2 = read_pickled(pr2)
     pr1 = map(lambda x: x.decode('utf-8', 'ignore'), pr1)
     pr2 = map(lambda x: x.decode('utf-8', 'ignore'), pr2)
     return dict.doc2bow(pr1), dict.doc2bow(pr2), label
+
+
 def dataset_to_bow(generator, length):
     matrix = lil_matrix((length, nr_words*2), dtype=int)
     labels = []
