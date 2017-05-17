@@ -32,7 +32,7 @@ def dataset_to_bow(generator, length):
             matrix[i][id] = count
         for (id, count) in pr2_bow:
             matrix[i][id+nr_words] = count
-        labels.append(labels)
+        labels.append(label)
     return matrix, labels
 print("creating matrix")
 training_matrix, tr_labels = dataset_to_bow(tr_gen, len(tr_lines))
