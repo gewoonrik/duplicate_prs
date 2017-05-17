@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+from multiprocessing import Pool
+
 from scipy.sparse import lil_matrix
 import itertools
 from sklearn.svm import LinearSVC
@@ -19,10 +21,15 @@ dict = Dictionary().load(config._current_path+"/baseline/dict3")
 
 nr_words = len(dict.token2id)
 
+def line_to_bow(line):
+    pr1,pr2,label = line
+    return dict.doc2bow(pr1), dict.doc2bow(pr2), label
 def dataset_to_bow(generator, length):
     matrix = lil_matrix((length, nr_words*2), dtype=int)
     labels = []
-    for i, (pr1,pr2,label) in enumerate(itertools.islice(generator,5)):
+    p = Pool(10)
+    bow = p.map(line_to_bow, generator)
+    for i, (pr1,pr2,label) in enumerate(bow):
         print("creating matrix %s / %s" % (i, length), end='\r')
 
         pr1 = map(lambda x: x.decode('utf-8', 'ignore'), pr1)
