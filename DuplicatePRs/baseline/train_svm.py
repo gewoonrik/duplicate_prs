@@ -13,8 +13,8 @@ from gensim.corpora import Dictionary
 
 tr_lines = load_csv(config.training_dataset_file)
 val_lines = load_csv(config.validation_dataset_file)
-tr_gen = line_to_tokenized_files(tr_lines)
-val_gen = line_to_tokenized_files(val_lines)
+tr_gen = map(line_to_tokenized_files,tr_lines)
+val_gen = map(line_to_tokenized_files,val_lines)
 
 print("loading dict")
 dict = Dictionary().load(config._current_path+"/baseline/dict3")
