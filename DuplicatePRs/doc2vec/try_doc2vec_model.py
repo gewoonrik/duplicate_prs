@@ -33,19 +33,19 @@ config_out_file = config._current_path+"/doc2vec/embeddings/projector_config.ptx
 
 
 label_out = open(label_out_file, "w")
-str = "owner\trepo\tduplicate\n"
+str_out = "owner\trepo\tduplicate\n"
 for line in test:
     owner, repo, pr1,pr2,is_duplicate = line.split(",")
-    str += owner+"\t"+repo+"\t"+is_duplicate+"\n"
+    str_out += owner+"\t"+repo+"\t"+is_duplicate+"\n"
 
-label_out.write(str)
+label_out.write(str_out)
 label_out.close()
 
 tensor_out = open(tensor_out_file, 'wb')
 
 for p in predictions:
-    str = "\t".join(map(str, p.tolist()))
-    tensor_out.write(str+"\n")
+    str_out = "\t".join(map(str, p.tolist()))
+    tensor_out.write(str_out+"\n")
 tensor_out.close()
 
 
