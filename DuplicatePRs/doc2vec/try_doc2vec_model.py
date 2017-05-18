@@ -44,25 +44,8 @@ label_out.close()
 tensor_out = open(tensor_out_file, 'wb')
 
 for p in predictions:
-    floatvals = p.tolist()
-    for f in floatvals:
-        tensor_out.write(struct.pack('<f', f))
+    str = "\t".join(map(str, p.tolist()))
+    tensor_out.write(str+"\n")
 tensor_out.close()
-
-config_str = '''{
-  "embeddings": [
-    {
-      "tensorName": "Test-dataset",
-      "tensorShape": [%d, %d],
-      "tensorPath": "%s",
-      "metadataPath": "%s"
-    }
-  ],
-  "modelCheckpointPath": "Demo datasets"
-}''' % ( len(test), 600, label_out_file, tensor_out_file)
-
-f = open(config_out_file, "w")
-f.write(config_str)
-f.close()
 
 
