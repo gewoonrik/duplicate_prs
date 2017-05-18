@@ -36,7 +36,7 @@ tsb = TensorBoard(log_dir=config._current_path+"/classifier_models/doc2vec2/embe
                             histogram_freq=1,
                             embeddings_freq=1,
                             write_grads=True,
-                            embeddings_layer_names=['pr1_input', 'pr2_input', 'dense_1'],
+                            embeddings_layer_names=['dense_1'],
                             batch_size=5)
 
 
