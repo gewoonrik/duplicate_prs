@@ -33,8 +33,11 @@ early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stoppin
 csv_logger = CSVLogger(config._current_path+"/classifier_models/doc2vec2/training.csv")
 tsb = TensorBoard(log_dir=config._current_path+"/classifier_models/doc2vec2/embeddings",
                             write_images=True,
+                            histogram_freq=1,
                             embeddings_freq=1,
-                            embeddings_layer_names=['dense_1'])
+                            write_grads=True,
+                            embeddings_layer_names=None,
+                            batch_size=5)
 
 
 print("train")
