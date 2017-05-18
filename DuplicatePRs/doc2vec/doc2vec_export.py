@@ -20,7 +20,7 @@ tensor_out = open(tensor_out_file, 'wb')
 
 label_out.write("owner\trepo\tid\n")
 print("exporting")
-for i, line in enumerate(test):
+for i, line in enumerate(total):
     owner, repo, pr1,pr2,is_duplicate = line.split(",")
     pr1_d = '\t'.join(map(str,read_pickled(get_doc2vec_file_diff(owner,repo,pr1)).tolist()))
     pr2_d = '\t'.join(map(str,read_pickled(get_doc2vec_file_diff(owner,repo,pr2)).tolist()))
