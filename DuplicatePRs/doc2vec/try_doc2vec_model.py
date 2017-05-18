@@ -61,5 +61,8 @@ config_str = '''{
   "modelCheckpointPath": "Demo datasets"
 }''' % ( len(test), 600, label_out_file, tensor_out_file)
 
+f = open(config_out_file, "w")
+f.write(config_str)
+f.close()
 
 
