@@ -26,6 +26,15 @@ model = Model(input=[pr1, pr2], output=[main_output])
 
 optimizer = Adam(lr = 0.0001)
 
+str = "owner\trepo\tduplicate\n"
+for line in train:
+    owner, repo, pr1,pr2,is_duplicate = line.split(",")
+    str += owner+"\t"+repo+"\t"+is_duplicate+"\n"
+
+f = open(config._current_path+"/classifier_models/doc2vec2/embeddings/meta.tsv", "w")
+f.write(str)
+f.close()
+
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
 checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/doc2vec2/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
@@ -35,13 +44,15 @@ tsb = TensorBoard(log_dir=config._current_path+"/classifier_models/doc2vec2/embe
                             write_images=True,
                             embeddings_freq=1,
                             embeddings_layer_names=['dense_1'],
-                            batch_size=5)
+                            batch_size=5,
+                            embeddings_metadata= config._current_path+"/classifier_models/doc2vec2/embeddings/meta.tsv")
 
 
 print("train")
 
 
 model.fit([tr_1, tr_2], tr_labels, batch_size=100, nb_epoch=100,
+          shuffle=False,
           validation_data=([val_1, val_2], val_labels), callbacks=[checkpoint, early_stopping, csv_logger, tsb])
 
 results = model.evaluate([test_1, test_2], test_labels, batch_size=100)
