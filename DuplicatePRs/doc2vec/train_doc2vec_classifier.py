@@ -1,4 +1,4 @@
-from keras.callbacks import CSVLogger, EarlyStopping
+from keras.callbacks import CSVLogger, EarlyStopping, TensorBoard
 from keras.layers import Input, merge, Dense
 from keras.models import Model
 from keras.callbacks import ModelCheckpoint
@@ -19,7 +19,7 @@ pr1 = Input(shape=(300,), dtype='float32', name='pr1_input')
 pr2 = Input(shape=(300,), dtype='float32', name='pr2_input')
 
 x = merged = merge([pr1, pr2], mode='concat')
-x = Dense(600, activation='relu')(x)
+x = Dense(600, activation='relu', name="dense_1")(x)
 main_output = Dense(1, activation='sigmoid', name='output')(x)
 
 model = Model(input=[pr1, pr2], output=[main_output])
@@ -31,13 +31,17 @@ model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accurac
 checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/doc2vec/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
 early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stopping_patience)
 csv_logger = CSVLogger(config._current_path+"/classifier_models/doc2vec/training.csv")
+tsb = TensorBoard(log_dir=config._current_path+"/classifier_models/doc2vec/embeddings",
+                            write_images=True,
+                            embeddings_freq=1,
+                            embeddings_layer_names=['dense_1'])
 
 
 print("train")
 
 
 model.fit([tr_1, tr_2], tr_labels, batch_size=100, nb_epoch=100,
-          validation_data=([val_1, val_2], val_labels), callbacks=[checkpoint, early_stopping, csv_logger])
+          validation_data=([val_1, val_2], val_labels), callbacks=[checkpoint, early_stopping, csv_logger, tsb])
 
 results = model.evaluate([test_1, test_2], test_labels, batch_size=100)
 print('Test results: ', results)
