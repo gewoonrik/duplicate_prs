@@ -1,4 +1,4 @@
-from keras.models import load_model
+from keras.models import load_model, model_from_json
 from DuplicatePRs import config
 from DuplicatePRs.classifiers.preprocessing import get_preprocessed_generator
 from DuplicatePRs.visualisation.visualize import visualize
@@ -22,9 +22,13 @@ def contrastive_loss(y_true, y_pred):
     return K.mean((1 - y_true) * K.square(y_pred) +  y_true * K.square(K.maximum(margin - y_pred, 0)))
 
 
-best_model = "0.16909.hdf5"
-model = load_model(config._current_path+"/classifier_models/cnn_euclidian/"+best_model, {"contrastive_loss":contrastive_loss, "acc":acc})
+best_model = "best.h5"
+f = open(config._current_path+"/classifier_models/cnn_euclidian/model.json")
+json = f.read()
+f.close()
 
+model = model_from_json(json, {"contrastive_loss":contrastive_loss, "acc":acc})
+model.load_weights(config._current_path+"/classifier_models/cnn_euclidian/"+best_model)
 w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
 embeddings_model = w2vec.wv
 # save memory

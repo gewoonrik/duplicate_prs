@@ -21,7 +21,6 @@ def visualize(model, pr):
     """
 
     shared_model = model.layers[-2]
-    shared_model.layers[0].inbound_nodes[0].input_shape = (None,None,300)
     activations = get_activations(shared_model, pr)
 
     # remove batching dimension, we do'nt batch
@@ -106,3 +105,6 @@ def calc_iim_conv(iim, input, layer):
             iim_out[i][j] = sum
 
     return iim_out
+
+
+
