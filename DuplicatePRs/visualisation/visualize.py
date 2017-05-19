@@ -4,7 +4,7 @@ from keras.models import Model
 
 def get_activations(model, inputs):
     activations = []
-    inp = model.input
+    inp = model.get_input_at(0)
     outputs = [layer.output for layer in model.layers]  # all layer outputs
     funcs = [K.function([inp] + [K.learning_phase()], [out]) for out in outputs]  # evaluation functions
     if len(inputs.shape) == 3:
