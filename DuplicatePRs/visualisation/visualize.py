@@ -33,13 +33,13 @@ def calculate_iim(inputs, activations, model):
     conv4 = model.layers[2]
     conv5 = model.layers[3]
 
-    conv3_out = activations[1]
-    conv4_out = activations[2]
-    conv5_out = activations[3]
+    conv3_out = activations[1][0]
+    conv4_out = activations[2][0]
+    conv5_out = activations[3][0]
 
-    max3_out = activations[4]
-    max4_out = activations[5]
-    max5_out = activations[6]
+    max3_out = activations[4][0]
+    max4_out = activations[5][0]
+    max5_out = activations[6][0]
 
 
     iim = np.ones(activations[7].shape)
@@ -66,7 +66,7 @@ def normalize_nparr(arr):
     return arr/max
 
 def calc_iim_merge(iim, filter_count):
-    size = len(iim)
+    size = iim.shape[0]
     per_filter = size/filter_count
     return [np.asarray(iim[0+i*per_filter: 0+i*per_filter+per_filter]) for i in range(filter_count)]
 
