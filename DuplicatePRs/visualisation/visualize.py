@@ -10,7 +10,6 @@ def get_activations(model, inputs):
     layer_outputs = [func([inputs])[0] for func in funcs]
     for layer_activations in layer_outputs:
         activations.append(layer_activations)
-        print(layer_activations)
     return activations
 
 
@@ -34,6 +33,7 @@ def calculate_iim(inputs, activations, model):
     conv4 = model.layers[2]
     conv5 = model.layers[3]
 
+
     conv3_out = activations[1][0]
     conv4_out = activations[2][0]
     conv5_out = activations[3][0]
@@ -54,13 +54,11 @@ def calculate_iim(inputs, activations, model):
     iim_conv5 = calc_iim_conv(iim_max5, inputs, conv5)
 
     iim_sum = iim_conv3 + iim_conv4 + iim_conv5
-    print(iim_sum.shape)
     final = np.zeros(inputs.shape[0])
     for i in range(inputs.shape[0]):
         sum = 0
         for j in range(inputs.shape[1]):
             sum += iim_sum[i][j]
-        print(sum)
         final[i] = sum
     return normalize_nparr(final)
 
