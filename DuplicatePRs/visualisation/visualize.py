@@ -92,7 +92,7 @@ def calc_iim_conv(iim, input, layer):
     # input is (sequence_length, embeddings)
     # output is (sequence_length, filters)
 
-    iim_out = iim * input * weights
+    iim_out = np.dot(iim,input) * weights
     # for i in range(input_length):
     #     for j in range(embedding_size):
     #         sum = 0
