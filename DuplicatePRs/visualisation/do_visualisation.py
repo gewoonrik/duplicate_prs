@@ -34,5 +34,5 @@ gen, steps, labels = get_preprocessed_generator(config.test_dataset_file, embedd
 
 prs, label = gen.next()
 
-print(visualize(model, prs[0][0]))
+print(visualize(model, prs[0]))
 
