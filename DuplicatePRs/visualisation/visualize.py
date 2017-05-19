@@ -7,7 +7,7 @@ def get_activations(model, inputs):
     inp = model.get_input_at(0)
     outputs = [layer.output for layer in model.layers]  # all layer outputs
     funcs = [K.function([inp] + [K.learning_phase()], [out]) for out in outputs]  # evaluation functions
-    layer_outputs = [func(inputs)[0] for func in funcs]
+    layer_outputs = [func([inputs])[0] for func in funcs]
     for layer_activations in layer_outputs:
         activations.append(layer_activations)
         print(layer_activations)
