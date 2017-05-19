@@ -5,7 +5,7 @@ from DuplicatePRs import config
 
 
 # First, define the vision modules
-input =  Input(shape=(config.maxlen,config.embeddings_size), dtype='float32')
+input =  Input(shape=(None,config.embeddings_size), dtype='float32')
 conv_3 = Conv1D(config.nr_filters,
                 3,
                 padding='same',
