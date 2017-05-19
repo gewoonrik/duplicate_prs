@@ -32,7 +32,7 @@ del w2vec
 
 gen, steps, labels = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, 1)
 
-pr1, pr2, label = gen.next()
+prs, label = gen.next()
 
-print(visualize(model, pr1[0]))
+print(visualize(model, prs[0][0]))
 
