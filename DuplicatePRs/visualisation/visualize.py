@@ -33,16 +33,16 @@ def calculate_iim(inputs, activations, model):
     conv4 = model.layers[2]
     conv5 = model.layers[3]
 
-    conv3_out = activations[0]
-    conv4_out = activations[1]
-    conv5_out = activations[2]
+    conv3_out = activations[1]
+    conv4_out = activations[2]
+    conv5_out = activations[3]
 
-    max3_out = activations[3]
-    max4_out = activations[4]
-    max5_out = activations[5]
+    max3_out = activations[4]
+    max4_out = activations[5]
+    max5_out = activations[6]
 
 
-    iim = np.ones(activations[6].shape())
+    iim = np.ones(activations[7].shape)
     iim_merges = calc_iim_merge(iim, 3)
     iim_max3 = calc_iim_max_pooling(iim_merges[0], conv3_out, max3_out)
     iim_max4 = calc_iim_max_pooling(iim_merges[1], conv4_out, max4_out)
