@@ -92,17 +92,18 @@ def calc_iim_conv(iim, input, layer):
     # input is (sequence_length, embeddings)
     # output is (sequence_length, filters)
 
-    for i in range(input_length):
-        for j in range(embedding_size):
-            sum = 0
-            for k in range(nr_filters):
-                for l in range(input_length + 1 - filter_length):
-                    influence = iim[k][l]
-                    inp = input[i][j]
-                    index = i+1-l
-                    if index >= 0 and index < filter_length:
-                        sum += influence * inp * weights[index][j][k]
-            iim_out[i][j] = sum
+    iim_out = iim * input * weights
+    # for i in range(input_length):
+    #     for j in range(embedding_size):
+    #         sum = 0
+    #         for k in range(nr_filters):
+    #             for l in range(input_length):
+    #                 influence = iim[k][l]
+    #                 inp = input[i][j]
+    #                 index = i+1-l
+    #                 if index >= 0 and index < filter_length:
+    #                     sum += influence * inp * weights[index][j][k]
+    #         iim_out[i][j] = sum
 
     return iim_out
 
