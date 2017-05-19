@@ -54,9 +54,9 @@ def calculate_iim(inputs, activations, model):
 
     iim_sum = iim_conv3 + iim_conv4 + iim_conv5
     final = np.zeros(inputs.shape[1])
-    for i in range(inputs.shape[0]):
+    for i in range(inputs.shape[1]):
         sum = 0
-        for j in range(inputs.shape[1]):
+        for j in range(inputs.shape[2]):
             sum += iim_sum[i][j]
         final[i] = sum
     return normalize_nparr(final)
