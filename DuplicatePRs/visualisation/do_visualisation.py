@@ -30,7 +30,7 @@ embeddings_model = w2vec.wv
 # save memory
 del w2vec
 
-gen, steps, labels = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, 1)
+gen, steps, labels = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, None, 1)
 
 prs, label = gen.next()
 
