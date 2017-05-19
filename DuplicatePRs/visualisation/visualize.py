@@ -24,7 +24,8 @@ def visualize(model, pr):
     shared_model = model.layers[-2]
     activations = get_activations(shared_model, pr)
 
-    dim = calculate_iim(pr, activations, shared_model)
+    # remove batching dimension, we do'nt batch
+    dim = calculate_iim(pr[0], activations, shared_model)
     return dim
 
 
@@ -54,10 +55,10 @@ def calculate_iim(inputs, activations, model):
 
     iim_sum = iim_conv3 + iim_conv4 + iim_conv5
     print(iim_sum.shape)
-    final = np.zeros(inputs.shape[1])
-    for i in range(inputs.shape[1]):
+    final = np.zeros(inputs.shape[0])
+    for i in range(inputs.shape[0]):
         sum = 0
-        for j in range(inputs.shape[2]):
+        for j in range(inputs.shape[1]):
             sum += iim_sum[i][j]
         print(sum)
         final[i] = sum
