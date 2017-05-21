@@ -62,7 +62,7 @@ for i in range(0, len(total), batch_size):
     tokenized = map(read_pickled, files)
     lengths = map(len, tokenized)
     maxlen = max(lengths)
-    w2vec_files = preprocess(tokenized, embeddings_model, config.embeddings_size, lengths)
+    w2vec_files = preprocess(tokenized, embeddings_model, config.embeddings_size, maxlen)
     results = model.predict(w2vec_files)
     for i in range(len(files)):
         save(files[i], results[i])
