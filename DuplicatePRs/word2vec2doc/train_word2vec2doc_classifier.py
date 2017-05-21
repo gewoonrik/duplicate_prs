@@ -1,5 +1,5 @@
 from keras.callbacks import CSVLogger, EarlyStopping
-from keras.layers import Input, merge, Dense
+from keras.layers import Input, merge, Dense, Dropout
 from keras.models import Model
 from keras.callbacks import ModelCheckpoint
 from DuplicatePRs.dataset import load_csv, get_word2vec2doc_data_diffs
@@ -18,6 +18,7 @@ pr1 = Input(shape=(300,), dtype='float32', name='pr1_input')
 pr2 = Input(shape=(300,), dtype='float32', name='pr2_input')
 
 x = merged = merge([pr1, pr2], mode='concat')
+x = Dropout(0.2)(x)
 x = Dense(600, activation='relu', name="dense_1")(x)
 main_output = Dense(1, activation='sigmoid', name='output')(x)
 
