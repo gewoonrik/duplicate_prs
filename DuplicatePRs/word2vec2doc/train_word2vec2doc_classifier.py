@@ -18,8 +18,8 @@ pr1 = Input(shape=(300,), dtype='float32', name='pr1_input')
 pr2 = Input(shape=(300,), dtype='float32', name='pr2_input')
 
 x = merged = merge([pr1, pr2], mode='concat')
-x = Dropout(0.2)(x)
-x = Dense(600, activation='relu', name="dense_1")(x)
+#x = Dropout(0.2)(x)
+x = Dense(600, activation='linear', name="dense_1")(x)
 main_output = Dense(1, activation='sigmoid', name='output')(x)
 
 model = Model(input=[pr1, pr2], output=[main_output])
