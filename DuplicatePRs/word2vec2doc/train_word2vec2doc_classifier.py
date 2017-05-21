@@ -35,7 +35,7 @@ csv_logger = CSVLogger(config._current_path+"/classifier_models/word2vec2doc/tra
 print("train")
 
 
-model.fit([tr_1, tr_2], tr_labels, batch_size=100, nb_epoch=200,
+model.fit([tr_1, tr_2], tr_labels, batch_size=100, nb_epoch=1000,
           validation_data=([val_1, val_2], val_labels), callbacks=[checkpoint, early_stopping, csv_logger])
 
 results = model.evaluate([test_1, test_2], test_labels, batch_size=100)
