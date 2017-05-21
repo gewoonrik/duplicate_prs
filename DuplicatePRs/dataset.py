@@ -44,6 +44,9 @@ def get_tokenized_file(owner, repo, id):
 def get_doc2vec_file_diff(owner, repo, id):
     return  _current_path+"/diffs_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".diff"
 
+def word2vec2doc_file_diff(owner, repo, id):
+    return  _current_path+"/diffs_word2vec2doc_preprocessed/"+owner+"@"+repo+"@"+str(id)+".diff"
+
 def get_doc2vec_file_title(owner, repo, id):
     return  _current_path+"/titles_doc2vec_preprocessed/"+owner+"@"+repo+"@"+str(id)+".title"
 def get_doc2vec_file_description(owner, repo, id):
@@ -129,6 +132,9 @@ def _get_data_generator(lines, get_file_func, read, maxlen = None):
 
 def get_doc2vec_data_diffs(lines):
     return _get_data(lines, get_doc2vec_file_diff, read_pickled, None)
+
+def get_word2vec2doc_data_diffs(lines):
+    return _get_data(lines, word2vec2doc_file_diff, read_pickled, None)
 
 def get_doc2vec_data_titles(lines):
     return _get_data(lines, get_doc2vec_file_title, read_pickled, None)
