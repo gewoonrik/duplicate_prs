@@ -55,13 +55,13 @@ w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epo
 embeddings_model = w2vec.wv
 del w2vec
 
-batch_size = 25
+batch_size = 50
 for i in range(0, len(total), batch_size):
     print("doing nr "+str(i)+" of "+str(len(total)),  end='\r')
     files = total[i:i+batch_size]
     tokenized = map(read_pickled, files)
     lengths = map(len, tokenized)
-    maxlen = max(lengths)
+    maxlen = min(max(lengths),10000)
     w2vec_files = preprocess(tokenized, embeddings_model, config.embeddings_size, maxlen)
     results = model.predict(w2vec_files)
     for i in range(len(files)):
