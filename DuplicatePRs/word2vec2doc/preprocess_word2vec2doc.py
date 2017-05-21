@@ -59,7 +59,7 @@ w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epo
 embeddings_model = w2vec.wv
 del w2vec
 
-batch_size = 20
+batch_size = 5
 for i in range(0, len(total), batch_size):
     print("doing nr "+str(i)+" of "+str(len(total)),  end='\r')
     files = total[i:i+batch_size]
