@@ -26,10 +26,6 @@ def contrastive_loss(y_true, y_pred):
     y_true = -1 * y_true + 1
     return K.mean((1 - y_true) * K.square(y_pred) +  y_true * K.square(K.maximum(margin - y_pred, 0)))
 
-def read_and_preprocess(file):
-    file = read_pickled(file)
-    return preprocess(file, embeddings_model, config.embeddings_size, len(file))
-
 def save(file, result):
     processed_pr_file = file.replace("_tokenized","_word2vec2doc_preprocessed")
     with open(processed_pr_file, 'w') as f:
@@ -59,11 +55,14 @@ w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epo
 embeddings_model = w2vec.wv
 del w2vec
 
-batch_size = 5
+batch_size = 25
 for i in range(0, len(total), batch_size):
     print("doing nr "+str(i)+" of "+str(len(total)),  end='\r')
     files = total[i:i+batch_size]
-    w2vec_files = map(read_and_preprocess, files)
+    tokenized = map(read_pickled, files)
+    lengths = map(len, tokenized)
+    maxlen = max(lengths)
+    w2vec_files = preprocess(tokenized, embeddings_model, config.embeddings_size, lengths)
     results = model.predict(w2vec_files)
     for i in range(len(files)):
         save(files[i], results[i])
