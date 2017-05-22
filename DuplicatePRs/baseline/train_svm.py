@@ -50,7 +50,7 @@ def dataset_to_bow(generator, length):
 print("creating matrix")
 training_matrix, tr_labels = dataset_to_bow(tr_gen, len(tr_lines))
 
-svm = SVC(verbose=1, C=0.0000067, max_iter=5000)
+svm = SVC(verbose=1, max_iter=10000)
 print("fitting ")
 svm.fit(training_matrix, tr_labels)
 
