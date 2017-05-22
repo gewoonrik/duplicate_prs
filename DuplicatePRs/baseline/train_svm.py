@@ -4,6 +4,8 @@ from multiprocessing import Pool
 
 from scipy.sparse import lil_matrix
 import itertools
+
+from sklearn import preprocessing
 from sklearn.svm import LinearSVC
 from sklearn.externals import joblib
 
@@ -16,6 +18,7 @@ tr_lines = load_csv(config.training_dataset_file)
 val_lines = load_csv(config.validation_dataset_file)
 tr_gen = map(line_to_tokenized_files,tr_lines)
 val_gen = map(line_to_tokenized_files,val_lines)
+
 
 print("loading dict")
 dict = Dictionary().load(config._current_path+"/baseline/dict_keepall")
@@ -50,7 +53,12 @@ def dataset_to_bow(generator, length):
 print("creating matrix")
 training_matrix, tr_labels = dataset_to_bow(tr_gen, len(tr_lines))
 
-svm = SVC(verbose=1, max_iter=50000)
+scaler = preprocessing.StandardScaler().fit(training_matrix)
+
+training_matrix = scaler.transform(training_matrix)
+
+
+svm = SVC(verbose=1, max_iter=10000)
 print("fitting ")
 svm.fit(training_matrix, tr_labels)
 
@@ -58,5 +66,5 @@ joblib.dump(svm, config._current_path+"/baseline/svm_keepall_rbf")
 
 validation_matrix, val_labels = dataset_to_bow(val_gen, len(val_lines))
 print("testing")
-acc = svm.score(validation_matrix, val_labels)
+acc = svm.score(scaler.transform(validation_matrix), val_labels)
 print("accuracy " +str(acc))
