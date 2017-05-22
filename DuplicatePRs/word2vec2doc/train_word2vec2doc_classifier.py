@@ -23,7 +23,7 @@ main_output = Dense(1, activation='sigmoid', name='output')(x)
 
 model = Model(input=[pr1, pr2], output=[main_output])
 
-optimizer = Adam(lr = 0.00001)
+optimizer = Adam(lr = 0.0001)
 
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
