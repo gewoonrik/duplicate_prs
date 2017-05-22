@@ -1,18 +1,32 @@
+import argparse
+
 from keras.callbacks import CSVLogger, EarlyStopping
-from keras.layers import Input, merge, Dense, Dropout
+from keras.layers import Input, merge, Dense
 from keras.models import Model
 from keras.callbacks import ModelCheckpoint
-from DuplicatePRs.dataset import load_csv, get_word2vec2doc_data_diffs
+from DuplicatePRs.dataset import load_csv, get_word2vec2doc_data_diffs, get_fasttext2doc_data_diffs
 from keras.optimizers import Adam
 from DuplicatePRs import config
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--embeddings_model', default='word2vec')
+
+args = parser.parse_args()
+
 print("loading files")
+
+if args.embeddings_model == "word2vec":
+    get_data_func = get_word2vec2doc_data_diffs
+else:
+    get_data_func = get_fasttext2doc_data_diffs
+
 train = load_csv(config.training_dataset_file)
 validation = load_csv(config.validation_dataset_file)
 test = load_csv(config.test_dataset_file)
-tr_1, tr_2, tr_labels = get_word2vec2doc_data_diffs(train)
-val_1, val_2, val_labels = get_word2vec2doc_data_diffs(validation)
-test_1, test_2, test_labels = get_word2vec2doc_data_diffs(test)
+tr_1, tr_2, tr_labels = get_data_func(train)
+val_1, val_2, val_labels = get_data_func(validation)
+test_1, test_2, test_labels = get_data_func(test)
 
 pr1 = Input(shape=(300,), dtype='float32', name='pr1_input')
 pr2 = Input(shape=(300,), dtype='float32', name='pr2_input')
