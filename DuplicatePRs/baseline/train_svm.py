@@ -53,7 +53,7 @@ def dataset_to_bow(generator, length):
 print("creating matrix")
 training_matrix, tr_labels = dataset_to_bow(tr_gen, len(tr_lines))
 
-scaler = preprocessing.StandardScaler().fit(training_matrix)
+scaler = preprocessing.StandardScaler(with_mean=False).fit(training_matrix)
 
 training_matrix = scaler.transform(training_matrix)
 
