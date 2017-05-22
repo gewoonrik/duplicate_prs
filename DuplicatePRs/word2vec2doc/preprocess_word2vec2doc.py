@@ -26,16 +26,21 @@ def contrastive_loss(y_true, y_pred):
     # so duplicates = 0, non duplicate = 1
     y_true = -1 * y_true + 1
     return K.mean((1 - y_true) * K.square(y_pred) +  y_true * K.square(K.maximum(margin - y_pred, 0)))
-
-def save(file, result):
-    processed_pr_file = file.replace("_tokenized","_word2vec2doc_preprocessed")
-    with open(processed_pr_file, 'w') as f:
-        pickle.dump(result, f)
-
 parser = argparse.ArgumentParser()
 parser.add_argument('--embeddings_model', default='word2vec')
 
 args = parser.parse_args()
+
+def save(file, result):
+    if args.embeddings_model == "word2vec":
+        processed_pr_file = file.replace("_tokenized","_word2vec2doc_preprocessed")
+    else:
+        processed_pr_file = file.replace("_tokenized","_fasttext2doc_preprocessed")
+
+    with open(processed_pr_file, 'w') as f:
+        pickle.dump(result, f)
+
+
 
 model_path = ""
 if args.embeddings_model != "word2vec":
