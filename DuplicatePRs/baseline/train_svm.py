@@ -10,6 +10,7 @@ from sklearn.externals import joblib
 from DuplicatePRs import config
 from DuplicatePRs.dataset import load_csv, read_pickled, line_to_tokenized_files
 from gensim.corpora import Dictionary
+from sklearn.svm import SVC
 
 tr_lines = load_csv(config.training_dataset_file)
 val_lines = load_csv(config.validation_dataset_file)
@@ -17,7 +18,7 @@ tr_gen = map(line_to_tokenized_files,tr_lines)
 val_gen = map(line_to_tokenized_files,val_lines)
 
 print("loading dict")
-dict = Dictionary().load(config._current_path+"/baseline/dict3")
+dict = Dictionary().load(config._current_path+"/baseline/dict_keepall")
 
 nr_words = len(dict.token2id)
 
@@ -49,11 +50,11 @@ def dataset_to_bow(generator, length):
 print("creating matrix")
 training_matrix, tr_labels = dataset_to_bow(tr_gen, len(tr_lines))
 
-svm = LinearSVC(verbose=1)
+svm = SVC(verbose=1, C=0.0000067, max_iter=5000)
 print("fitting ")
 svm.fit(training_matrix, tr_labels)
 
-joblib.dump(svm, config._current_path+"/baseline/svm")
+joblib.dump(svm, config._current_path+"/baseline/svm_keepall_rbf")
 
 validation_matrix, val_labels = dataset_to_bow(val_gen, len(val_lines))
 print("testing")
