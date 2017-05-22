@@ -18,8 +18,11 @@ print("loading files")
 
 if args.embeddings_model == "word2vec":
     get_data_func = get_word2vec2doc_data_diffs
+    classifier_dir = "word2vec2doc"
 else:
     get_data_func = get_fasttext2doc_data_diffs
+    classifier_dir = "fasttext2doc"
+
 
 train = load_csv(config.training_dataset_file)
 validation = load_csv(config.validation_dataset_file)
@@ -41,9 +44,9 @@ optimizer = Adam(lr = 0.0001)
 
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
-checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/word2vec2doc/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
+checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/"+classifier_dir+"/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
 early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stopping_patience)
-csv_logger = CSVLogger(config._current_path+"/classifier_models/word2vec2doc/training.csv")
+csv_logger = CSVLogger(config._current_path+"/classifier_models/"+classifier_dir+"/training.csv")
 
 
 print("train")
