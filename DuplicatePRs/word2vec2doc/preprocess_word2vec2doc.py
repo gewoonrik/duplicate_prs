@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import argparse
 import pickle
 
 from keras.models import model_from_json
@@ -31,12 +32,20 @@ def save(file, result):
     with open(processed_pr_file, 'w') as f:
         pickle.dump(result, f)
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--embeddings_model', default='word2vec')
+
+args = parser.parse_args()
+
+model_path = ""
+if args.embeddings_model != "word2vec":
+    model_path = "_fasttext"
 
 f = open(config._current_path+"/classifier_models/cnn_euclidian/model.json")
 json = f.read()
 f.close()
 model = model_from_json(json, {"contrastive_loss":contrastive_loss, "acc":acc})
-model.load_weights(config._current_path+"/classifier_models/cnn_euclidian/best.h5")
+model.load_weights(config._current_path+"/classifier_models/cnn_euclidian"+model_path+"/best.h5")
 
 # take only the shared CNN model :)
 model = model.layers[-2]
@@ -51,9 +60,16 @@ te_files  = get_tokenized_files(test)
 
 total = tr_files+val_files+te_files
 
-w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
-embeddings_model = w2vec.wv
-del w2vec
+if(args.embeddings_model == "word2vec"):
+    from gensim.models import Word2Vec
+    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
+    embeddings_model = w2vec.wv
+    # save memory
+    del w2vec
+else:
+    print("doing fasttext")
+    import fasttext
+    embeddings_model = fasttext.load_model(config.fasttext_model_directory+"/model.bin")
 
 batch_size = 50
 for i in range(0, len(total), batch_size):
