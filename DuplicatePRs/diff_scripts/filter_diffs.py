@@ -5,10 +5,11 @@ from DuplicatePRs.dataset import load_csv, line_to_diff_files
 def is_valid_diff(file):
     f = open(file, "r")
     content = f.read()
+    if '<a href="https://status.github.com">GitHub Status</a>' in content:
+        return False
     nr_lines = content.count("\n")
     f.close()
     return nr_lines > 0 and nr_lines <= 28567
-
 def filter_diffs_in_file(file):
     lines  = load_csv(file)
     correct_lines = []

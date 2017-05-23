@@ -23,7 +23,7 @@ def file_to_files(file):
     pr_lines = filter_file_lines(read_normal(file))
     return map(file_line_to_file, pr_lines)
 
-def files_to_percentages(prs1, prs2):
+def get_overlapping_files_percentage(prs1, prs2):
     results = []
     for i, pr in enumerate(prs1):
         pr1 = file_to_files(pr)
@@ -42,15 +42,13 @@ tr_1, tr_2, tr_y = zip(*map(line_to_diff_files, load_csv(config.training_dataset
 val_1, val_2, val_y = zip(*map(line_to_diff_files,load_csv(config.validation_dataset_file)))
 te_1, te_2, te_y = zip(*map(line_to_diff_files, load_csv(config.test_dataset_file)))
 
-tr = files_to_percentages(tr_1, tr_2)
-val = files_to_percentages(val_1, val_2)
-te = files_to_percentages(te_1, te_2)
+tr = get_overlapping_files_percentage(tr_1, tr_2)
+val = get_overlapping_files_percentage(val_1, val_2)
+te = get_overlapping_files_percentage(te_1, te_2)
 
 svm = LinearSVC(verbose=1, max_iter=10000)
 svm.fit(tr, tr_y)
 acc = svm.score(val, val_y)
-
-
 
 
 
