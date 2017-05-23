@@ -35,6 +35,14 @@ def get_valid_random_prs_and_download(db, owner, repo):
                     dict[file] = number
     # if none found until now, just return two
     print("no overlapping diffs found")
+    results = []
+    for pr in prs:
+        number = pr["number"]
+        diff = download_diff_string(owner,repo,number)
+        if is_valid_string(diff):
+            results.append(number)
+        if len(results) == 2:
+            return results[0], results[1]
     return prs[0]["number"], prs[1]["number"]
 
 
@@ -88,7 +96,7 @@ def generate_negative_samples(file):
 
 
 if __name__ == "__main__":
-    generate_negative_samples(config._current_path+"/training.csv")
-    generate_negative_samples(config._current_path+"validation.csv")
-    generate_negative_samples(config._current_path+"test.csv")
+    #generate_negative_samples(config._current_path+"/training.csv")
+    #generate_negative_samples(config._current_path+"validation.csv")
+    generate_negative_samples(config._current_path+"/test.csv")
 
