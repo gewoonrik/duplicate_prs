@@ -23,7 +23,7 @@ def get_random_pr(owner, repo):
 def get_random_prs(owner,repo):
     client = MongoClient('127.0.0.1', 27017)
     db = client.github
-    prs = db.pull_requests.find({"owner":owner, "repo":repo}, {"number":1})[:1000]
+    prs = db.pull_requests.find({"owner":owner, "repo":repo}, {"number":1})[:1000].tolist()
     random.shuffle(prs)
     return prs
 
