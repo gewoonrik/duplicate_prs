@@ -1,4 +1,3 @@
-import urllib2
 
 from DuplicatePRs.dataset import get_diff_file
 import os
@@ -12,4 +11,4 @@ def download_diff(owner, repo, id):
     return file
 def download_diff_string(owner,repo,id):
     url = "https://www.github.com/" + owner + "/" + repo + "/pull/" + str(id) + ".diff"
-    return urllib2.urlopen(url).read()
+    return urllib.urlopen(url).read()
