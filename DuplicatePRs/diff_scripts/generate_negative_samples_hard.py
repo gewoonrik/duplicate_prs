@@ -11,10 +11,11 @@ from DuplicatePRs.diff_scripts.download import download_diff, download_diff_stri
 from pymongo import MongoClient
 import random
 
+client = MongoClient('127.0.0.1', 27017)
+db = client.github
 
 def get_random_pr(owner, repo):
-    client = MongoClient('127.0.0.1', 27017)
-    db = client.github
+
     count = db.pull_requests.count({"owner":owner, "repo":repo})
     rand = random.randint(0, count-1)
     return db.pull_requests.find({"owner":owner, "repo":repo})[rand]
@@ -72,8 +73,8 @@ def generate_negative_samples(file):
     for line in lines_filtered:
         f.write(line+","+"1\n")
 
-    p = Pool(10)
-    for owner, repo, pr1, pr2 in tqdm(p.imap_unordered(generate_negative_sample, lines_filtered)):
+   # p = Pool(10)
+    for owner, repo, pr1, pr2 in tqdm(map(generate_negative_sample, lines_filtered)):
         f.write(owner+","+repo+","+pr1+","+pr2+","+"0\n")
     f.close()
 
