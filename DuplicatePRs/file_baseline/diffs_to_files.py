@@ -1,3 +1,5 @@
+from sklearn.svm import LinearSVC
+
 from DuplicatePRs import config
 from DuplicatePRs.dataset import load_csv, line_to_diff_files, read_normal
 
@@ -40,5 +42,13 @@ te_1, te_2, te_y = line_to_diff_files(load_csv(config.test_dataset_file))
 tr = files_to_percentages(tr_1, tr_2)
 val = files_to_percentages(val_1, val_2)
 te = files_to_percentages(te_1, te_2)
+
+svm = LinearSVC(verbose=1, max_iter=10000)
+svm.fit(tr, tr_y)
+acc = svm.score(val, val_y)
+
+
+
+
 
 
