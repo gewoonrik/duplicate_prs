@@ -35,9 +35,9 @@ def files_to_percentages(prs1, prs2):
 
 
 
-tr_1, tr_2, tr_y = map(line_to_diff_files, load_csv(config.training_dataset_file))
-val_1, val_2, val_y = map(line_to_diff_files,load_csv(config.validation_dataset_file))
-te_1, te_2, te_y = map(line_to_diff_files, load_csv(config.test_dataset_file))
+tr_1, tr_2, tr_y = zip(*map(line_to_diff_files, load_csv(config.training_dataset_file)))
+val_1, val_2, val_y = zip(*map(line_to_diff_files,load_csv(config.validation_dataset_file)))
+te_1, te_2, te_y = zip(*map(line_to_diff_files, load_csv(config.test_dataset_file)))
 
 tr = files_to_percentages(tr_1, tr_2)
 val = files_to_percentages(val_1, val_2)
