@@ -38,7 +38,9 @@ def generate_negative_sample(line):
     while tries < 100:
         rand1, file1 = get_valid_random_pr_and_download(owner,repo)
         rand2, file2 = get_valid_random_pr_and_download(owner,repo)
-        if get_overlapping_files_percentage(file1, file2) > 0:
+        overlap = get_overlapping_files_percentage(file1, file2)
+        print(overlap)
+        if overlap > 0:
             break
         tries += 1
     count +=1
