@@ -31,9 +31,9 @@ def files_to_percentages(prs1, prs2):
         intersection = len([x for x in pr1 if x in pr2])
         total = (len(pr1)+len(pr2))*1.0
         if total == 0:
-            results.append(1)
+            results.append([1])
         else:
-            results.append(intersection/total)
+            results.append([intersection/total])
     return results
 
 
