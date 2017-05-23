@@ -55,11 +55,12 @@ def batch_generate_negative_sample(batch):
         results.append(generate_negative_sample(db, line))
     return results
 
-def batch(iterable, size):
-    sourceiter = iter(iterable)
-    while True:
-        batchiter = islice(sourceiter, size)
-        yield chain([batchiter.next()], batchiter)
+def batch(l, batches):
+    per_batch = math.ceil(len(l)/(batches*1.0))
+    results = []
+    for i in range(batches):
+        results.append(l[i*per_batch:i*per_batch+per_batch])
+
 
 def generate_negative_samples(file):
     lines = load_csv(file)
@@ -77,8 +78,7 @@ def generate_negative_samples(file):
 
     processes = 16.0
     p = Pool(int(processes))
-    per_process = math.ceil(len(lines_filtered)/processes)
-    batched = batch(lines_filtered, per_process)
+    batched = batch(lines_filtered, processes)
 
     for b in p.imap_unordered(batch_generate_negative_sample, batched):
         for owner, repo, pr1, pr2 in b:
