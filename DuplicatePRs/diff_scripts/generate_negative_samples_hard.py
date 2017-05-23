@@ -1,7 +1,7 @@
 from multiprocessing import Pool
 
 from tqdm import tqdm
-
+from itertools import imap
 from DuplicatePRs import config
 from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_file_percentage, string_to_files
 from filter_diffs import is_valid_string, is_valid_diff
@@ -74,7 +74,7 @@ def generate_negative_samples(file):
         f.write(line+","+"1\n")
 
    # p = Pool(10)
-    for owner, repo, pr1, pr2 in tqdm(map(generate_negative_sample, lines_filtered)):
+    for owner, repo, pr1, pr2 in tqdm(imap(generate_negative_sample, lines_filtered)):
         f.write(owner+","+repo+","+pr1+","+pr2+","+"0\n")
     f.close()
 
