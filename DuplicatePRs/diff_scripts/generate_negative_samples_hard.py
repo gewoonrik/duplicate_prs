@@ -3,7 +3,7 @@ from multiprocessing import Pool
 from tqdm import tqdm
 
 from DuplicatePRs import config
-from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_file_percentage
+from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_file_percentage, file_to_files
 from filter_diffs import is_valid_diff
 from DuplicatePRs.dataset import get_diff_file, load_csv
 from DuplicatePRs.diff_scripts.download import download_diff
@@ -20,32 +20,41 @@ def get_random_pr(owner, repo):
     rand = random.randint(0, count-1)
     return db.pull_requests.find({"owner":owner, "repo":repo})[rand]
 
+def get_random_prs(owner,repo):
+    client = MongoClient('127.0.0.1', 27017)
+    db = client.github
+    prs = db.pull_requests.find({"owner":owner, "repo":repo}, {"number":1})[:1000]
+    random.shuffle(prs)
+    return prs
 
-# keep trying getting random prs until they are valid
-def get_valid_random_pr_and_download(owner, repo):
-    while True:
-        rand = get_random_pr(owner, repo)
-        file = download_diff(owner,repo,rand["number"])
-        if is_valid_diff(file):
-            return rand, file
 
-count = 0
+# keep trying getting random prs until they are valid and overlapping in at leas one file
+def get_valid_random_prs_and_download(owner, repo):
+    prs = get_random_prs(owner, repo)
+    dict = {}
+    for pr in prs:
+        number = pr["number"]
+        diff = download_diff(owner,repo,number)
+        if is_valid_diff(diff):
+            files_in_diff = file_to_files(diff)
+            for file in files_in_diff:
+                if file in dict:
+                    return number, dict[file]
+                else:
+                    dict[file] = number
+    # if none found until now, just return two
+    print("no overlapping diffs found")
+    return prs[0]["number"], prs[1]["number"]
+
+
 def generate_negative_sample(line):
-    global count
     owner, repo, pr1, pr2 = line.split(",")
     tries = 0
     # try to get overlapping diffs for 100 times
     # else settle with a non overlapping diff
-    while tries < 100:
-        rand1, file1 = get_valid_random_pr_and_download(owner,repo)
-        rand2, file2 = get_valid_random_pr_and_download(owner,repo)
-        overlap = get_overlapping_file_percentage(file1, file2)
-        if overlap > 0:
-            break
-        tries += 1
-    count +=1
-    min_v = min(rand1["number"], rand2["number"])
-    max_v = max(rand1["number"], rand2["number"])
+    rand1, rand2 = get_valid_random_prs_and_download(owner, repo)
+    min_v = min(rand1, rand2)
+    max_v = max(rand1, rand2)
     return owner, repo, str(min_v), str(max_v)
 
 def generate_negative_samples(file):
