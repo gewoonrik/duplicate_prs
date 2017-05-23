@@ -37,7 +37,7 @@ def get_overlapping_file_percentage(pr1, pr2):
 def get_overlapping_files_percentage(prs1, prs2):
     results = []
     for i, pr in enumerate(prs1):
-        results.append([get_overlapping_file_percentage(pr1,pr2)])
+        results.append([get_overlapping_file_percentage(pr,prs2[i])])
     return results
 
 if __name__ == "__main__":
