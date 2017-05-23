@@ -1,5 +1,6 @@
 from multiprocessing import Pool
 
+from DuplicatePRs import config
 from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_files_percentage
 from filter_diffs import is_valid_diff
 from DuplicatePRs.dataset import get_diff_file, load_csv
@@ -70,7 +71,7 @@ def generate_negative_samples(file):
 
 
 if __name__ == "__main__":
-    generate_negative_samples("training.csv")
-    generate_negative_samples("validation.csv")
-    generate_negative_samples("test.csv")
+    generate_negative_samples(config._current_path+"/training.csv")
+    generate_negative_samples(config._current_path+"validation.csv")
+    generate_negative_samples(config._current_path+"test.csv")
 
