@@ -56,7 +56,7 @@ def batch_generate_negative_sample(batch):
     return results
 
 def batch(l, batches):
-    per_batch = math.ceil(len(l)/(batches*1.0))
+    per_batch = int(math.ceil(len(l)/(batches*1.0)))
     results = []
     for i in range(batches):
         results.append(l[i*per_batch:i*per_batch+per_batch])
