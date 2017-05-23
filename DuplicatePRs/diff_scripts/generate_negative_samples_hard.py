@@ -14,7 +14,7 @@ import random
 
 
 def get_random_prs(db, owner,repo):
-    prs = list(db.pull_requests.find({"owner":owner, "repo":repo}, {"number":1})[:1000])
+    prs = list(db.pull_requests.find({"owner":owner, "repo":repo}, {"number":1})[:500])
     random.shuffle(prs)
     return prs
 
