@@ -76,7 +76,7 @@ def generate_negative_samples(file):
         f.write(line+","+"1\n")
 
     processes = 16.0
-    p = Pool(processes)
+    p = Pool(int(processes))
     per_process = math.ceil(len(lines_filtered)/processes)
     batched = batch(lines_filtered, per_process)
 
