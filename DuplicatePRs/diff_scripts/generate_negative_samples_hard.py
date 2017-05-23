@@ -60,6 +60,7 @@ def batch(l, batches):
     results = []
     for i in range(batches):
         results.append(l[i*per_batch:i*per_batch+per_batch])
+    return results
 
 
 def generate_negative_samples(file):
