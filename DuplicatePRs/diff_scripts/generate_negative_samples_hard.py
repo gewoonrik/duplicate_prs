@@ -63,9 +63,7 @@ def generate_negative_samples(file):
         f.write(line+","+"1\n")
 
     p = Pool(10)
-    negative_samples = tqdm(p.imap(generate_negative_sample, lines_filtered))
-
-    for owner, repo, pr1, pr2 in negative_samples:
+    for owner, repo, pr1, pr2 in tqdm(p.imap_unordered(generate_negative_sample, lines_filtered)):
         f.write(owner+","+repo+","+pr1+","+pr2+","+"0\n")
     f.close()
 
