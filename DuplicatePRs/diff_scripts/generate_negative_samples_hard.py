@@ -1,5 +1,7 @@
 from multiprocessing import Pool
 
+from tqdm import tqdm
+
 from DuplicatePRs import config
 from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_file_percentage
 from filter_diffs import is_valid_diff
@@ -31,7 +33,6 @@ count = 0
 def generate_negative_sample(line):
     global count
     owner, repo, pr1, pr2 = line.split(",")
-    print(owner+" "+repo)
     tries = 0
     # try to get overlapping diffs for 100 times
     # else settle with a non overlapping diff
@@ -39,12 +40,10 @@ def generate_negative_sample(line):
         rand1, file1 = get_valid_random_pr_and_download(owner,repo)
         rand2, file2 = get_valid_random_pr_and_download(owner,repo)
         overlap = get_overlapping_file_percentage(file1, file2)
-        print(overlap)
         if overlap > 0:
             break
         tries += 1
     count +=1
-    print("count "+str(count))
     min_v = min(rand1["number"], rand2["number"])
     max_v = max(rand1["number"], rand2["number"])
     return owner, repo, str(min_v), str(max_v)
@@ -64,8 +63,7 @@ def generate_negative_samples(file):
         f.write(line+","+"1\n")
 
     p = Pool(10)
-    print("need to do "+str(len(lines_filtered)))
-    negative_samples = p.map(generate_negative_sample, lines_filtered)
+    negative_samples = tqdm(p.map(generate_negative_sample, lines_filtered))
 
     for owner, repo, pr1, pr2 in negative_samples:
         f.write(owner+","+repo+","+pr1+","+pr2+","+"0\n")
