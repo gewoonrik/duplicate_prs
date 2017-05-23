@@ -16,8 +16,8 @@ def filter_file_lines(str):
 def file_line_to_file(line):
     # remove diff --git + space
     line = line[12:]
-    a,b = line.split(" ")
-    return a
+    a = line.split(" b/")
+    return a[0]
 
 def file_to_files(file):
     pr_lines = filter_file_lines(read_normal(file))
