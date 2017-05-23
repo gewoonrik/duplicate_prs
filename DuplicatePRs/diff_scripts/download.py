@@ -10,5 +10,8 @@ def download_diff(owner, repo, id):
         urllib.urlretrieve(url, file)
     return file
 def download_diff_string(owner,repo,id):
-    url = "https://www.github.com/" + owner + "/" + repo + "/pull/" + str(id) + ".diff"
-    return urllib.urlopen(url).read()
+    try:
+        url = "https://www.github.com/" + owner + "/" + repo + "/pull/" + str(id) + ".diff"
+        return urllib.urlopen(url).read()
+    except:
+        return ""
