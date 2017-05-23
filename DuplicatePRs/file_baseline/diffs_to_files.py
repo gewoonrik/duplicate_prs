@@ -23,6 +23,10 @@ def file_to_files(file):
     pr_lines = filter_file_lines(read_normal(file))
     return map(file_line_to_file, pr_lines)
 
+def string_to_files(string):
+    pr_lines = filter_file_lines(string)
+    return map(file_line_to_file, pr_lines)
+
 def get_overlapping_file_percentage(pr1, pr2):
     pr1 = file_to_files(pr1)
     pr2 = file_to_files(pr2)

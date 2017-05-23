@@ -3,11 +3,10 @@ from multiprocessing import Pool
 from tqdm import tqdm
 
 from DuplicatePRs import config
-from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_file_percentage, file_to_files
-from filter_diffs import is_valid_diff
+from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_file_percentage, string_to_files
+from filter_diffs import is_valid_string, is_valid_diff
 from DuplicatePRs.dataset import get_diff_file, load_csv
-from DuplicatePRs.diff_scripts.download import download_diff
-
+from DuplicatePRs.diff_scripts.download import download_diff, download_diff_string
 
 from pymongo import MongoClient
 import random
@@ -34,9 +33,9 @@ def get_valid_random_prs_and_download(owner, repo):
     dict = {}
     for pr in prs:
         number = pr["number"]
-        diff = download_diff(owner,repo,number)
-        if is_valid_diff(diff):
-            files_in_diff = file_to_files(diff)
+        diff = download_diff_string(owner,repo,number)
+        if is_valid_string(diff):
+            files_in_diff = string_to_files(diff)
             for file in files_in_diff:
                 if file in dict:
                     return number, dict[file]
@@ -53,6 +52,8 @@ def generate_negative_sample(line):
     # try to get overlapping diffs for 100 times
     # else settle with a non overlapping diff
     rand1, rand2 = get_valid_random_prs_and_download(owner, repo)
+    download_diff(owner,repo,rand1)
+    download_diff(owner,repo,rand2)
     min_v = min(rand1, rand2)
     max_v = max(rand1, rand2)
     return owner, repo, str(min_v), str(max_v)
