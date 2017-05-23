@@ -36,19 +36,20 @@ def get_overlapping_files_percentage(prs1, prs2):
             results.append([intersection/total])
     return results
 
+if __name__ == "__main__":
 
 
-tr_1, tr_2, tr_y = zip(*map(line_to_diff_files, load_csv(config.training_dataset_file)))
-val_1, val_2, val_y = zip(*map(line_to_diff_files,load_csv(config.validation_dataset_file)))
-te_1, te_2, te_y = zip(*map(line_to_diff_files, load_csv(config.test_dataset_file)))
+    tr_1, tr_2, tr_y = zip(*map(line_to_diff_files, load_csv(config.training_dataset_file)))
+    val_1, val_2, val_y = zip(*map(line_to_diff_files,load_csv(config.validation_dataset_file)))
+    te_1, te_2, te_y = zip(*map(line_to_diff_files, load_csv(config.test_dataset_file)))
 
-tr = get_overlapping_files_percentage(tr_1, tr_2)
-val = get_overlapping_files_percentage(val_1, val_2)
-te = get_overlapping_files_percentage(te_1, te_2)
+    tr = get_overlapping_files_percentage(tr_1, tr_2)
+    val = get_overlapping_files_percentage(val_1, val_2)
+    te = get_overlapping_files_percentage(te_1, te_2)
 
-svm = LinearSVC(verbose=1, max_iter=10000)
-svm.fit(tr, tr_y)
-acc = svm.score(val, val_y)
+    svm = LinearSVC(verbose=1, max_iter=10000)
+    svm.fit(tr, tr_y)
+    acc = svm.score(val, val_y)
 
 
 
