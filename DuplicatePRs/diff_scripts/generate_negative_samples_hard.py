@@ -55,7 +55,7 @@ def generate_negative_samples(file):
         if is_valid_diff(get_diff_file(owner,repo,pr1)) and is_valid_diff(get_diff_file(owner,repo,pr2)):
             lines_filtered.append(line)
 
-    f = open(file.split(".")[0]+"_with_negative_samples_hard.csv", "w")
+    f = open(config._current_path+"/"+file.split(".")[0]+"_with_negative_samples_hard.csv", "w")
     f.write("owner,repo,pr1_id,p2_id,is_duplicate\n")
 
     for line in lines_filtered:
