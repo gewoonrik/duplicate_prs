@@ -76,8 +76,8 @@ def generate_negative_samples(file):
     for line in lines_filtered:
         f.write(line+","+"1\n")
 
-    processes = 16.0
-    p = Pool(int(processes))
+    processes = 16
+    p = Pool(processes)
     batched = batch(lines_filtered, processes)
 
     for b in p.imap_unordered(batch_generate_negative_sample, batched):
