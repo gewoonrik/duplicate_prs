@@ -23,17 +23,19 @@ def file_to_files(file):
     pr_lines = filter_file_lines(read_normal(file))
     return map(file_line_to_file, pr_lines)
 
+def get_overlapping_file_percentage(pr1, pr2):
+    pr1 = file_to_files(pr1)
+    pr2 = file_to_files(pr2)
+    intersection = len([x for x in pr1 if x in pr2])
+    total = (len(pr1)+len(pr2))*1.0
+    return intersection/total
+
 def get_overlapping_files_percentage(prs1, prs2):
     results = []
     for i, pr in enumerate(prs1):
         pr1 = file_to_files(pr)
         pr2 = file_to_files(prs2[i])
-        intersection = len([x for x in pr1 if x in pr2])
-        total = (len(pr1)+len(pr2))*1.0
-        if total == 0:
-            results.append([1])
-        else:
-            results.append([intersection/total])
+        results.append([get_overlapping_file_percentage(pr1,pr2)])
     return results
 
 if __name__ == "__main__":

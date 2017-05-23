@@ -1,7 +1,7 @@
 from multiprocessing import Pool
 
 from DuplicatePRs import config
-from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_files_percentage
+from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_file_percentage
 from filter_diffs import is_valid_diff
 from DuplicatePRs.dataset import get_diff_file, load_csv
 from DuplicatePRs.diff_scripts.download import download_diff
@@ -38,7 +38,7 @@ def generate_negative_sample(line):
     while tries < 100:
         rand1, file1 = get_valid_random_pr_and_download(owner,repo)
         rand2, file2 = get_valid_random_pr_and_download(owner,repo)
-        overlap = get_overlapping_files_percentage(file1, file2)
+        overlap = get_overlapping_file_percentage(file1, file2)
         print(overlap)
         if overlap > 0:
             break
