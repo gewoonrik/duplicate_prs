@@ -24,7 +24,7 @@ def file_to_files(file):
     return map(file_line_to_file, pr_lines)
 
 def string_to_files(string):
-    pr_lines = filter_file_lines(string)
+    pr_lines = filter_file_lines(read_normal(file))
     return map(file_line_to_file, pr_lines)
 
 def get_overlapping_file_percentage(pr1, pr2):
@@ -37,8 +37,6 @@ def get_overlapping_file_percentage(pr1, pr2):
 def get_overlapping_files_percentage(prs1, prs2):
     results = []
     for i, pr in enumerate(prs1):
-        pr1 = file_to_files(pr)
-        pr2 = file_to_files(prs2[i])
         results.append([get_overlapping_file_percentage(pr1,pr2)])
     return results
 
