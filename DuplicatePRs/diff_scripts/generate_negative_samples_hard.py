@@ -22,10 +22,12 @@ def get_random_prs(db, owner,repo):
 def get_valid_random_prs_and_download(db, owner, repo):
     prs = get_random_prs(db, owner, repo)
     dict = {}
+    has_valid = False
     for pr in prs:
         number = pr["number"]
         diff = download_diff_string(owner,repo,number)
         if is_valid_string(diff):
+            has_valid = True
             files_in_diff = string_to_files(diff)
             for file in files_in_diff:
                 if file in dict:
@@ -33,6 +35,9 @@ def get_valid_random_prs_and_download(db, owner, repo):
                 else:
                     dict[file] = number
     # if none found until now, just return two
+    if not has_valid:
+        print("no valid diffs found...")
+        return 0,0
     print("no overlapping diffs found")
     results = []
     for pr in prs:
@@ -49,8 +54,11 @@ def generate_negative_sample(db, line):
     owner, repo, pr1, pr2 = line.split(",")
 
     rand1, rand2 = get_valid_random_prs_and_download(db, owner, repo)
-    download_diff(owner,repo,rand1)
-    download_diff(owner,repo,rand2)
+    try:
+        download_diff(owner,repo,rand1)
+        download_diff(owner,repo,rand2)
+    except:
+        pass
     min_v = min(rand1, rand2)
     max_v = max(rand1, rand2)
     return owner, repo, str(min_v), str(max_v)
