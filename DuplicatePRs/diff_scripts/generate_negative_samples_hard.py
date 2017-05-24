@@ -1,3 +1,4 @@
+import traceback
 from multiprocessing import Pool
 
 import math
@@ -64,12 +65,23 @@ def generate_negative_sample(db, line):
     return owner, repo, str(min_v), str(max_v)
 
 def batch_generate_negative_sample(batch):
-    db = MongoClient('127.0.0.1', 27017).github
-    results = []
-    for line in tqdm(batch, total = len(batch)):
-        results.append(generate_negative_sample(db, line))
-    print("batch done :D")
-    return results
+    try:
+
+        db = MongoClient('127.0.0.1', 27017).github
+        results = []
+        for line in tqdm(batch, total = len(batch)):
+            results.append(generate_negative_sample(db, line))
+        print("batch done :D")
+        return results
+    except Exception as e:
+        print('Caught exception in worker thread (x = %d):' % x)
+
+        # This prints the type, value, and stack trace of the
+        # current exception being handled.
+        traceback.print_exc()
+
+        print()
+        exit()
 
 def batch(l, batches):
     per_batch = int(math.ceil(len(l)/(batches*1.0)))
@@ -93,11 +105,13 @@ def generate_negative_samples(file):
     for line in lines_filtered:
         f.write(line+","+"1\n")
 
-    processes = 10
+    processes = 300
     p = Pool(processes)
     batched = batch(lines_filtered, processes)
-
+    count = processes
     for b in p.imap_unordered(batch_generate_negative_sample, batched):
+        count -=1
+        print(str(count)+" threads to go!")
         i = 0
         for owner, repo, pr1, pr2 in b:
             f.write(owner+","+repo+","+pr1+","+pr2+","+"0\n")
