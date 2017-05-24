@@ -39,6 +39,9 @@ def get_valid_random_prs_and_download(db, owner, repo):
     if not has_valid:
         print("no valid diffs found...")
         return 0,0
+    if len(prs) < 2:
+        print("wut, not enough PRs")
+        return 0,0
     print("no overlapping diffs found")
     results = []
     for pr in prs:
