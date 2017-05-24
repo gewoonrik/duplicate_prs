@@ -1,4 +1,3 @@
-import urllib
 from multiprocessing import Pool
 
 import math
@@ -11,8 +10,6 @@ from DuplicatePRs.diff_scripts.download import download_diff, download_diff_stri
 
 from pymongo import MongoClient
 import random
-import json
-
 
 project_cache = {}
 def get_random_prs(db, owner,repo):
@@ -27,22 +24,14 @@ def get_valid_random_prs_and_download(db, owner, repo):
     dict = {}
     for pr in prs:
         number = pr["number"]
-        files = get_files(owner, repo, number)
-        for file in files:
-            filename = file.filename
-            if file in dict:
-                number2 = dict[filename]
-                diff1 = is_valid_string(download_diff_string(owner,repo,number))
-                diff2 = is_valid_string(download_diff_string(owner,repo,number2))
-                if not diff2:
-                    if diff1:
-                        dict[filename] = number
-                    else:
-                        del dict[filename]
-                elif diff1:
-                    return number, number2
-            else:
-                dict[filename] = number
+        diff = download_diff_string(owner,repo,number)
+        if is_valid_string(diff):
+            files_in_diff = string_to_files(diff)
+            for file in files_in_diff:
+                if file in dict:
+                    return number, dict[file]
+                else:
+                    dict[file] = number
     # if none found until now, just return two
     print("no overlapping diffs found")
     results = []
@@ -53,7 +42,6 @@ def get_valid_random_prs_and_download(db, owner, repo):
             results.append(number)
         if len(results) == 2:
             return results[0], results[1]
-    # we give up, just return something
     return prs[0]["number"], prs[1]["number"]
 
 
@@ -82,9 +70,6 @@ def batch(l, batches):
         results.append(l[i*per_batch:i*per_batch+per_batch])
     return results
 
-def get_files(owner,repo, number):
-    j = urllib.urlopen("https://api.github.com/repos/"+owner+"/"+repo+"/pulls/"+number+"/files").read()
-    return json.loads(j)
 
 def generate_negative_samples(file):
     lines = load_csv(file)
