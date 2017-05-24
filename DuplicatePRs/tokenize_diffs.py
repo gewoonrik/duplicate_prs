@@ -21,7 +21,7 @@ files = get_diff_files(total)
 
 
 def download_a_diff(line):
-    owner, repo, id1, id2 = line.split(",")
+    owner, repo, id1, id2, is_dup = line.split(",")
     download_diff(owner,repo,id1)
     download_diff(owner,repo,id2)
 
