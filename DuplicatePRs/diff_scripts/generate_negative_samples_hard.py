@@ -2,7 +2,6 @@ from multiprocessing import Pool
 
 import math
 from tqdm import tqdm
-from itertools import imap, islice, chain
 from DuplicatePRs import config
 from DuplicatePRs.file_baseline.diffs_to_files import get_overlapping_file_percentage, string_to_files
 from filter_diffs import is_valid_string, is_valid_diff
@@ -14,7 +13,7 @@ import random
 
 
 def get_random_prs(db, owner,repo):
-    prs = list(db.pull_requests.find({"owner":owner, "repo":repo}, {"number":1}).limit(1000)[:1000])
+    prs = list(db.pull_requests.find({"owner":owner, "repo":repo}, {"number":1}).limit(2000))
     random.shuffle(prs)
     return prs
 
@@ -61,6 +60,7 @@ def batch_generate_negative_sample(batch):
     results = []
     for line in tqdm(batch, total = len(batch)):
         results.append(generate_negative_sample(db, line))
+    print("batch done :D")
     return results
 
 def batch(l, batches):
@@ -85,13 +85,16 @@ def generate_negative_samples(file):
     for line in lines_filtered:
         f.write(line+","+"1\n")
 
-    processes = 16
+    processes = 10
     p = Pool(processes)
     batched = batch(lines_filtered, processes)
 
     for b in p.imap_unordered(batch_generate_negative_sample, batched):
+        i = 0
         for owner, repo, pr1, pr2 in b:
             f.write(owner+","+repo+","+pr1+","+pr2+","+"0\n")
+            if i % 500 == 0:
+                f.flush()
     f.close()
 
 
