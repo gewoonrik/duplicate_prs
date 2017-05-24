@@ -29,7 +29,7 @@ def get_valid_random_prs_and_download(db, owner, repo):
         number = pr["number"]
         files = get_files(owner, repo, number)
         for file in files:
-            filename = file["filename"]
+            filename = file.filename
             if filename in dict:
                 number2 = dict[filename]
                 diff1 = is_valid_string(download_diff_string(owner,repo,number))
