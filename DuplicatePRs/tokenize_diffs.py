@@ -1,6 +1,7 @@
 import sys
 
 from DuplicatePRs import config
+from DuplicatePRs.diff_scripts.download import download_diff
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -12,11 +13,17 @@ from tokenize import tokenize,filter_diff_lines
 
 training = load_csv(config.training_dataset_file)
 validation = load_csv(config.validation_dataset_file)
-test = load_csv(config.test_dataset_file)
+#test = load_csv(config.test_dataset_file)
 
-total = training+test+validation
+total = training+validation #
 
 files = get_diff_files(total)
+
+
+def download_a_diff(line):
+    owner, repo, id1, id2 = line.split(",")
+    download_diff(owner,repo,id1)
+    download_diff(owner,repo,id2)
 
 def tokenize_file(file):
     out_file = file.replace("diffs","diffs_tokenized")
@@ -29,5 +36,6 @@ def tokenize_file(file):
         f.close()
 
 p = Pool(16)
+p.map(download_a_diff, total)
 p.map(tokenize_file,files)
 
