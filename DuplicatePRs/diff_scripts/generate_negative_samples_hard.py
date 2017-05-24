@@ -83,7 +83,7 @@ def batch(l, batches):
     return results
 
 def get_files(owner,repo, number):
-    j = urllib.urlopen("https://api.github.com/repos/"+owner+"/"+repo+"/pulls/"+str(number)+"/files").read()
+    j = urllib.urlopen("https://api.github.com/repos/"+owner+"/"+repo+"/pulls/"+number+"/files").read()
     return json.loads(j)
 
 def generate_negative_samples(file):
