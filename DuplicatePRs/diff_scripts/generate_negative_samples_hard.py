@@ -11,9 +11,9 @@ from DuplicatePRs.diff_scripts.download import download_diff, download_diff_stri
 from pymongo import MongoClient
 import random
 
-
+project_cache = {}
 def get_random_prs(db, owner,repo):
-    prs = list(db.pull_requests.find({"owner":owner, "repo":repo}, {"number":1}).limit(2000))
+    prs = list(db.pull_requests.find({"owner":owner, "repo":repo}, {"number":1, "_id":0}).limit(5000))
     random.shuffle(prs)
     return prs
 
@@ -95,11 +95,12 @@ def generate_negative_samples(file):
             f.write(owner+","+repo+","+pr1+","+pr2+","+"0\n")
             if i % 500 == 0:
                 f.flush()
+            i +=1
     f.close()
 
 
 if __name__ == "__main__":
-    #generate_negative_samples(config._current_path+"/training.csv")
-    #generate_negative_samples(config._current_path+"validation.csv")
-    generate_negative_samples(config._current_path+"/test.csv")
+    generate_negative_samples(config._current_path+"/training.csv")
+    generate_negative_samples(config._current_path+"/validation.csv")
+    #generate_negative_samples(config._current_path+"/test.csv")
 
