@@ -74,8 +74,8 @@ def batch_generate_negative_sample(batch):
         print("batch done :D")
         return results
     except Exception as e:
-        print('Caught exception in worker thread (x = %d):' % x)
-
+        #print('Caught exception in worker thread (x = %d):' % x)
+        print("exception :(")
         # This prints the type, value, and stack trace of the
         # current exception being handled.
         traceback.print_exc()
