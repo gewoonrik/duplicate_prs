@@ -47,7 +47,7 @@ elif args.descriptions:
 else:
     documents = Documents(get_tokenized_files(total))
     print("learning based on diffs")
-    file = "doc2vec_word2vec_dbow_epoch"
+    file = "doc2vec_word2vec_dbow_hard_epoch"
 
 
 #iter = 1, because we keep training ourselves :)
