@@ -11,18 +11,12 @@ parser.add_argument('--titles', action="store_true")
 parser.add_argument('--descriptions', action="store_true")
 
 args = parser.parse_args()
-cached_files = {}
 class Documents(object):
     def __init__(self, files):
         self.files = files
 
     def __iter__(self):
         for file in self.files:
-            if file in cached_files:
-                content = cached_files[file]
-            else:
-                content = read_pickled(file)
-                cached_files[file] = content
             yield TaggedDocument(words = content, tags = [file])
 
 
