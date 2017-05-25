@@ -56,6 +56,7 @@ else:
 epoch = 6
 model = Doc2Vec.load(config._current_path+'/doc2vec_models/'+file+str(epoch)+'.model')
 model.alpha = 0.025 - epoch * 0.002
+model.min_alpha = model.alpha
 for epoch in range(6,10):
     print("epoch "+str(epoch))
     model.train(documents, total_examples=len(total)*2, epochs=1)
