@@ -17,6 +17,7 @@ class Documents(object):
 
     def __iter__(self):
         for file in self.files:
+            content = read_pickled(file)
             yield TaggedDocument(words = content, tags = [file])
 
 
