@@ -5,7 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 import re
-
+import numpy as np
 from gensim.models import Doc2Vec
 from keras.models import load_model
 from DuplicatePRs import config
@@ -48,8 +48,15 @@ def predict():
     pr1_diff = get_diff(pr1)
     pr2_diff = get_diff(pr2)
 
+    inputs_1 = []
+    inputs_2 = []
+
+
     vec1 = d2vec.infer_vector(tokenize(filter_diff_lines(pr1_diff)))
     vec2 = d2vec.infer_vector(tokenize(filter_diff_lines(pr2_diff)))
-    result = model.predict([vec1, vec2])
+    inputs_1.append(vec1)
+    inputs_2.append(vec2)
+
+    result = model.predict([np.asarray(inputs_1), np.asarray(inputs_2)])
     return render_template('result.html', result=result)
 
