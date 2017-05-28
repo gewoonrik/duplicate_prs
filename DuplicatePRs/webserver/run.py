@@ -12,6 +12,9 @@ from DuplicatePRs import config
 
 from flask import url_for
 
+from DuplicatePRs.tokenize import filter_diff_lines
+from DuplicatePRs.tokenize import tokenize
+
 app = Flask(__name__)
 
 d2vec = Doc2Vec.load(config._current_path+"/doc2vec_models/doc2vec_word2vec_dbow_hard_epoch9.model")
@@ -45,8 +48,8 @@ def predict():
     pr1_diff = get_diff(pr1)
     pr2_diff = get_diff(pr2)
 
-    vec1 = d2vec.infer_vector(pr1_diff)
-    vec2 = d2vec.infer_vector(pr2_diff)
+    vec1 = d2vec.infer_vector(tokenize(filter_diff_lines(pr1_diff)))
+    vec2 = d2vec.infer_vector(tokenize(filter_diff_lines(pr2_diff)))
     result = model.predict([vec1, vec2])
     return render_template('result.html', result=result)
 
