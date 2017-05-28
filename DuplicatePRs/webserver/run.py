@@ -58,5 +58,5 @@ def predict():
     inputs_2.append(vec2)
 
     result = model.predict([np.asarray(inputs_1), np.asarray(inputs_2)])
-    return render_template('result.html', result=result)
+    return render_template('result.html', result=result[0], diff1=pr1_diff, diff2=pr2_diff)
 
