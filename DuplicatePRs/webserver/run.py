@@ -39,7 +39,7 @@ def get_diff(url):
 @app.route('/predict', methods=['POST'])
 def predict():
     pr1 = request.form['pr1']
-    pr2 = request.form['pr1']
+    pr2 = request.form['pr2']
     if not check_url(pr1) or not check_url(pr2):
         return redirect(url_for('index'), code=400)
     pr1 = pr1+".diff"
