@@ -1,0 +1,11 @@
+<form action="{{ url_for('predict') }}" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="pr1">PR1</label>
+        <input type="text" name="pr1" id="pr1">
+        <label for="pr2">PR2</label>
+        <input type="text" name="pr2" id="pr2">
+        <label class="btn btn-primary">
+            <input type="submit" value="Predict!" style="display: none;">
+        </label>
+    </div>
+</form>
