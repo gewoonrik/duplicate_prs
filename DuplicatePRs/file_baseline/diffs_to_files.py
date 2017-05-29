@@ -1,3 +1,5 @@
+from multiprocessing import Pool
+
 from sklearn.svm import LinearSVC
 
 from DuplicatePRs import config
@@ -36,22 +38,18 @@ def get_overlapping_file_percentage(pr1, pr2):
         return 1.0
     return intersection/total
 
-def get_overlapping_files_percentage(prs1, prs2):
-    results = []
-    for i, pr in enumerate(prs1):
-        results.append([get_overlapping_file_percentage(pr,prs2[i])])
-    return results
+def line_to_overlapping_file_percentage(line):
+    pr1, pr2, is_dup = line_to_diff_files(line)
+    return get_overlapping_file_percentage(pr1,pr2), is_dup
 
 if __name__ == "__main__":
 
+    p = Pool(32)
 
-    tr_1, tr_2, tr_y = zip(*map(line_to_diff_files, load_csv(config.training_dataset_file)))
-    val_1, val_2, val_y = zip(*map(line_to_diff_files,load_csv(config.validation_dataset_file)))
-    te_1, te_2, te_y = zip(*map(line_to_diff_files, load_csv(config.test_dataset_file)))
+    tr, tr_y = zip(*p.map(line_to_overlapping_file_percentage, load_csv(config.training_dataset_file)))
+    val, val_y = zip(*p.map(line_to_overlapping_file_percentage,load_csv(config.validation_dataset_file)))
+    te, te_y = zip(*p.map(line_to_overlapping_file_percentage, load_csv(config.test_dataset_file)))
 
-    tr = get_overlapping_files_percentage(tr_1, tr_2)
-    val = get_overlapping_files_percentage(val_1, val_2)
-    te = get_overlapping_files_percentage(te_1, te_2)
 
     svm = LinearSVC(verbose=1, max_iter=10000)
     svm.fit(tr, tr_y)
