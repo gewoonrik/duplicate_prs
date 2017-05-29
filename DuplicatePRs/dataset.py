@@ -103,7 +103,7 @@ def read_normal(file):
     f.close()
     return content
 
-def _get_data_by_line(get_file_func, read, maxlen, line):
+def _get_data_by_line(get_file_func, read, maxlen, cutoff, line):
     owner, repo, pr1, pr2, is_dup = line.split(",")
     pr1_file = get_file_func(owner, repo, pr1)
     pr2_file = get_file_func(owner, repo, pr2)
@@ -111,11 +111,14 @@ def _get_data_by_line(get_file_func, read, maxlen, line):
     pr1_data = read(pr1_file)
     pr2_data = read(pr2_file)
     if maxlen != None and (len(pr1_data) > maxlen or len(pr2_data) > maxlen):
-        return None
+        if not cutoff:
+            return None
+        else:
+            return pr1_data[:maxlen], pr2_data[:maxlen], is_dup
     return pr1_data, pr2_data, is_dup
 
-def _get_data(lines, get_file_func, read, maxlen = None):
-    get_data_func = partial(_get_data_by_line, get_file_func, read, maxlen)
+def _get_data(lines, get_file_func, read, maxlen = None, cutoff = False):
+    get_data_func = partial(_get_data_by_line, get_file_func, read, maxlen, cutoff)
     pool = Pool(8)
 
     data = pool.map(get_data_func, lines)
@@ -128,8 +131,8 @@ def _get_data(lines, get_file_func, read, maxlen = None):
     return np.asarray(pr1s), np.asarray(pr2s), np.asarray(labels)
 
 
-def _get_data_generator(lines, get_file_func, read, maxlen = None):
-    get_data_func = partial(_get_data_by_line, get_file_func, read, maxlen)
+def _get_data_generator(lines, get_file_func, read, maxlen = None, cutoff = False):
+    get_data_func = partial(_get_data_by_line, get_file_func, read, maxlen, cutoff)
     for line in lines:
         yield get_data_func(line)
 
@@ -149,8 +152,8 @@ def get_doc2vec_data_titles(lines):
 def get_doc2vec_data_descriptions(lines):
     return _get_data(lines, get_doc2vec_file_description, read_pickled, None)
 
-def get_tokenized_data(lines, maxlen = None):
-    return _get_data(lines, get_tokenized_file, read_pickled, maxlen)
+def get_tokenized_data(lines, maxlen = None, cutoff = False):
+    return _get_data(lines, get_tokenized_file, read_pickled, maxlen, cutoff)
 
-def get_tokenized_data_generator(lines, maxlen = None):
-    return _get_data_generator(lines, get_tokenized_file, read_pickled, maxlen)
+def get_tokenized_data_generator(lines, maxlen = None , cutoff = False):
+    return _get_data_generator(lines, get_tokenized_file, read_pickled, maxlen, cutoff)
