@@ -21,7 +21,7 @@ val_gen = map(line_to_tokenized_files,val_lines)
 
 
 print("loading dict")
-dict = Dictionary().load(config._current_path+"/baseline/dict_keepall")
+dict = Dictionary().load(config._current_path+"/baseline/dict_hard")
 
 nr_words = len(dict.token2id)
 
@@ -58,11 +58,11 @@ scaler = preprocessing.StandardScaler(with_mean=False).fit(training_matrix)
 training_matrix = scaler.transform(training_matrix)
 
 
-svm = SVC(verbose=1, max_iter=10000)
+svm = LinearSVC(verbose=1, max_iter=10000)
 print("fitting ")
 svm.fit(training_matrix, tr_labels)
 
-joblib.dump(svm, config._current_path+"/baseline/svm_keepall_rbf")
+joblib.dump(svm, config._current_path+"/baseline/svm_hard")
 
 validation_matrix, val_labels = dataset_to_bow(val_gen, len(val_lines))
 print("testing")
