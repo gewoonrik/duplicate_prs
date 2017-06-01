@@ -46,7 +46,7 @@ out_2 = conv_model(pr_2)
 
 merged = merge([out_1, out_2], mode='concat')
 x = Dense(2000, activation='relu')(merged)
-x = Dropout(0.5)
+x = Dropout(0.5)(x)
 main_output = Dense(1, activation='sigmoid', name='main_output')(x)
 
 model = Model(input=[pr_1, pr_2], output=main_output)
