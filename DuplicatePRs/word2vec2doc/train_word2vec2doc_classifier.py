@@ -18,10 +18,10 @@ print("loading files")
 
 if args.embeddings_model == "word2vec":
     get_data_func = get_word2vec2doc_data_diffs
-    classifier_dir = "word2vec2doc"
+    classifier_dir = "word2vec2doc_hard"
 else:
     get_data_func = get_fasttext2doc_data_diffs
-    classifier_dir = "fasttext2doc"
+    classifier_dir = "fasttext2doc_hard"
 
 
 train = load_csv(config.training_dataset_file)
