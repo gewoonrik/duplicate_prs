@@ -2,7 +2,7 @@ import argparse
 
 from keras.callbacks import EarlyStopping, CSVLogger
 from keras.callbacks import ModelCheckpoint
-from keras.models import Model
+from keras.models import Model, Dropout
 from keras.layers import Dense
 from keras.layers import Input, merge
 from keras.optimizers import Adam
@@ -45,7 +45,8 @@ out_1 = conv_model(pr_1)
 out_2 = conv_model(pr_2)
 
 merged = merge([out_1, out_2], mode='concat')
-x = Dense(600, activation='relu')(merged)
+x = Dense(2000, activation='relu')(merged)
+x = Dropout(0.5)
 main_output = Dense(1, activation='sigmoid', name='main_output')(x)
 
 model = Model(input=[pr_1, pr_2], output=main_output)
