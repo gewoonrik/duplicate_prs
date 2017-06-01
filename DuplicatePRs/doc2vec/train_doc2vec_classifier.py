@@ -5,6 +5,7 @@ from keras.callbacks import ModelCheckpoint
 from DuplicatePRs.dataset import load_csv, get_doc2vec_data_diffs
 from keras.optimizers import Adam
 from DuplicatePRs import config
+import numpy as np
 
 print("loading files")
 train = load_csv(config.training_dataset_file)
@@ -12,7 +13,16 @@ validation = load_csv(config.validation_dataset_file)
 test = load_csv(config.test_dataset_file)
 tr_1, tr_2, tr_labels = get_doc2vec_data_diffs(train)
 val_1, val_2, val_labels = get_doc2vec_data_diffs(validation)
-test_1, test_2, test_labels = get_doc2vec_data_diffs(test)
+#test_1, test_2, test_labels = get_doc2vec_data_diffs(test)
+
+
+val_1_total = np.concatenate([val_1,val_2])
+val_2_total = np.concatenate([val_2,val_1])
+val_labels_total = np.concatenate([val_labels,val_labels])
+
+tr_1_total = np.concatenate([tr_1,tr_2])
+tr_2_total = np.concatenate([tr_2,tr_1])
+tr_labels_total = np.concatenate([tr_labels,tr_labels])
 
 pr1 = Input(shape=(300,), dtype='float32', name='pr1_input')
 pr2 = Input(shape=(300,), dtype='float32', name='pr2_input')
@@ -27,17 +37,18 @@ optimizer = Adam(lr = 0.0001)
 
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
-checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/doc2vec/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
+checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/doc2vec_hard/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
 early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stopping_patience)
-csv_logger = CSVLogger(config._current_path+"/classifier_models/doc2vec/training.csv")
+csv_logger = CSVLogger(config._current_path+"/classifier_models/doc2vec_hard/training.csv")
 
 
 print("train")
 
 
+
 model.fit([tr_1, tr_2], tr_labels, batch_size=100, nb_epoch=100,
           validation_data=([val_1, val_2], val_labels), callbacks=[checkpoint, early_stopping, csv_logger])
 
-results = model.evaluate([test_1, test_2], test_labels, batch_size=100)
-print('Test results: ', results)
-print('On metrics: ', model.metrics_names)
+#results = model.evaluate([test_1, test_2], test_labels, batch_size=100)
+#print('Test results: ', results)
+#print('On metrics: ', model.metrics_names)
