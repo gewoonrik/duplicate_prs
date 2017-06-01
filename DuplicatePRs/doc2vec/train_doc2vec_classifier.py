@@ -46,8 +46,8 @@ print("train")
 
 
 
-model.fit([tr_1, tr_2], tr_labels, batch_size=100, nb_epoch=100,
-          validation_data=([val_1, val_2], val_labels), callbacks=[checkpoint, early_stopping, csv_logger])
+model.fit([tr_1_total, tr_2_total], tr_labels_total, batch_size=100, nb_epoch=100,
+          validation_data=([val_1_total, val_2_total], val_labels_total), callbacks=[checkpoint, early_stopping, csv_logger])
 
 #results = model.evaluate([test_1, test_2], test_labels, batch_size=100)
 #print('Test results: ', results)
