@@ -2,8 +2,8 @@ import argparse
 
 from keras.callbacks import EarlyStopping, CSVLogger
 from keras.callbacks import ModelCheckpoint
-from keras.models import Model, Dropout
-from keras.layers import Dense
+from keras.models import Model
+from keras.layers import Dense,Dropout
 from keras.layers import Input, merge
 from keras.optimizers import Adam
 
