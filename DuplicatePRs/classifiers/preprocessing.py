@@ -89,7 +89,7 @@ def get_preprocessed_generator(file, embeddings_model, embeddings_size, maxlen, 
     prs_1, prs_2, y = get_tokenized_data(load_csv(file), maxlen, cutoff)
     prs_1_total = prs_1 + prs_2
     prs_2_total = prs_2 + prs_1
-    y_total = y + y
+    y_total = np.concatenate([y, y])
     print("starting iterator")
     return DataIterator(prs_1_total, prs_2_total, y_total, embeddings_model, embeddings_size, maxlen, batch_size), math.ceil(len(y)/(batch_size*1.0)), y
 
