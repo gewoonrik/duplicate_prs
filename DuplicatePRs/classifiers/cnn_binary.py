@@ -12,7 +12,7 @@ from DuplicatePRs.classifiers.preprocessing import get_preprocessed_generator
 from cnn_shared_model import conv_model
 
 # Training
-batch_size = 50
+batch_size = 25
 epochs = 150
 
 parser = argparse.ArgumentParser()
