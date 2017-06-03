@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import argparse
 import pickle
+from tqdm import tqdm
 
 from keras.models import model_from_json
 import keras.backend as K
@@ -45,12 +46,13 @@ def save(file, result):
 model_path = ""
 if args.embeddings_model != "word2vec":
     model_path = "_fasttext"
-
+else:
+    model_path = "_word2vec"
 f = open(config._current_path+"/classifier_models/cnn_euclidian/model.json")
 json = f.read()
 f.close()
 model = model_from_json(json, {"contrastive_loss":contrastive_loss, "acc":acc})
-model.load_weights(config._current_path+"/classifier_models/cnn_euclidian"+model_path+"/best.h5")
+model.load_weights(config._current_path+"/classifier_models/cnn_euclidian"+model_path+"_hard/best.hdf5")
 
 # take only the shared CNN model :)
 model = model.layers[-2]
@@ -67,7 +69,7 @@ total = tr_files+val_files+te_files
 
 if(args.embeddings_model == "word2vec"):
     from gensim.models import Word2Vec
-    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
+    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_hard_epoch9.model")
     embeddings_model = w2vec.wv
     # save memory
     del w2vec
@@ -77,8 +79,8 @@ else:
     embeddings_model = fasttext.load_model(config.fasttext_model_directory+"/model.bin")
 
 batch_size = 50
-for i in range(0, len(total), batch_size):
-    print("doing nr "+str(i)+" of "+str(len(total)),  end='\r')
+for i in tqdm(range(0, len(total), batch_size)):
+#    print("doing nr "+str(i)+" of "+str(len(total)))
     files = total[i:i+batch_size]
     tokenized = map(read_pickled, files)
     lengths = map(len, tokenized)
