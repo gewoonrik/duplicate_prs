@@ -22,7 +22,7 @@ app = Flask(__name__)
 d2vec = Doc2Vec.load(config._current_path+"/doc2vec_models/doc2vec_word2vec_dbow_hard_epoch9.model")
 embeddings_model = d2vec.wv
 
-model = load_model(config._current_path+"/classifier_models/doc2vec_hard/0.52447.hdf5")
+model = load_model(config._current_path+"/classifier_models/doc2vec_hard/0.50974.hdf5")
 
 top_model = load_model(config._current_path+"/classifier_models/word2vec2doc_hard/0.51685.hdf5")
 def acc(y_true, y_pred):
@@ -47,7 +47,7 @@ shared_model = model_from_json(json, {"contrastive_loss":contrastive_loss, "acc"
 shared_model.load_weights(config._current_path+"/classifier_models/cnn_euclidian_word2vec_hard/best.hdf5")
 
 # take only the shared CNN model :)
-shared_model = model.layers[-2]
+shared_model = shared_model.layers[-2]
 
 def pair_to_word2vec(tok1, tok2):
     p1 = preprocess([tok1],embeddings_model, 300, len(tok1))
