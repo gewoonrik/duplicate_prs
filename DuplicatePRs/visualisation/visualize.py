@@ -94,9 +94,6 @@ def normalize_nparr(arr):
 def calc_iim_dense(iim_vec, weights, input):
     iim_weights = (iim_vec* weights).transpose()
 
-    assert (iim_weights.transpose())[0][0] == iim_vec[0]*weights[0][0]
-    assert (iim_weights.transpose())[10][5] == iim_vec[10]*weights[10][5]
-
     return np.dot((input * iim_weights).transpose()
                   , np.repeat(1, weights.shape[1]))
 
