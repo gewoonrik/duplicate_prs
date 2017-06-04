@@ -95,9 +95,9 @@ def predict_w2vec():
     w2vec1, w2vec2 = pair_to_word2vec(vec1, vec2)
 
     results = visualize(shared_model, top_model, w2vec1, w2vec2)
-    s1 = to_style(vec1, results[0])
-    s2 = to_style(vec2, results[1])
-    return render_template('side_by_side.html', pr1=s1, pr2=s2)
+    #s1 = to_style(vec1, results[0])
+    #s2 = to_style(vec2, results[1])
+    return render_template('side_by_side.html', pr1_tokens=vec1, pr2_tokens=vec2, res1=results[0], res2=results[1])
 
 
 @app.route('/predict', methods=['POST'])

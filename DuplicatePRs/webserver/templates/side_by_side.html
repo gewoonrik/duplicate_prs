@@ -1,6 +1,21 @@
 <table border="0" width="100%">
     <tr>
-        <td>{{pr1}}</td>
-        <td>{{pr2}}</td>
+        <td>
+
+
+            {% for i,token in enumerate(pr1_tokens) %}
+                {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' %}
+                    <br/>
+                {% endif %}
+                <span style="rgba(0, 255, 0, {{res1[i]}}")>{{token}}</span>
+            {% endfor %}
+        </td>
+        <td>{% for i,token in enumerate(pr2_tokens) %}
+                {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' %}
+                <br/>
+                {% endif %}
+                <span style="rgba(0, 255, 0, {{res2[i]}}")>{{token}}</span>
+            {% endfor %}
+        </td>
     </tr>
 </table>
