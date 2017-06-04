@@ -77,8 +77,8 @@ def to_style(tokens, res):
     for i,token in enumerate(tokens):
         if token == 'lineremovedtoken' or token == 'lineaddedtoken':
             styled.append("<br/>")
-        styled.append("<span style='rgba(0, 255, 0, "+res[i]+")'>"+token+"</span>")
-    return styled
+        styled.append("<span style='rgba(0, 255, 0, "+str(res[i])+")'>"+token+"</span>")
+    return ' '.join(styled)
 @app.route('/predict_w2vec', methods=['POST'])
 def predict_w2vec():
     pr1 = request.form['pr1']
