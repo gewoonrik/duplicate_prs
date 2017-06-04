@@ -81,7 +81,7 @@ def calculate_iim_shared(start_iim, inputs, activations, model):
         for j in range(inputs.shape[1]):
             sum += iim_sum[i][j]
         final[i] = sum
-    return final #normalize_nparr(final)
+    return normalize_nparr(final)
 
 def normalize_nparr(arr):
     mi = np.min(arr)
