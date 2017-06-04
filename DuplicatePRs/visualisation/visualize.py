@@ -84,8 +84,10 @@ def calculate_iim_shared(start_iim, inputs, activations, model):
     return normalize_nparr(final)
 
 def normalize_nparr(arr):
-    mi = np.min(arr)
-    arr = arr-mi
+    #remove less than zero's
+    arr = np.maximum(arr, 0)
+    #mi = np.min(arr)
+    #arr = arr-mi
     ma = np.max(arr)*1.0
     return arr/ma
 

@@ -7,6 +7,9 @@
                 {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' %}
                     <br/>
                 {% endif %}
+                {% if token == 'newfiletoken' %}
+                    <br/><br/>
+                {% endif %}
                 <span style="background-color:rgba(0, 255, 0, {{res1[loop.index0]}}")>{{token}}</span>
             {% endfor %}
         </td>
