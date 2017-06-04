@@ -119,13 +119,15 @@ def calc(iim, weights, input_length, inp):
     embedding_size = weights.shape[1]
     nr_filters = weights.shape[2]
     out = np.zeros(embedding_size)
+    padding = filter_length//2
     for j in range(embedding_size):
         inp = input[j]
         sum = 0
         for k in range(nr_filters):
             for l in range(filter_length):
-                if i+l<input_length:
-                    influence = iim[i+l][k]
+                index = i-l+padding
+                if index<input_length and index > 0:
+                    influence = iim[index][k]
                     sum += influence * weights[l][j][k]
         out[j] = inp * sum
     return i,out
