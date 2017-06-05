@@ -1,0 +1,32 @@
+<table border="0" width="100%">
+    <tr>
+        <td>
+            <span>
+            {% set linenr = 0 %}
+            {% for token in pr1_tokens %}
+                {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' or token == 'newfiletoken' %}
+                    </span>
+                    <br/>
+                    <span style="background-color:rgba(0, 255, 0, {{influence1[linenr]}}")>
+                    {% set linenr = linenr + 1 %}
+                {% endif %}
+                {{token}}
+            {% endfor %}
+                    </span>
+        </td>
+        <td>
+            <span>
+            {% set linenr = 0 %}
+            {% for token in pr2_tokens %}
+                {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' or token == 'newfiletoken' %}
+                    </span>
+            <br/>
+            <span style="background-color:rgba(0, 255, 0, {{influence2[linenr]}}")>
+                    {% set linenr = linenr + 1 %}
+                {% endif %}
+                {{token}}
+            {% endfor %}
+            </span>
+        </td>
+    </tr>
+</table>

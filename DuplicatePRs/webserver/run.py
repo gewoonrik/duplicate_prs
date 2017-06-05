@@ -11,10 +11,12 @@ from keras.models import load_model, model_from_json
 from DuplicatePRs import config
 import keras.backend as K
 from flask import url_for
+import numpy as np
 
 from DuplicatePRs.classifiers.preprocessing import preprocess
 from DuplicatePRs.tokenize import filter_diff_lines
 from DuplicatePRs.tokenize import tokenize
+from DuplicatePRs.visualisation.remove_lines import test_lines
 from DuplicatePRs.visualisation.visualize import visualize
 
 app = Flask(__name__)
@@ -115,12 +117,21 @@ def predict():
     inputs_1 = []
     inputs_2 = []
 
+    tokenized_1 = tokenize(filter_diff_lines(pr1_diff))
+    tokenized_2 = tokenize(filter_diff_lines(pr2_diff))
 
-    vec1 = d2vec.infer_vector(tokenize(filter_diff_lines(pr1_diff)))
-    vec2 = d2vec.infer_vector(tokenize(filter_diff_lines(pr2_diff)))
-    inputs_1.append(vec1)
-    inputs_2.append(vec2)
+    pred1, pred2, result  = test_lines(d2vec, model, tokenized_1, tokenized_2)
+
+    # only keep the lines that reduce the result when removed :)
+    influence1 = -1 * np.minimum(pred1, 0)
+    max1 = np.max(influence1)
+    influence1 = influence1/max1
+
+    influence2 = -1 * np.minimum(pred2, 0)
+    max2 = np.max(influence2)
+    influence2 = influence2/max2
 
     result = model.predict([np.asarray(inputs_1), np.asarray(inputs_2)])
-    return render_template('result.html', result=result[0], diff1=pr1_diff, diff2=pr2_diff)
+    return render_template('side_by_side_lines.html', pr1_tokens = tokenized_1, pr2_tokens = tokenized_2,
+                           influence1 = influence1, influence2 = influence2)
 
