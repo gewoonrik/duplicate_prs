@@ -24,7 +24,7 @@ def get_predictions(doc2vec, model, baseline, lines, other_vector):
         vec = doc2vec.infer_vector(test)
         #vec_total = np.concatenate([vec, other_vector])
         res = model.predict([np.asarray([vec]), np.asarray([other_vector])])[0][0]
-        results.append(baseline-res)
+        results.append(res-baseline)
     return results
 
 def test_lines(doc2vec, model, pr1, pr2):

@@ -114,8 +114,6 @@ def predict():
     pr1_diff = get_diff(pr1)
     pr2_diff = get_diff(pr2)
 
-    inputs_1 = []
-    inputs_2 = []
 
     tokenized_1 = tokenize(filter_diff_lines(pr1_diff))
     tokenized_2 = tokenize(filter_diff_lines(pr2_diff))
