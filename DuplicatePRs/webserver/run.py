@@ -125,11 +125,19 @@ def predict():
     max1 = np.max(influence1)
     influence1 = influence1/max1
 
+    bad_influence1 = np.maximum(pred1, 0)
+    max1 = np.max(bad_influence1)
+    bad_influence1 = bad_influence1/max1
+
     influence2 = -1 * np.minimum(pred2, 0)
     max2 = np.max(influence2)
     influence2 = influence2/max2
 
+    bad_influence2 = np.maximum(pred2, 0)
+    ma21 = np.max(bad_influence2)
+    bad_influence2 = bad_influence2/max1
+
     print(result)
     return render_template('side_by_side_lines.html', pr1_tokens = tokenized_1, pr2_tokens = tokenized_2,
-                           influence1 = influence1, influence2 = influence2)
+                           influence1 = influence1, influence2 = influence2, bad_influence1= bad_influence1, bad_influence2=bad_influence2)
 
