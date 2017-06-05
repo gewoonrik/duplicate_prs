@@ -14,7 +14,7 @@ def to_lines(tokens):
         lines.append(cur_line)
     return lines
 
-lines_per_check = 20
+lines_per_check = 5
 
 def check_line(doc2vec, lines, i):
     before = lines[:i]
