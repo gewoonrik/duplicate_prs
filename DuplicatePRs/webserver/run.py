@@ -122,19 +122,19 @@ def predict():
 
     # only keep the lines that reduce the result when removed :)
     influence1 = -1 * np.minimum(pred1, 0)
-    sum1 = influence1.sum()
+    sum1 = np.max(influence1)
     influence1 = influence1/sum1
 
     bad_influence1 = np.maximum(pred1, 0)
-    sum1 = bad_influence1.sum()
+    sum1 = np.max(bad_influence1)
     bad_influence1 = bad_influence1/sum1
 
     influence2 = -1 * np.minimum(pred2, 0)
-    sum2 = influence2.sum()
+    sum2 = np.max(influence2)
     influence2 = influence2/sum2
 
     bad_influence2 = np.maximum(pred2, 0)
-    sum2 = bad_influence2.sum()
+    sum2 = np.max(bad_influence2)
     bad_influence2 = bad_influence2/sum2
 
     print(result)
