@@ -1,41 +1,40 @@
 <table border="0" width="100%">
     <tr>
         <td width="50%">
-            <span>
             {% set count = [] %}
-            {% for token in pr1_tokens %}
-                {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' or token == 'newfiletoken' %}
-                    </span>
-                    <br/>
+            {% for line in pr1_diff %}
+            <br/>
+            {% if line[0] == '+' or line[0] == '-' or line[:10] == "diff --git" %}
                     {% if influence1[count|length] >0 %}
                         <span style="background-color:rgba(0, 255, 0, {{influence1[count|length]}}" )>
                     {%else%}
                         <span style="background-color:rgba(255, 0, 0, {{bad_influence1[count|length]}}" )>
                     {% endif %}
                     {% set __ = count.append(1) %}
-
+                {%else%}
+                    <span>
                 {% endif %}
-                {{token}}
+                {{line}}
+                </span>
             {% endfor %}
-                    </span>
         </td>
         <td width="50%">
-            <span>
             {% set count = [] %}
-            {% for token in pr2_tokens %}
-                {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' or token == 'newfiletoken' %}
-                    </span>
-                    <br/>
-                    {% if influence2[count|length] >0 %}
-                        <span style="background-color:rgba(0, 255, 0, {{influence2[count|length]}}" )>
+            {% for line in pr2_diff %}
+            <br/>
+            {% if line[0] == '+' or line[0] == '-' or line[:10] == "diff --git" %}
+            {% if influence2[count|length] >0 %}
+            <span style="background-color:rgba(0, 255, 0, {{influence2[count|length]}}" )>
                     {%else%}
                         <span style="background-color:rgba(255, 0, 0, {{bad_influence2[count|length]}}" )>
                     {% endif %}
                     {% set __ = count.append(1) %}
+                {%else%}
+                    <span>
                 {% endif %}
-                {{token}}
+                {{line}}
+                </span>
             {% endfor %}
-            </span>
         </td>
     </tr>
 </table>
