@@ -25,31 +25,31 @@ d2vec = Doc2Vec.load(config._current_path+"/doc2vec_models/doc2vec_word2vec_dbow
 embeddings_model = d2vec.wv
 
 model = load_model(config._current_path+"/classifier_models/doc2vec_hard/0.50974.hdf5")
-
-top_model = load_model(config._current_path+"/classifier_models/word2vec2doc_hard/0.51685.hdf5")
-def acc(y_true, y_pred):
-    ones = K.ones_like(y_pred)
-    return K.mean(K.equal(y_true, ones - K.clip(K.round(y_pred), 0, 1)), axis=-1)
-
-
-def contrastive_loss(y_true, y_pred):
-    '''Contrastive loss from Hadsell-et-al.'06
-    http://yann.lecun.com/exdb/publis/pdf/hadsell-chopra-lecun-06.pdf
-    '''
-    margin = 1
-    # duplicates should be low, non duplicates should be high
-    # so duplicates = 0, non duplicate = 1
-    y_true = -1 * y_true + 1
-    return K.mean((1 - y_true) * K.square(y_pred) +  y_true * K.square(K.maximum(margin - y_pred, 0)))
-
-f = open(config._current_path+"/classifier_models/cnn_euclidian/model.json")
-json = f.read()
-f.close()
-shared_model = model_from_json(json, {"contrastive_loss":contrastive_loss, "acc":acc})
-shared_model.load_weights(config._current_path+"/classifier_models/cnn_euclidian_word2vec_hard/best.hdf5")
-
-# take only the shared CNN model :)
-shared_model = shared_model.layers[-2]
+#
+# top_model = load_model(config._current_path+"/classifier_models/word2vec2doc_hard/0.51685.hdf5")
+# def acc(y_true, y_pred):
+#     ones = K.ones_like(y_pred)
+#     return K.mean(K.equal(y_true, ones - K.clip(K.round(y_pred), 0, 1)), axis=-1)
+#
+#
+# def contrastive_loss(y_true, y_pred):
+#     '''Contrastive loss from Hadsell-et-al.'06
+#     http://yann.lecun.com/exdb/publis/pdf/hadsell-chopra-lecun-06.pdf
+#     '''
+#     margin = 1
+#     # duplicates should be low, non duplicates should be high
+#     # so duplicates = 0, non duplicate = 1
+#     y_true = -1 * y_true + 1
+#     return K.mean((1 - y_true) * K.square(y_pred) +  y_true * K.square(K.maximum(margin - y_pred, 0)))
+#
+# f = open(config._current_path+"/classifier_models/cnn_euclidian/model.json")
+# json = f.read()
+# f.close()
+# shared_model = model_from_json(json, {"contrastive_loss":contrastive_loss, "acc":acc})
+# shared_model.load_weights(config._current_path+"/classifier_models/cnn_euclidian_word2vec_hard/best.hdf5")
+#
+# # take only the shared CNN model :)
+# shared_model = shared_model.layers[-2]
 
 def pair_to_word2vec(tok1, tok2):
     p1 = preprocess([tok1],embeddings_model, 300, len(tok1))
@@ -74,32 +74,32 @@ def check_url(url):
 def get_diff(url):
     return urllib.urlopen(url).read()
 
-def to_style(tokens, res):
-    styled = []
-    for i,token in enumerate(tokens):
-        if token == 'lineremovedtoken' or token == 'lineaddedtoken':
-            styled.append("<br/>")
-        styled.append("<span style='rgba(0, 255, 0, "+str(res[i])+")'>"+token+"</span>")
-    return ' '.join(styled)
-@app.route('/predict_w2vec', methods=['POST'])
-def predict_w2vec():
-    pr1 = request.form['pr1']
-    pr2 = request.form['pr2']
-    if not check_url(pr1) or not check_url(pr2):
-        return redirect(url_for('w2vec'), code=400)
-    pr1 = pr1+".diff"
-    pr2 = pr2+".diff"
-
-    pr1_diff = get_diff(pr1)
-    pr2_diff = get_diff(pr2)
-    vec1 = tokenize(filter_diff_lines(pr1_diff))
-    vec2 = tokenize(filter_diff_lines(pr2_diff))
-    w2vec1, w2vec2 = pair_to_word2vec(vec1, vec2)
-
-    results = visualize(shared_model, top_model, w2vec1, w2vec2)
-    #s1 = to_style(vec1, results[0])
-    #s2 = to_style(vec2, results[1])
-    return render_template('side_by_side.html', pr1_tokens=vec1, pr2_tokens=vec2, res1=results[0], res2=results[1])
+# def to_style(tokens, res):
+#     styled = []
+#     for i,token in enumerate(tokens):
+#         if token == 'lineremovedtoken' or token == 'lineaddedtoken':
+#             styled.append("<br/>")
+#         styled.append("<span style='rgba(0, 255, 0, "+str(res[i])+")'>"+token+"</span>")
+#     return ' '.join(styled)
+# @app.route('/predict_w2vec', methods=['POST'])
+# def predict_w2vec():
+#     pr1 = request.form['pr1']
+#     pr2 = request.form['pr2']
+#     if not check_url(pr1) or not check_url(pr2):
+#         return redirect(url_for('w2vec'), code=400)
+#     pr1 = pr1+".diff"
+#     pr2 = pr2+".diff"
+#
+#     pr1_diff = get_diff(pr1)
+#     pr2_diff = get_diff(pr2)
+#     vec1 = tokenize(filter_diff_lines(pr1_diff))
+#     vec2 = tokenize(filter_diff_lines(pr2_diff))
+#     w2vec1, w2vec2 = pair_to_word2vec(vec1, vec2)
+#
+#     results = visualize(shared_model, top_model, w2vec1, w2vec2)
+#     #s1 = to_style(vec1, results[0])
+#     #s2 = to_style(vec2, results[1])
+#     return render_template('side_by_side.html', pr1_tokens=vec1, pr2_tokens=vec2, res1=results[0], res2=results[1])
 
 
 @app.route('/predict', methods=['POST'])
