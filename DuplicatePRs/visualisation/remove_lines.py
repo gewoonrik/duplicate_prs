@@ -31,7 +31,7 @@ def get_predictions(doc2vec, model, baseline, lines, other_vector):
     results = []
     func = partial(check_line, doc2vec, model, baseline, other_vector)
     p = Pool(16)
-    for i,res in p.imap_unordered(func, enumerate(skip_lines(lines))):
+    for i,res in map(func, enumerate(skip_lines(lines))):
         results[i] = res
     return results
 
