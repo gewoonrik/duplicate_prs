@@ -1,3 +1,6 @@
+from functools import partial
+from multiprocessing import Pool
+
 import numpy as np
 def to_lines(tokens):
     lines = []
@@ -18,16 +21,19 @@ def skip_lines(lines):
         after = lines[i+1:]
         yield [x for sublist in (before + after) for x in sublist]
 
+def check_line(doc2vec, model, baseline, other_vector, test):
+    (i,test) = test
+    vec = doc2vec.infer_vector(test)
+    res = model.predict([np.asarray([vec]), np.asarray([other_vector])])[0][0]
+    return i, res-baseline
+
 def get_predictions(doc2vec, model, baseline, lines, other_vector):
     results = []
-    vecs1 = []
-    vecs2 = []
-    for test in skip_lines(lines):
-        vec = doc2vec.infer_vector(test)
-        vecs1.append(vec)
-        vecs2.append(other_vector)
-    res = model.predict([np.asarray(vecs2), np.asarray(vecs2)])[0][0]
-    return res-baseline
+    func = partial(check_line, doc2vec, model, baseline, other_vector)
+    p = Pool(16)
+    for i,res in p.imap_unordered(func, enumerate(skip_lines(lines))):
+        results[i] = res
+    return results
 
 def test_lines(doc2vec, model, pr1, pr2):
     lines1 = to_lines(pr1)
