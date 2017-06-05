@@ -1,6 +1,6 @@
 from functools import partial
 from multiprocessing import Pool
-
+from tqdm import tqdm
 import numpy as np
 def to_lines(tokens):
     lines = []
@@ -20,26 +20,27 @@ def check_line(doc2vec, lines, i):
     after = lines[i+1:]
     test = [x for sublist in (before + after) for x in sublist]
     vec = doc2vec.infer_vector(test)
-    return i, vec
+    return vec
 
 def get_predictions(doc2vec, model, baseline, lines, other_vector):
     results = []
-    func = partial(check_line, doc2vec, lines)
-    p = Pool(5)
-    for i,res in p.imap_unordered(func, len(lines)):
-        results[i] = model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
-    print(results)
+    print("go")
+    for i in tqdm(range(len(lines))):
+        res = check_line(doc2vec,lines,i)
+        res = model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
+        results.append(res)
     return results
 
 def test_lines(doc2vec, model, pr1, pr2):
+    print("to lines")
     lines1 = to_lines(pr1)
     lines2 = to_lines(pr2)
-
+    print("get base vectors")
     vec1 = doc2vec.infer_vector(pr1)
     vec2 = doc2vec.infer_vector(pr2)
-
+    print("baseline")
     baseline = model.predict([np.asarray([vec1]), np.asarray([vec2])])[0][0]
-
+    print("get predictions")
     predictions1 = get_predictions(doc2vec, model, baseline, lines1, vec2)
     predictions2 = get_predictions(doc2vec, model, baseline, lines2, vec1)
     return np.asarray(predictions1), np.asarray(predictions2), baseline
