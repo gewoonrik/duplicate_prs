@@ -7,7 +7,7 @@
                 {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' or token == 'newfiletoken' %}
                     </span>
                     <br/>
-                    <span style="background-color:rgba(0, 255, 0, {{influence1[len(count)]}}")>
+                    <span style="background-color:rgba(0, 255, 0, {{influence1[count|length]}}")>
                         {{linenr}}
                     {% set __ = count.append(1) %}
                 {% endif %}
@@ -22,7 +22,7 @@
                 {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' or token == 'newfiletoken' %}
                     </span>
             <br/>
-            <span style="background-color:rgba(0, 255, 0, {{influence2[len(count)]}}")>
+            <span style="background-color:rgba(0, 255, 0, {{influence2[count|length]}}")>
                     {% set __ = count.append(1) %}
                 {% endif %}
                 {{token}}
