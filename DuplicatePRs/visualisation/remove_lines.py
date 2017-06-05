@@ -34,8 +34,7 @@ def test_lines(doc2vec, model, pr1, pr2):
     vec1 = doc2vec.infer_vector(pr1)
     vec2 = doc2vec.infer_vector(pr2)
 
-    vecs = np.concatenate([vec1, vec2])
-    baseline = model.predict([vecs])
+    baseline = model.predict([np.asarray(vec1), np.asarray(vec2)])
 
     predictions1 = get_predictions(doc2vec, model, baseline, lines1, vec2)
     predictions2 = get_predictions(doc2vec, model, baseline, lines2, vec1)
