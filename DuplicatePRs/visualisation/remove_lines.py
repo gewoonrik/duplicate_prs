@@ -14,23 +14,28 @@ def to_lines(tokens):
         lines.append(cur_line)
     return lines
 
+lines_to_remove = 5
 
 def check_line(doc2vec, lines, i):
     before = lines[:i]
-    after = lines[i+1:]
+    after = lines[i+1+lines_to_remove:]
     test = [x for sublist in (before + after) for x in sublist]
     vec = doc2vec.infer_vector(test)
     return vec
 
 def get_predictions(doc2vec, model, baseline, lines, other_vector, first):
-    results = []
+    results = np.zeros(len(lines))
     print("go")
     for i in tqdm(range(len(lines))):
         res = check_line(doc2vec, lines, i)
         if first:
-            results.append(model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline)
+            res = (model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline)
         else:
-            results.append(model.predict([np.asarray([other_vector]), np.asarray([res])])[0][0] - baseline)
+            res = (model.predict([np.asarray([other_vector]), np.asarray([res])])[0][0] - baseline)
+        for j in range(lines_to_remove):
+            index = i+j
+            if index < len(lines):
+                results[index] += res
     return results
 
 def test_lines(doc2vec, model, pr1, pr2):
