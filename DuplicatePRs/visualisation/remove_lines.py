@@ -23,7 +23,7 @@ def get_predictions(doc2vec, model, baseline, lines, other_vector):
     for test in skip_lines(lines):
         vec = doc2vec.infer_vector(test)
         #vec_total = np.concatenate([vec, other_vector])
-        res = model.predict([np.asarray([vec]), np.asarray([other_vector])])[0]
+        res = model.predict([np.asarray([vec]), np.asarray([other_vector])])[0][0]
         results.append(baseline-res)
     return results
 
@@ -34,7 +34,7 @@ def test_lines(doc2vec, model, pr1, pr2):
     vec1 = doc2vec.infer_vector(pr1)
     vec2 = doc2vec.infer_vector(pr2)
 
-    baseline = model.predict([np.asarray([vec1]), np.asarray([vec2])])[0]
+    baseline = model.predict([np.asarray([vec1]), np.asarray([vec2])])[0][0]
 
     predictions1 = get_predictions(doc2vec, model, baseline, lines1, vec2)
     predictions2 = get_predictions(doc2vec, model, baseline, lines2, vec1)
