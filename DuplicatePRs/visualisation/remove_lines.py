@@ -22,13 +22,14 @@ def check_line(doc2vec, lines, i):
     vec = doc2vec.infer_vector(test)
     return vec
 
-def get_predictions(doc2vec, model, baseline, lines, other_vector):
+def get_predictions(doc2vec, model, baseline, lines, other_vector, first):
     results = []
     print("go")
     for i in tqdm(range(len(lines))):
-        res = check_line(doc2vec,lines,i)
-        res = model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
-        results.append(res)
+        if first:
+            results[i] = model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
+        else:
+            results[i] = model.predict([np.asarray([other_vector]), np.asarray([res])])[0][0] - baseline
     return results
 
 def test_lines(doc2vec, model, pr1, pr2):
@@ -40,7 +41,6 @@ def test_lines(doc2vec, model, pr1, pr2):
     vec2 = doc2vec.infer_vector(pr2)
     print("baseline")
     baseline = model.predict([np.asarray([vec1]), np.asarray([vec2])])[0][0]
-    print("get predictions")
-    predictions1 = get_predictions(doc2vec, model, baseline, lines1, vec2)
-    predictions2 = get_predictions(doc2vec, model, baseline, lines2, vec1)
+    predictions1 = get_predictions(doc2vec, model, baseline, lines1, vec2, True)
+    predictions2 = get_predictions(doc2vec, model, baseline, lines2, vec1, False)
     return np.asarray(predictions1), np.asarray(predictions2), baseline
