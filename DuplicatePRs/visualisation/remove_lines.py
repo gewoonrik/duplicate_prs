@@ -26,6 +26,7 @@ def get_predictions(doc2vec, model, baseline, lines, other_vector, first):
     results = []
     print("go")
     for i in tqdm(range(len(lines))):
+        res = check_line(doc2vec, lines, i)
         if first:
             results[i] = model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
         else:
