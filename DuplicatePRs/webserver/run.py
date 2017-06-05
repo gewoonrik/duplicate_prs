@@ -130,8 +130,6 @@ def predict():
     influence2 = -1 * np.minimum(pred2, 0)
     max2 = np.max(influence2)
     influence2 = influence2/max2
-
-    result = model.predict([np.asarray(inputs_1), np.asarray(inputs_2)])
     return render_template('side_by_side_lines.html', pr1_tokens = tokenized_1, pr2_tokens = tokenized_2,
                            influence1 = influence1, influence2 = influence2)
 
