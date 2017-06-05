@@ -1,4 +1,4 @@
-from functools import partial
+import itertools
 from multiprocessing import Pool
 from tqdm import tqdm
 import numpy as np
@@ -22,10 +22,12 @@ def check_line(doc2vec, lines, i):
     vec = get_doc2vec(doc2vec, test, 20)
     return vec
 
+
 def get_doc2vec(doc2vec, pr, sample_count):
     sum = np.zeros(300)
-    for i in range(sample_count):
-        sum += doc2vec.infer_vector(pr)
+    p = Pool(16)
+    for res in p.imap_unordered(doc2vec.infer_vector, itertools.repeat(pr, sample_count)):
+        sum += res
     return sum/sample_count
 
 def get_predictions(doc2vec, model, baseline, lines, other_vector, first):
