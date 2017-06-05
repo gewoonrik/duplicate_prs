@@ -28,9 +28,9 @@ def get_predictions(doc2vec, model, baseline, lines, other_vector, first):
     for i in tqdm(range(len(lines))):
         res = check_line(doc2vec, lines, i)
         if first:
-            results[i] = model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
+            results.append(model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline)
         else:
-            results[i] = model.predict([np.asarray([other_vector]), np.asarray([res])])[0][0] - baseline
+            results.append(model.predict([np.asarray([other_vector]), np.asarray([res])])[0][0] - baseline)
     return results
 
 def test_lines(doc2vec, model, pr1, pr2):
