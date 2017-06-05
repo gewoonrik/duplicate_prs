@@ -19,7 +19,7 @@ def check_line(doc2vec, lines, i):
     before = lines[:i]
     after = lines[i+1:]
     test = [x for sublist in (before + after) for x in sublist]
-    vec = get_doc2vec(doc2vec, test, 50)
+    vec = get_doc2vec(doc2vec, test, 20)
     return vec
 
 def get_doc2vec(doc2vec, pr, sample_count):
@@ -46,8 +46,8 @@ def test_lines(doc2vec, model, pr1, pr2):
     lines1 = to_lines(pr1)
     lines2 = to_lines(pr2)
     print("get base vectors")
-    vec1 = get_doc2vec(doc2vec, pr1, 50)
-    vec2 = get_doc2vec(doc2vec, pr2, 50)
+    vec1 = get_doc2vec(doc2vec, pr1, 20)
+    vec2 = get_doc2vec(doc2vec, pr2, 20)
     print("baseline")
     baseline = model.predict([np.asarray([vec1]), np.asarray([vec2])])[0][0]
     predictions1 = get_predictions(doc2vec, model, baseline, lines1, vec2, True)
