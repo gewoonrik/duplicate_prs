@@ -14,10 +14,11 @@ def to_lines(tokens):
         lines.append(cur_line)
     return lines
 
+lines_per_check = 20
 
 def check_line(doc2vec, lines, i):
     before = lines[:i]
-    after = lines[i+1:]
+    after = lines[i+lines_per_check:]
     test = [x for sublist in (before + after) for x in sublist]
     vec = get_doc2vec(doc2vec, test, 10)
     return vec
@@ -38,7 +39,9 @@ def get_predictions(doc2vec, model, baseline, lines, other_vector, first):
             res = model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
         else:
             res = model.predict([np.asarray([other_vector]), np.asarray([res])])[0][0] - baseline
-        results[i] += res
+        for j in range(lines_per_check):
+            if i+j < len(lines):
+                results[i+j] += res
 
     return results
 
