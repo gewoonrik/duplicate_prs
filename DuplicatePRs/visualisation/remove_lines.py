@@ -29,14 +29,11 @@ def check_line(doc2vec, test):
 def get_predictions(doc2vec, model, baseline, lines, other_vector):
     results = []
     func = partial(check_line, doc2vec)
-    p = Pool(16)
+    p = Pool(5)
     for i,res in p.imap_unordered(func, enumerate(skip_lines(lines))):
         results[i] = model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
-    results
-
-
     print(results)
-    return results - baseline
+    return results
 
 def test_lines(doc2vec, model, pr1, pr2):
     lines1 = to_lines(pr1)
