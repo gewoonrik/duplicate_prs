@@ -134,8 +134,8 @@ def predict():
     influence2 = influence2/max2
 
     bad_influence2 = np.maximum(pred2, 0)
-    ma21 = np.max(bad_influence2)
-    bad_influence2 = bad_influence2/max1
+    max2 = np.max(bad_influence2)
+    bad_influence2 = bad_influence2/max2
 
     print(result)
     return render_template('side_by_side_lines.html', pr1_tokens = tokenized_1, pr2_tokens = tokenized_2,
