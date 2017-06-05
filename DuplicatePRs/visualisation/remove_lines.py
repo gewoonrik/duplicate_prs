@@ -23,14 +23,14 @@ def check_line(doc2vec, lines, i):
     vec = get_doc2vec(doc2vec, test, 20)
     return vec
 
-def get_vec(doc2vec, pr):
+def get_vec(doc2vec, pr, _):
     return doc2vec.infer_vector(pr)
 
 def get_doc2vec(doc2vec, pr, sample_count):
     sum = np.zeros(300)
     p = Pool(16)
-    func = partial(get_vec, doc2vec)
-    for res in p.imap_unordered(func, itertools.repeat(pr, sample_count)):
+    func = partial(get_vec, doc2vec, pr)
+    for res in p.imap_unordered(func, range(sample_count)):
         sum += res
     return sum/sample_count
 
