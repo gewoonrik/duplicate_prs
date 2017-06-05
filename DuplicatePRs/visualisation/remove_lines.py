@@ -15,8 +15,7 @@ def to_lines(tokens):
     return lines
 
 
-def check_line(doc2vec, lines):
-    (i,lines) = lines
+def check_line(doc2vec, lines, i):
     before = lines[:i]
     after = lines[i+1:]
     test = [x for sublist in (before + after) for x in sublist]
@@ -25,9 +24,9 @@ def check_line(doc2vec, lines):
 
 def get_predictions(doc2vec, model, baseline, lines, other_vector):
     results = []
-    func = partial(check_line, doc2vec)
+    func = partial(check_line, doc2vec, lines)
     p = Pool(5)
-    for i,res in p.imap_unordered(func, enumerate(lines)):
+    for i,res in p.imap_unordered(func, len(lines)):
         results[i] = model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
     print(results)
     return results
