@@ -2,13 +2,14 @@
     <tr>
         <td>
             <span>
-            {% set linenr = 0 %}
+            {% set count = [] %}
             {% for token in pr1_tokens %}
                 {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' or token == 'newfiletoken' %}
                     </span>
                     <br/>
-                    <span style="background-color:rgba(0, 255, 0, {{influence1[linenr]}}")>
-                    {% set linenr = linenr + 1 %}
+                    <span style="background-color:rgba(0, 255, 0, {{influence1[len(count)]}}")>
+                        {{linenr}}
+                    {% set __ = count.append(1) %}
                 {% endif %}
                 {{token}}
             {% endfor %}
@@ -16,13 +17,13 @@
         </td>
         <td>
             <span>
-            {% set linenr = 0 %}
+            {% set count = [] %}
             {% for token in pr2_tokens %}
                 {% if token == 'lineremovedtoken' or token == 'lineaddedtoken' or token == 'newfiletoken' %}
                     </span>
             <br/>
-            <span style="background-color:rgba(0, 255, 0, {{influence2[linenr]}}")>
-                    {% set linenr = linenr + 1 %}
+            <span style="background-color:rgba(0, 255, 0, {{influence2[len(count)]}}")>
+                    {% set __ = count.append(1) %}
                 {% endif %}
                 {{token}}
             {% endfor %}
