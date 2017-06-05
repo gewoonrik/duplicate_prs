@@ -20,12 +20,14 @@ def skip_lines(lines):
 
 def get_predictions(doc2vec, model, baseline, lines, other_vector):
     results = []
+    vecs1 = []
+    vecs2 = []
     for test in skip_lines(lines):
         vec = doc2vec.infer_vector(test)
-        #vec_total = np.concatenate([vec, other_vector])
-        res = model.predict([np.asarray([vec]), np.asarray([other_vector])])[0][0]
-        results.append(res-baseline)
-    return results
+        vecs1.append(vec)
+        vecs2.append(other_vector)
+    res = model.predict([np.asarray(vecs2), np.asarray(vecs2)])[0][0]
+    return res-baseline
 
 def test_lines(doc2vec, model, pr1, pr2):
     lines1 = to_lines(pr1)
