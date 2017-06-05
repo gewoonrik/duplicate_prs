@@ -123,8 +123,8 @@ def predict():
     # only keep the lines that reduce the result when removed :)
     influence1 = -1 * np.minimum(pred1, 0)
     influence2 = -1 * np.minimum(pred2, 0)
-    sum1 = influence1.sum()
-    sum2 = influence2.sum()
+    sum1 = np.max(influence1)
+    sum2 = np.max(influence2)
     influence1 = influence1/sum1
     influence2 = influence2/sum2
 
@@ -133,8 +133,8 @@ def predict():
     bad_influence2 = np.maximum(pred2, 0)
     sum1 = bad_influence1.sum()
     sum2 = bad_influence2.sum()
-    bad_influence1 = bad_influence1/sum1
-    bad_influence2 = bad_influence2/sum2
+    bad_influence1 = bad_influence1*0#bad_influence1/sum1
+    bad_influence2 = bad_influence2*0#/sum2
 
     print(result)
     return render_template('side_by_side_lines.html', pr1_tokens = tokenized_1, pr2_tokens = tokenized_2,
