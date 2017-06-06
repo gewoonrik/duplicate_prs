@@ -126,8 +126,8 @@ def predict_w2vec_cam():
     # only keep the lines that reduce the result when removed :)
     influence1 = -1 * np.minimum(pred1, 0)
     influence2 = -1 * np.minimum(pred2, 0)
-    sum1 = influence1.sum()
-    sum2 = influence2.sum()
+    sum1 = np.max(influence1)
+    sum2 = np.max(influence2)
     influence1 = influence1/sum1
     influence2 = influence2/sum2
 
