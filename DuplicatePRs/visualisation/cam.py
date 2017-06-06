@@ -8,7 +8,7 @@ def to_lines(tokens):
     lines = []
     cur_line = []
     for token in tokens:
-        if token == "lineremovedtoken" or token == "lineaddedtoken" or token == "newfiletoken":
+        if len(cur_line) >0 and (token == "lineremovedtoken" or token == "lineaddedtoken" or token == "newfiletoken"):
             lines.append(cur_line)
             cur_line = []
         cur_line.append(token)
@@ -96,7 +96,7 @@ def w2vec2lines(lines, pr):
     w2vec_lines = []
     i = 0
     for line in lines:
-        w2vec_lines.append(pr[i:len(line)])
+        w2vec_lines.append(pr[i:len(line)+1])
         i = len(line)
     return w2vec_lines
 
