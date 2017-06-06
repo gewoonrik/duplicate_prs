@@ -122,7 +122,8 @@ def predict_w2vec_cam():
     vec2 = tokenize(filter_diff_lines(pr2_diff))
 
     pred1, pred2, result  = test_lines_word2vec(embeddings_model, shared_model, top_model, vec1, vec2)
-
+    print("result")
+    print(result)
     # only keep the lines that reduce the result when removed :)
     influence1 = np.power(-1 * np.minimum(pred1, 0), 3)
     influence2 = np.power(-1 * np.minimum(pred2, 0), 3)
