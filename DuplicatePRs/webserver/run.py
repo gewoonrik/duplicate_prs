@@ -106,6 +106,11 @@ def predict_w2vec():
 def w2vec_cam():
     return render_template('select_diffs.html', to='predict_w2vec_cam')
 
+import matplotlib.cm as cm
+def color_map(value):
+    r,g,b,a = cm.autumn(value)
+
+    return (r*255, g*255, b* 255, a)
 
 @app.route('/predict_w2vec_cam', methods=['POST'])
 def predict_w2vec_cam():
@@ -124,6 +129,8 @@ def predict_w2vec_cam():
     pred1, pred2, result  = test_lines_word2vec(embeddings_model, shared_model, top_model, vec1, vec2)
     print("result")
     print(result)
+
+
     # only keep the lines that reduce the result when removed :)
     influence1 = -1 * np.minimum(pred1, 0)
     influence2 = -1 * np.minimum(pred2, 0)
@@ -131,6 +138,9 @@ def predict_w2vec_cam():
     sum2 = np.max(influence2)
     influence1 = influence1/sum1
     influence2 = influence2/sum2
+
+    influence1 = map(color_map, influence1)
+    influence2 = map(color_map, influence2)
 
 
     bad_influence1 = np.maximum(pred1, 0)

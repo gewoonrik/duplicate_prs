@@ -6,9 +6,10 @@
             <br/>
             {% if (line[0] == '+' and line[0:2] != '++' ) or (line[0] == '-' and line[0:2] != '--') or line[:10] == "diff --git" %}
                     {% if influence1[count|length] >0 %}
-                        <span style="background-color:rgba(0, 255, 0, {{influence1[count|length]}}" )>
+                        {% set r,g,b,a = influence1[count|length] %}
+                        <span style="background-color:rgba({{r}}, {{g}}, {{b}}, {{a}} )">
                     {%else%}
-                        <span style="background-color:rgba(255, 0, 0, {{bad_influence1[count|length]}}" )>
+                        <span style="background-color:rgba(255, 0, 0, {{bad_influence1[count|length]}} )">
                     {% endif %}
                     {% set __ = count.append(1) %}
                 {%else%}
@@ -24,9 +25,9 @@
             <br/>
             {% if (line[0] == '+' and line[0:2] != '++' ) or (line[0] == '-' and line[0:2] != '--') or line[:10] == "diff --git" %}
             {% if influence2[count|length] >0 %}
-            <span style="background-color:rgba(0, 255, 0, {{influence2[count|length]}}" )>
+            <span style="background-color:rgba(0, 255, 0, {{influence2[count|length]}} )">
                     {%else%}
-                        <span style="background-color:rgba(255, 0, 0, {{bad_influence2[count|length]}}" )>
+                        <span style="background-color:rgba(255, 0, 0, {{bad_influence2[count|length]}} )">
                     {% endif %}
                     {% set __ = count.append(1) %}
                 {%else%}
