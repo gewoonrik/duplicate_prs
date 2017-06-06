@@ -179,6 +179,6 @@ def predict():
     bad_influence2 = bad_influence2*0#/sum2
 
     print(result)
-    return render_template('side_by_side_lines.html', pr1_diff = pr1_diff.split("\n"), pr2_diff = pr2_diff.split("\n"),
+    return render_template('side_by_side_lines.html', pr1_diff = pr1_diff.decode('utf-8', 'ignore').split("\n"), pr2_diff = pr2_diff.decode('utf-8', 'ignore').split("\n"),
                            influence1 = influence1, influence2 = influence2, bad_influence1= bad_influence1, bad_influence2=bad_influence2)
 
