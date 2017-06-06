@@ -108,7 +108,7 @@ def w2vec_cam():
 
 import matplotlib.cm as cm
 def color_map(value):
-    r,g,b,a = cm.autumn(value)
+    r,g,b,a = cm.winter(value)
 
     return (int(r*255), int(g*255), int(b* 255), a)
 
