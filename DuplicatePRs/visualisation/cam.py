@@ -1,6 +1,7 @@
 from tqdm import tqdm
 import numpy as np
 
+from DuplicatePRs.classifiers.preprocessing import preprocess
 
 
 def to_lines(tokens):
