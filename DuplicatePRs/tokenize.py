@@ -19,22 +19,25 @@ def filter_diff_lines(str):
 
 def tokenize(text, lower=True):
     ''' Tokenizes code. All consecutive alphanumeric characters are grouped into one token.
+    But we also split on camel case
     Thereby trying to heuristically match identifiers.
     All other symbols are seen as one token.
-    Whitespace is stripped, except the newline token.
+    Whitespace is stripped.
     '''
-    if lower:
-        text = text.lower() #type: str
     seq = []
     curr = ""
     for c in text:
         if c.isalnum():
-            curr += c
+            # this is a camelCase variable, so start a new token
+            if c.isupper() and curr != "":
+                seq.append(curr)
+                curr = ""
+            curr += c.lower()
         else:
             if curr != "":
                 seq.append(curr)
                 curr = ""
-            if not c.isspace() or c == '\n':
+            if not c.isspace():
                 seq.append(c)
     if curr != "":
         seq.append(curr)
