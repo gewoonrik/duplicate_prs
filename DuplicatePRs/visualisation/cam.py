@@ -121,4 +121,4 @@ def test_lines_word2vec(word2vec, shared_model, top_model, pr1, pr2):
     pred1 = get_predictions_word2vec(shared_model, top_model, baseline, w2vec1_lines, base_2, True)
     pred2 = get_predictions_word2vec(shared_model, top_model, baseline, w2vec2_lines, base_1, False)
 
-    return np.asarray(pred1), np.asarray(pred2)
+    return np.asarray(pred1), np.asarray(pred2), baseline
