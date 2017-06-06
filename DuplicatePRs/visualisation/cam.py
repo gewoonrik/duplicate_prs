@@ -92,6 +92,7 @@ def get_predictions_word2vec(shared_model, top_model, baseline, lines, other_vec
     return results
 
 def w2vec2lines(lines, pr):
+    pr = pr[0]
     w2vec_lines = []
     i = 0
     for line in lines:
