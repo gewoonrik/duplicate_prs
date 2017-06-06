@@ -1,9 +1,6 @@
-from functools import partial
-from multiprocessing import Pool
 from tqdm import tqdm
 import numpy as np
 
-from DuplicatePRs.webserver.run import pair_to_word2vec
 
 
 def to_lines(tokens):
@@ -66,6 +63,11 @@ def test_lines(doc2vec, model, pr1, pr2):
 
 
 
+
+def pair_to_word2vec(embeddings_model, tok1, tok2):
+    p1 = preprocess([tok1],embeddings_model, 300, len(tok1))
+    p2 = preprocess([tok2],embeddings_model, 300, len(tok2))
+    return p1, p2
 
 def check_line_word2vec(shared_model, lines, i):
     # set the line we are checking to zeroes
