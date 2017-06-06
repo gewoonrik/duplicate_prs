@@ -85,9 +85,9 @@ def get_predictions_word2vec(shared_model, top_model, baseline, lines, other_vec
     for i in tqdm(range(len(lines))):
         res = check_line_word2vec(shared_model, lines, i)
         if first:
-            res = top_model.predict([np.asarray([res]), np.asarray([other_vector])])[0][0] - baseline
+            res = top_model.predict([np.asarray(res), np.asarray(other_vector)])[0][0] - baseline
         else:
-            res = top_model.predict([np.asarray([other_vector]), np.asarray([res])])[0][0] - baseline
+            res = top_model.predict([np.asarray(other_vector), np.asarray(res)])[0][0] - baseline
         results[i] += res
     return results
 
