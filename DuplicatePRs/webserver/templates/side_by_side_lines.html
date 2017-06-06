@@ -6,8 +6,8 @@
             <br/>
             {% if (line[0] == '+' and line[0:2] != '++' ) or (line[0] == '-' and line[0:2] != '--') or line[:10] == "diff --git" %}
                     {% if influence1[count|length] >0 %}
-                        {% set r,g,b,a = influence1[count|length] %}
-                        <span style="background-color:rgba({{r}}, {{g}}, {{b}}, {{a}} )">
+                        {% set c = influence1[count|length] %}
+                        <span style="background-color:rgba({{c[0]}}, {{c[1]}}, {{c[2]}}, {{c[3]}} )">
                     {%else%}
                         <span style="background-color:rgba(255, 0, 0, {{bad_influence1[count|length]}} )">
                     {% endif %}
