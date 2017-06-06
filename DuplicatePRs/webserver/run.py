@@ -124,8 +124,8 @@ def predict_w2vec_cam():
     pred1, pred2, result  = test_lines_word2vec(embeddings_model, shared_model, top_model, vec1, vec2)
 
     # only keep the lines that reduce the result when removed :)
-    influence1 = np.sqrt(-1 * np.minimum(pred1, 0))
-    influence2 = np.sqrt(-1 * np.minimum(pred2, 0))
+    influence1 = np.power(-1 * np.minimum(pred1, 0), 2)
+    influence2 = np.power(-1 * np.minimum(pred2, 0), 2)
     sum1 = np.max(influence1)
     sum2 = np.max(influence2)
     influence1 = influence1/sum1
