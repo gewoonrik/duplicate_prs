@@ -75,7 +75,7 @@ def check_line_word2vec(shared_model, lines, i):
     lines[i] = lines[i] * 0
     #flatten
     test = [x for sublist in lines for x in sublist]
-    return shared_model.predict([np.asarray(test)])
+    return shared_model.predict([np.asarray([test])])
 
 
 
