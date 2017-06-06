@@ -110,7 +110,7 @@ import matplotlib.cm as cm
 def color_map(value):
     r,g,b,a = cm.autumn(value)
 
-    return (r*255, g*255, b* 255, a)
+    return (int(r*255), int(g*255), int(b* 255), a)
 
 @app.route('/predict_w2vec_cam', methods=['POST'])
 def predict_w2vec_cam():
