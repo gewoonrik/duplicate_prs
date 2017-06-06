@@ -102,6 +102,11 @@ def predict_w2vec():
     return render_template('side_by_side.html', pr1_tokens=vec1, pr2_tokens=vec2, res1=results[0], res2=results[1])
 
 
+@app.route("/w2vec_cam")
+def w2vec():
+    return render_template('select_diffs.html', to='predict_w2vec_cam')
+
+
 @app.route('/predict_w2vec_cam', methods=['POST'])
 def predict_w2vec_cam():
     pr1 = request.form['pr1']
