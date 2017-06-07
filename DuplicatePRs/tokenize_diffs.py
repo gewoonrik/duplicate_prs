@@ -10,12 +10,14 @@ import pickle
 from multiprocessing import Pool
 from dataset import load_csv, get_diff_files, read_normal
 from tokenize import tokenize,filter_diff_lines
+from tqdm import tqdm
+
 
 training = load_csv(config.training_dataset_file)
 validation = load_csv(config.validation_dataset_file)
-#test = load_csv(config.test_dataset_file)
+test = load_csv(config.test_dataset_file)
 
-total = training+validation #
+total = training+validation + test
 
 files = get_diff_files(total)
 
@@ -37,5 +39,6 @@ def tokenize_file(file):
 
 p = Pool(16)
 p.map(download_a_diff, total)
-p.map(tokenize_file,files)
+for i in  tqdm(p.imap_unordered(tokenize_file,files)):
+    pass
 
