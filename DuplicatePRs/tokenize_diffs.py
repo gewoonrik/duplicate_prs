@@ -37,8 +37,9 @@ def tokenize_file(file):
         pickle.dump(tokens,f)
         f.close()
 
-p = Pool(16)
-p.map(download_a_diff, total)
-for i in  tqdm(p.imap_unordered(tokenize_file,files)):
+p = Pool(150)
+#p.map(download_a_diff, total)
+for i in  tqdm(p.imap_unordered(tokenize_file,files), total = len(files)):
     pass
+
 
