@@ -29,10 +29,10 @@ def tokenize(text, lower=True):
     for c in text:
         if c.isalnum():
             # this is a camelCase variable, so start a new token
-            if c.isupper() and curr != "":
+            if c.isupper() and curr != "" and not curr[-1].isupper():
                 seq.append(curr)
                 curr = ""
-            curr += c.lower()
+            curr += c
         else:
             if curr != "":
                 seq.append(curr)
@@ -41,4 +41,4 @@ def tokenize(text, lower=True):
                 seq.append(c)
     if curr != "":
         seq.append(curr)
-    return [_f for _f in seq if _f]
+    return [_f.lower() for _f in seq if _f]
