@@ -24,7 +24,7 @@ class Documents(object):
                 content = cached_files[file]
             else:
                 content = read_pickled(file)
-                if i < nr_files/10.0 * 7:
+                if i < nr_files/10.0 * 5:
                     cached_files[file] = content
             i+=1
             yield TaggedDocument(words = content, tags = [file])
@@ -51,13 +51,9 @@ else:
 
 
 #iter = 1, because we keep training ourselves :)
-#model = Doc2Vec(size=config.embeddings_size, dbow_words= 1, dm=0, iter=1,  window=5, seed=1337, min_count=5, workers=16,alpha=0.025, min_alpha=0.025)
-#model.build_vocab(documents)
-epoch = 6
-model = Doc2Vec.load(config._current_path+'/doc2vec_models/'+file+str(epoch)+'.model')
-model.alpha = 0.025 - epoch * 0.002
-model.min_alpha = model.alpha
-for epoch in range(6,10):
+model = Doc2Vec(size=config.embeddings_size, dbow_words= 1, dm=0, iter=1,  window=5, seed=1337, min_count=5, workers=16,alpha=0.025, min_alpha=0.025)
+model.build_vocab(documents)
+for epoch in range(10):
     print("epoch "+str(epoch))
     model.train(documents, total_examples=len(total)*2, epochs=1)
     model.save(config._current_path+'/doc2vec_models/'+file+str(epoch)+'.model')
