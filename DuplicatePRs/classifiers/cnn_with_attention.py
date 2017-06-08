@@ -25,7 +25,7 @@ args = parser.parse_args()
 
 if(args.embeddings_model == "word2vec"):
     from gensim.models import Word2Vec
-    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
+    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_hard_epoch9.model")
     embeddings_model = w2vec.wv
     # save memory
     del w2vec
@@ -35,8 +35,8 @@ else:
 
 print("setting up datasource")
 
-tr_gen, tr_steps, tr_y = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
-val_gen, val_steps, val_y = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
+tr_gen, tr_steps, tr_y = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, 100, batch_size)
+val_gen, val_steps, val_y = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, 100, batch_size)
 #te_gen, te_steps = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
 
 
@@ -64,7 +64,7 @@ att_1 = Activation('softmax')(att_1)
 out_1 = dot([att_1, out_1], axes=1)
 
 # out_2 row wise
-attention_transposed = Lambda(lambda x: K.transpose(x))(attention)
+attention_transposed = Lambda(lambda x: K.permute_dimensions(x, (0,2,1)))(attention)
 att_2 = GlobalMaxPooling1D()(attention_transposed)
 att_2 = Activation('softmax')(att_2)
 out_2 = dot([att_2, out_2], axes=1)

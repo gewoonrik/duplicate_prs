@@ -8,7 +8,6 @@ class AttentionLayer(Layer):
         super(AttentionLayer, self).__init__(**kwargs)
 
     def build(self, input_shape):
-
         # Create a trainable weight variable for this layer.
         if not isinstance(input_shape, list) or len(input_shape) != 2:
             raise ValueError('A Attention layer should be called '
@@ -22,7 +21,9 @@ class AttentionLayer(Layer):
         super(AttentionLayer, self).build(input_shape)  # Be sure to call this somewhere!
 
     def call(self, inputs):
-        return K.dot(K.transpose(inputs[0]),K.dot(self.kernel, inputs[1]))
-
+        a = K.dot(inputs[0], self.kernel)
+        y_trans = K.permute_dimensions(inputs[1], (0,2,1))
+	b = K.batch_dot(a, y_trans, axes=[2,1])
+        return K.tanh(b)
     def compute_output_shape(self, input_shape):
         return (None, None, None)
