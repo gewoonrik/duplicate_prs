@@ -8,7 +8,7 @@ from DuplicatePRs.dataset import get_tokenized_data, load_csv, line_to_tokenized
 
 def preprocess_text(text, embeddings_model, maxlen, embeddings_size):
     seq = text
-    seq = seq[0:maxlen-1]
+    seq = seq[0:maxlen]
     res = np.zeros((maxlen, embeddings_size))
     seq_length = len(seq)
     offset = maxlen - seq_length
