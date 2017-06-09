@@ -5,7 +5,7 @@ from keras.callbacks import CSVLogger
 from keras.callbacks import EarlyStopping
 from keras.callbacks import ModelCheckpoint
 from keras.models import Model
-from keras.layers import Conv1D, GlobalMaxPooling1D, Activation, dot, Lambda
+from keras.layers import Conv1D, GlobalMaxPooling1D, Activation, dot, Lambda, MaxPooling1D
 import keras.backend as K
 from keras.optimizers import Adam
 
@@ -47,7 +47,8 @@ conv_4 = Conv1D(config.nr_filters*3,
                 padding='same',
                 activation='relu',
                 strides=1)(input)
-shared = Model(input, conv_4)
+pooled = MaxPooling1D(pool_size=4, strides=None, padding='same')(conv_4)
+shared = Model(input, pooled)
 
 pr_1 =  Input(shape=(None, config.embeddings_size), dtype='float32')
 pr_2 =  Input(shape=(None, config.embeddings_size), dtype='float32')
