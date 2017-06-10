@@ -95,6 +95,10 @@ checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/cnn_euclid
 early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stopping_patience)
 csv_logger = CSVLogger(config._current_path+"/classifier_models/cnn_euclidian_word2vec_end_to_end/training.csv")
 
+del cnn_model
+del shared_cnn_model
+del word2vec2doc_model
+
 print("setting up datasource")
 
 
