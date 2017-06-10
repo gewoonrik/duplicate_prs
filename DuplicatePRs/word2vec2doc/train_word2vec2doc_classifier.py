@@ -45,12 +45,12 @@ pr2 = Input(shape=(300,), dtype='float32', name='pr2_input')
 
 x = merged = merge([pr1, pr2], mode='concat')
 x = Dense(2000, activation='relu', name="dense_1")(x)
-x = Dropout(0.2)(x)
+x = Dropout(0.5)(x)
 main_output = Dense(2, activation='softmax', name='output')(x)
 
 model = Model(input=[pr1, pr2], output=[main_output])
 
-optimizer = Adam(lr = 0.00007)
+optimizer = Adam(lr = 0.00005)
 
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
