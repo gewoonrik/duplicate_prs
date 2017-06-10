@@ -8,6 +8,7 @@ from DuplicatePRs.dataset import load_csv, get_word2vec2doc_data_diffs, get_fast
 from keras.optimizers import Adam
 from DuplicatePRs import config
 import numpy as np
+import keras
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--embeddings_model', default='word2vec')
@@ -45,7 +46,7 @@ pr2 = Input(shape=(300,), dtype='float32', name='pr2_input')
 x = merged = merge([pr1, pr2], mode='concat')
 x = Dense(2000, activation='relu', name="dense_1")(x)
 x = Dropout(0.2)(x)
-main_output = Dense(1, activation='sigmoid', name='output')(x)
+main_output = Dense(2, activation='softmax', name='output')(x)
 
 model = Model(input=[pr1, pr2], output=[main_output])
 
@@ -61,8 +62,8 @@ csv_logger = CSVLogger(config._current_path+"/classifier_models/"+classifier_dir
 print("train")
 
 
-model.fit([tr_1_total, tr_2_total], tr_labels_total, batch_size=100, nb_epoch=1000,
-          validation_data=([val_1_total, val_2_total], val_labels_total), callbacks=[checkpoint, early_stopping, csv_logger])
+model.fit([tr_1_total, tr_2_total], keras.utils.to_categorical(tr_labels_total, 2), batch_size=100, nb_epoch=1000,
+          validation_data=([val_1_total, val_2_total], keras.utils.to_categorical(val_labels_total,2)), callbacks=[checkpoint, early_stopping, csv_logger])
 
 #results = model.evaluate([test_1, test_2], test_labels, batch_size=100)
 #print('Test results: ', results)
