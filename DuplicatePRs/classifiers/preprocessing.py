@@ -1,5 +1,6 @@
 import threading
 
+import keras
 import numpy as np
 import math
 from DuplicatePRs.dataset import get_tokenized_data, load_csv, line_to_tokenized_files, read_pickled
@@ -33,7 +34,7 @@ def preprocess(texts, embeddings_model, embeddings_size, maxlen):
 
 
 class DataIterator:
-    def __init__(self, prs1, prs2, labels, embeddings_model, embeddings_size, maxlen, batch_size):
+    def __init__(self, prs1, prs2, labels, embeddings_model, embeddings_size, maxlen, batch_size, categorical_labels= False):
         self.prs1 = prs1
         self.prs2 = prs2
         self.labels = labels
@@ -44,6 +45,7 @@ class DataIterator:
         self.lock = threading.Lock()
         self.i = 0
         self.steps = math.ceil(len(labels)/batch_size)
+        self.categorical_labels = categorical_labels
 
     def __iter__(self):
         return self
@@ -69,7 +71,10 @@ class DataIterator:
             maxlen = self.maxlen
         prs1_res = preprocess(prs1_sliced, self.embeddings_model, self.embeddings_size, maxlen)
         prs2_res = preprocess(prs2_sliced, self.embeddings_model, self.embeddings_size, maxlen)
-        return ([np.concatenate([prs1_res,prs2_res]), np.concatenate([prs2_res, prs1_res])], np.concatenate([labels_sliced,labels_sliced]))
+        labels = np.concatenate([labels_sliced,labels_sliced])
+        if self.categorical_labels:
+            labels = keras.utils.to_categorical(labels,2)
+        return ([np.concatenate([prs1_res,prs2_res]), np.concatenate([prs2_res, prs1_res])], labels)
 
 
 def lines_to_tokenized_files(lines):
@@ -84,9 +89,9 @@ def lines_to_tokenized_files(lines):
     return prs1, prs2, labels
 
 
-def get_preprocessed_generator(file, embeddings_model, embeddings_size, maxlen, batch_size, cutoff=False):
+def get_preprocessed_generator(file, embeddings_model, embeddings_size, maxlen, batch_size, cutoff=False, categorical_labels=False):
     print("loading data into memory")
     prs_1, prs_2, y = get_tokenized_data(load_csv(file), maxlen, cutoff)
     print("starting iterator")
-    return DataIterator(prs_1, prs_2, y, embeddings_model, embeddings_size, maxlen, batch_size), math.ceil(len(y)/(batch_size*1.0)), y
+    return DataIterator(prs_1, prs_2, y, embeddings_model, embeddings_size, maxlen, batch_size, categorical_labels), math.ceil(len(y)/(batch_size*1.0)), y
 
