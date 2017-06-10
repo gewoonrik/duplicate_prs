@@ -53,7 +53,7 @@ args = parser.parse_args()
 
 if(args.embeddings_model == "word2vec"):
     from gensim.models import Word2Vec
-    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_epoch9.model")
+    w2vec =  Word2Vec.load(config.doc2vec_model_directory+"doc2vec_word2vec_dbow_hard_epoch9.model")
     embeddings_model = w2vec.wv
     # save memory
     del w2vec
