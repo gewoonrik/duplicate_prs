@@ -15,7 +15,7 @@ from DuplicatePRs import config
 
 
 # Training
-batch_size = 50
+batch_size = 10
 epochs = 150
 
 def acc(y_true, y_pred):
