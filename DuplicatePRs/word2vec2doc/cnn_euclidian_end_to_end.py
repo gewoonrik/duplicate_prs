@@ -61,12 +61,6 @@ else:
     import fasttext
     embeddings_model = fasttext.load_model(config.fasttext_model_directory+"/model.bin")
 
-print("setting up datasource")
-
-
-tr_gen, tr_steps, tr_y = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size, True)
-val_gen, val_steps, val_y = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size, True)
-#te_gen, te_steps = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
 
 
 print('Build model...')
@@ -92,7 +86,6 @@ word2vec2doc_model = load_model(config._current_path+"/classifier_models/word2ve
 empty_model.layers[2].set_weights(shared_cnn_model.get_weights())
 empty_model.layers[-1].set_weights(word2vec2doc_model.layers[-1].get_weights())
 empty_model.layers[-3].set_weights(word2vec2doc_model.layers[-3].get_weights())
-print('Train...')
 
 optimizer = Adam(lr = 0.00001)
 
@@ -101,6 +94,15 @@ empty_model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['a
 checkpoint = ModelCheckpoint(config._current_path+"/classifier_models/cnn_euclidian_word2vec_end_to_end/{val_loss:5.5f}.hdf5", monitor="val_loss", save_best_only=True)
 early_stopping = EarlyStopping(monitor="val_loss", patience=config.early_stopping_patience)
 csv_logger = CSVLogger(config._current_path+"/classifier_models/cnn_euclidian_word2vec_end_to_end/training.csv")
+
+print("setting up datasource")
+
+
+tr_gen, tr_steps, tr_y = get_preprocessed_generator(config.training_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size, True)
+val_gen, val_steps, val_y = get_preprocessed_generator(config.validation_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size, True)
+#te_gen, te_steps = get_preprocessed_generator(config.test_dataset_file, embeddings_model, config.embeddings_size, config.maxlen, batch_size)
+
+print('Train...')
 
 empty_model.fit_generator(tr_gen, steps_per_epoch=tr_steps,
                     epochs=epochs,
