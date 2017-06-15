@@ -10,6 +10,7 @@ from keras.optimizers import Adam
 from preprocessing import get_preprocessed_generator
 from cnn_shared_model import conv_model
 from DuplicatePRs import config
+import sys
 
 
 
@@ -25,7 +26,7 @@ def acc(y_true, y_pred):
 
 def euclidean_distance(vects):
     x, y = vects
-    return K.sqrt(K.maximum(K.sum(K.square(x - y), axis=1, keepdims=True), K.epsilon()))
+    return K.sqrt(K.minimum(K.maximum(K.sum(K.square(x - y), axis=1, keepdims=True), K.epsilon()), sys.float_info.max))
 
 
 def eucl_dist_output_shape(shapes):
