@@ -58,8 +58,9 @@ scaler = preprocessing.StandardScaler(with_mean=False).fit(training_matrix)
 
 training_matrix = scaler.transform(training_matrix)
 
+validation_matrix, val_labels = dataset_to_bow(val_gen, len(val_lines))
 
-params = [1,0.1,0.01,0.001,0.0001,0.0001,0.00001,0.000001, 0.0000001]
+params = [1,0.1,0.01,0.001,0.0001,0.00001,0.000001, 0.0000001]
 
 results = []
 for c in params:
@@ -69,7 +70,6 @@ for c in params:
 
     joblib.dump(svm, config._current_path+"/baseline/svm_hard-c-"+str(c))
 
-    validation_matrix, val_labels = dataset_to_bow(val_gen, len(val_lines))
     print("testing")
     acc = svm.score(scaler.transform(validation_matrix), val_labels)
     print("accuracy " +str(acc))
