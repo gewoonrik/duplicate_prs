@@ -57,7 +57,7 @@ class DataIterator:
         with self.lock:
             i = self.i
             self.i += 1
-            if self.i > self.steps:
+            if self.i >= self.steps:
                 self.reset()
 
         cur = i * self.batch_size
