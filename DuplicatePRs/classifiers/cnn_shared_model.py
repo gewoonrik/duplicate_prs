@@ -1,8 +1,6 @@
 from keras.layers import Conv1D, GlobalMaxPooling1D
 from keras.layers import Input, merge
 from keras.models import Model
-from keras.regularizers import l2
-
 from DuplicatePRs import config
 
 
@@ -12,8 +10,6 @@ conv_3 = Conv1D(config.nr_filters,
                 3,
                 padding='same',
                 activation='relu',
-                kernel_regularizer=l2(0.00001),
-                bias_regularizer=l2(0.00001),
                 strides=1)(input)
 out_3 = GlobalMaxPooling1D()(conv_3)
 
@@ -21,8 +17,6 @@ conv_4 = Conv1D(config.nr_filters,
                 4,
                 padding='same',
                 activation='relu',
-                kernel_regularizer=l2(0.00001),
-                bias_regularizer=l2(0.00001),
                 strides=1)(input)
 out_4 = GlobalMaxPooling1D()(conv_4)
 
@@ -30,8 +24,6 @@ out_4 = GlobalMaxPooling1D()(conv_4)
 conv_5 = Conv1D(config.nr_filters,
                 5,
                 padding='same',
-                kernel_regularizer=l2(0.00001),
-                bias_regularizer=l2(0.00001),
                 activation='relu',
                 strides=1)(input)
 out_5 = GlobalMaxPooling1D()(conv_5)
