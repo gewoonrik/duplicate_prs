@@ -6,7 +6,7 @@ validation_dataset_file = _current_path+"/validation_with_negative_samples_hard.
 test_dataset_file = _current_path+"/test_with_negative_samples_hard.csv"
 
 embeddings_size = 300
-maxlen = 2000
+maxlen = 20000
 
 #convolution
 nr_filters = 100
