@@ -16,7 +16,7 @@ import sys
 
 
 # Training
-batch_size = 10
+batch_size = 5
 epochs = 150
 
 def acc(y_true, y_pred):
