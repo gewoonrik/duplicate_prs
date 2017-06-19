@@ -26,7 +26,7 @@ def acc(y_true, y_pred):
 
 def euclidean_distance(vects):
     x, y = vects
-    return K.sqrt(K.minimum(K.maximum(K.sum(K.square(x - y), axis=1, keepdims=True), K.epsilon()), sys.float_info.max))
+    return K.sqrt(K.maximum(K.sum(K.square(x - y), axis=1, keepdims=True), K.epsilon()))
 
 
 def eucl_dist_output_shape(shapes):
