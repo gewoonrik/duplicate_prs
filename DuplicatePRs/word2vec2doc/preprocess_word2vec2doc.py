@@ -4,7 +4,7 @@ import argparse
 import pickle
 from tqdm import tqdm
 
-from keras.models import model_from_json
+from keras.models import load_model
 import keras.backend as K
 from DuplicatePRs import config
 from DuplicatePRs.classifiers.preprocessing import preprocess
@@ -51,8 +51,7 @@ else:
 f = open(config._current_path+"/classifier_models/cnn_euclidian/model.json")
 json = f.read()
 f.close()
-model = model_from_json(json, {"contrastive_loss":contrastive_loss, "acc":acc})
-model.load_weights(config._current_path+"/classifier_models/cnn_euclidian"+model_path+"_hard/best.hdf5")
+model = load_model(config._current_path+"/classifier_models/cnn_euclidian"+model_path+"_hard/best.hdf5", {"contrastive_loss":contrastive_loss, "acc":acc})
 
 # take only the shared CNN model :)
 model = model.layers[-2]
