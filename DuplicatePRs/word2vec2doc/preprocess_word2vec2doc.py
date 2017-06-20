@@ -48,9 +48,6 @@ if args.embeddings_model != "word2vec":
     model_path = "_fasttext"
 else:
     model_path = "_word2vec"
-f = open(config._current_path+"/classifier_models/cnn_euclidian/model.json")
-json = f.read()
-f.close()
 model = load_model(config._current_path+"/classifier_models/cnn_euclidian"+model_path+"_hard/best.hdf5", {"contrastive_loss":contrastive_loss, "acc":acc})
 
 # take only the shared CNN model :)
