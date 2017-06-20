@@ -84,7 +84,7 @@ for i in tqdm(range(0, len(total), batch_size)):
     files = total[i:i+batch_size]
     tokenized = map(read_pickled, files)
     lengths = map(len, tokenized)
-    maxlen = min(max(lengths),10000)
+    maxlen = min(max(lengths),config.maxlen)
     w2vec_files = preprocess(tokenized, embeddings_model, config.embeddings_size, maxlen)
     results = model.predict(w2vec_files)
     for i in range(len(files)):
