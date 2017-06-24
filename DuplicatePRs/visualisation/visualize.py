@@ -32,27 +32,40 @@ def visualize(shared_model, top_model, pr1, pr2):
     top_activations = get_activations(top_model, [[pr1_act[-1][0]], [pr2_act[-1][0]]])
     print("result ")
     print(top_activations[-1])
-    top_iim = calculate_iim_top(top_activations, top_model)
+    top_iims = calculate_iim_top(top_activations, top_model)
 
-    dim1 = calculate_iim_shared(top_iim[:300], pr1[0], pr1_act, shared_model)
-    dim2 = calculate_iim_shared(top_iim[300:], pr2[0], pr2_act, shared_model)
+    dim1s = []
+    dim2s = []
+    for top_iim in top_iims:
+        dim1s.append(calculate_iim_shared(top_iim[:300], pr1[0], pr1_act, shared_model))
+        dim2s.append(calculate_iim_shared(top_iim[300:], pr2[0], pr2_act, shared_model))
 
-    return dim1, dim2
+    return normalize_nparrs(dim1s), normalize_nparrs(dim2s)
 
 def calculate_iim_top(activations, model):
-    global test_iim
     start_iim = activations[-1]
 
-    iim = calc_iim_dense(start_iim,model.layers[-1].get_weights()[0],activations[-2][0])
-    # we skip dropout
-    iim = calc_iim_dense(iim,model.layers[-3].get_weights()[0],activations[-4][0])
-    return iim
+    iims = []
+    negative = np.copy(start_iim)
+    negative[1] = 0
+    iims.append(negative)
+
+    positive = np.copy(start_iim)
+    positive[0] = 0
+    iims.append(positive)
+
+    res = []
+    for start_iim in iims:
+        iim = calc_iim_dense(start_iim,model.layers[-1].get_weights()[0],activations[-2][0])
+        # we skip dropout
+        iim = calc_iim_dense(iim,model.layers[-3].get_weights()[0],activations[-4][0])
+        res.append(iim)
+    return res
 
 def calculate_iim_shared(start_iim, inputs, activations, model):
     conv3 = model.layers[1]
     conv4 = model.layers[2]
     conv5 = model.layers[3]
-
 
     conv3_out = activations[1][0]
     conv4_out = activations[2][0]
@@ -61,8 +74,6 @@ def calculate_iim_shared(start_iim, inputs, activations, model):
     max3_out = activations[4][0]
     max4_out = activations[5][0]
     max5_out = activations[6][0]
-
-    print(inputs.shape)
 
 
     iim_merges = calc_iim_concat(start_iim, 3)
@@ -81,15 +92,13 @@ def calculate_iim_shared(start_iim, inputs, activations, model):
         for j in range(inputs.shape[1]):
             sum += iim_sum[i][j]
         final[i] = sum
-    return normalize_nparr(final)
+    return final
 
-def normalize_nparr(arr):
-    #remove less than zero's
-    arr = np.maximum(arr, 0)
-    #mi = np.min(arr)
-    #arr = arr-mi
-    ma = np.max(arr)*1.0
-    return arr/ma
+def normalize_nparrs(arrs):
+    mi = min(map(np.min, arrs))
+    arrs = map(lambda x: x+mi, arrs)
+    ma = max(map(np.max, arrs))
+    return map(lambda x: x/ma, arrs)
 
 def calc_iim_dense(iim_vec, weights, input):
     iim_weights = (iim_vec* weights).transpose()

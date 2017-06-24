@@ -25,7 +25,7 @@ embeddings_model = d2vec.wv
 
 model = load_model(config._current_path+"/classifier_models/doc2vec_hard/0.50974.hdf5")
 
-top_model = load_model(config._current_path+"/classifier_models/word2vec2doc_hard/0.51685.hdf5")
+top_model = load_model(config._current_path+"/classifier_models/word2vec2doc_hard/0.51836.hdf5")
 def acc(y_true, y_pred):
     ones = K.ones_like(y_pred)
     return K.mean(K.equal(y_true, ones - K.clip(K.round(y_pred), 0, 1)), axis=-1)
@@ -41,11 +41,7 @@ def contrastive_loss(y_true, y_pred):
     y_true = -1 * y_true + 1
     return K.mean((1 - y_true) * K.square(y_pred) +  y_true * K.square(K.maximum(margin - y_pred, 0)))
 
-f = open(config._current_path+"/classifier_models/cnn_euclidian/model.json")
-json = f.read()
-f.close()
-shared_model = model_from_json(json, {"contrastive_loss":contrastive_loss, "acc":acc})
-shared_model.load_weights(config._current_path+"/classifier_models/cnn_euclidian_word2vec_hard/best.hdf5")
+shared_model = load_model(config._current_path+"/classifier_models/cnn_euclidian_word2vec_hard/0.60779.hdf5", {"contrastive_loss":contrastive_loss, "acc":acc})
 
 # take only the shared CNN model :)
 shared_model = shared_model.layers[-2]
@@ -96,10 +92,10 @@ def predict_w2vec():
     vec2 = tokenize(filter_diff_lines(pr2_diff))
     w2vec1, w2vec2 = pair_to_word2vec(embeddings_model, vec1, vec2)
 
-    results = visualize(shared_model, top_model, w2vec1, w2vec2)
+    res1, res2 = visualize(shared_model, top_model, w2vec1, w2vec2)
     #s1 = to_style(vec1, results[0])
     #s2 = to_style(vec2, results[1])
-    return render_template('side_by_side.html', pr1_tokens=vec1, pr2_tokens=vec2, res1=results[0], res2=results[1])
+    return render_template('side_by_side.html', pr1_tokens=vec1, pr2_tokens=vec2, res1_neg=res1[0], res1_pos=res1[1], res2_neg=res2[0], res2_pos=res2[1])
 
 
 @app.route("/w2vec_cam")

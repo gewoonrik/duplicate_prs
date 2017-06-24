@@ -10,7 +10,11 @@
                 {% if token == 'newfiletoken' %}
                     <br/><br/>
                 {% endif %}
-                <span style="background-color:rgba(0, 255, 0, {{res1[loop.index0]}}")>{{token}}</span>
+                {% if res1_neg[loop.index0] < res1_pos[loop.index0] %}
+                    <span style="background-color:rgba(0, 255, 0, {{res1_pos[loop.index0]}}")>{{token}}</span>
+                {% else %}
+                    <span style="background-color:rgba(255, 0, 0, {{res1_neg[loop.index0]}}")>{{token}}</span>
+                {% endif %}
             {% endfor %}
         </td>
         <td>{% for token in pr2_tokens %}
@@ -20,7 +24,11 @@
                 {% if token == 'newfiletoken' %}
                 <br/><br/>
                 {% endif %}
-                <span style="background-color:rgba(0, 255, 0, {{res2[loop.index0]}}")>{{token}}</span>
+                {% if res2_neg[loop.index0] < res2_pos[loop.index0] %}
+                    <span style="background-color:rgba(0, 255, 0, {{res2_pos[loop.index0]}}")>{{token}}</span>
+                {% else %}
+                <   span style="background-color:rgba(255, 0, 0, {{res2_neg[loop.index0]}}")>{{token}}</span>
+                {% endif %}
             {% endfor %}
         </td>
     </tr>
