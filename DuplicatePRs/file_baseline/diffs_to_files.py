@@ -32,7 +32,7 @@ def string_to_files(string):
 def get_overlapping_file_percentage(pr1, pr2):
     pr1 = file_to_files(pr1)
     pr2 = file_to_files(pr2)
-    intersection = len([x for x in pr1 if x in pr2])
+    intersection = len(set(pr1).intersection(set(pr2)))
     total_files = set(pr1 + pr2)
     total = float(len(total_files))
     if total == 0:
