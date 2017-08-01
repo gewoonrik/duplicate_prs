@@ -33,9 +33,10 @@ def get_overlapping_file_percentage(pr1, pr2):
     pr1 = file_to_files(pr1)
     pr2 = file_to_files(pr2)
     intersection = len([x for x in pr1 if x in pr2])
-    total = (len(pr1)+len(pr2))*1.0
+    total_files = set(pr1 + pr2)
+    total = float(len(total_files))
     if total == 0:
-        return 1.0
+        return 0.0
     return intersection/total
 
 def line_to_overlapping_file_percentage(line):
